@@ -4,3 +4,6 @@
 *.local
 
 venv
+**/__pycache__
+
+**/*.sqlite3
