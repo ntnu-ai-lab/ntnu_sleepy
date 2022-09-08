@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  kratos-migrate:
+    image: oryd/kratos:v0.10.1
+    depends_on:
+      - db
+    environment:
+      DSN: postgresql://postgres:postgres@db:5432/kratos
+    volumes:
+      - type: bind
+        source: ./config
+        target: /etc/config/kratos
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+    restart: on-failure
+    networks:
+      - kratos
+  kratos:
+    depends_on:
+     - kratos-migrate
+    image: oryd/kratos:v0.10.1
+    ports:
+      - '4433:4433' # public
+      - '4434:4434' # admin
+    restart: unless-stopped
+    environment:
+      DSN: postgresql://postgres:postgres@db:5432/kratos
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    volumes:
+      - type: bind
+        source: ./config
+        target: /etc/config/kratos
+    networks:
+      - kratos 
+  db:
+    image: postgres:alpine
+    restart: always
+    networks:
+      - kratos
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kratos
+
+networks:
+  kratos:
+
+volumes:
+  db:
+    driver: local
