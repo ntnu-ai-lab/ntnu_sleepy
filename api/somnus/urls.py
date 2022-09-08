@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('somnus-auth/', include('rest_framework.urls'))
+    path('somnus-auth/', include('rest_framework.urls')),
+    path('users/', include('somnus.users.urls')),
 ]
