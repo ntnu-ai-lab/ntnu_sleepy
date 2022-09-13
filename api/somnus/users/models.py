@@ -1,8 +1,8 @@
 from pyexpat import model
 import uuid
 from django.db import models
-from django.contrib.auth import models as auth_models
+from django.contrib.auth.models import AbstractUser
 
 
-class User(auth_models.AbstractUser):
+class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
