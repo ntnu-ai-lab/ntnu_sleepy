@@ -37,7 +37,7 @@ class Input(models.Model):
     name = models.CharField(max_length=255)
     label = models.CharField(max_length=255)
     helptext = models.CharField(max_length=255)
-    value = models.CharField(max_length=255)
+    value = models.CharField(max_length=255, blank=True)
     section = models.ForeignKey(to=Section, related_name='form', on_delete=models.CASCADE)
 
 class Answers(models.Model):
@@ -47,6 +47,6 @@ class Answers(models.Model):
 
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    input = models.ForeignKey(to=Input, related_name='answers', on_delete=models.CASCADE)
+    input = models.ForeignKey(to=Input, related_name='answer', on_delete=models.CASCADE)
     answers = models.ForeignKey(to=Answers, related_name='answers', on_delete=models.CASCADE)
     value = models.CharField(max_length=255)
