@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'somnus.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': env('DB_USER', default='django'),
+        'HOST': env('DB_HOST', default='localhost'),
+        'NAME': env('DB_NAME', default='django'),
+        'PASSWORD': env('DB_PASSWORD', default='supersecret'), # This will _certainly_ not work in any kind of production environment.
+        'PORT': env('DB_PORT', default=5431),
     }
 }
 
