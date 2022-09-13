@@ -149,6 +149,6 @@ ORY_UI_URL=env("ORY_SDK_URL", default='https://auth.somnus.no/ui')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ]
 }
