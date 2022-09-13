@@ -11,7 +11,7 @@ class Page(models.Model):
     module = models.ForeignKey(to=Module, related_name='pages', on_delete=models.CASCADE)
 
 class Section(models.Model):
-    id = models.AutoField()
+    id = models.AutoField(primary_key=True)
     rules = models.CharField()
     heading = models.CharField()
     content = models.TextField()
