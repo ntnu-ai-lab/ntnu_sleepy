@@ -1,7 +1,10 @@
+from pyexpat import model
+import uuid
 from django.db import models
+from django.contrib.auth import models as auth_models
 
 
-class User(models.Model):
-    id = models.AutoField(primary_key=True)
-    is_admin = models.BooleanField(default=False)
-    pass
+class User(auth_models.AbstractBaseUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
