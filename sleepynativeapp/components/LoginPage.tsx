@@ -38,7 +38,7 @@ export function LoginPage() {
           </Button>
         </Card>
         <Button
-          onClick={() => { //@ts-ignore
+          onClick={() => { //@ts-ignore'
             navigation.navigate("signup");
           }}
         >
