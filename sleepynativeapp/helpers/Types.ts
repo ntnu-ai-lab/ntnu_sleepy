@@ -14,5 +14,15 @@ export interface User {
   occupation: string;
   relationshipStatus: relationshipStatus;
 }
+//temporary user before connecting to database
+export const UserEx: User = {
+  email: "test@test.com",
+  name: "testname",
+  password: "*******",
+  dateOfBirth: "20.02.1999",
+  gender: "male",
+  occupation: "lawyer",
+  relationshipStatus: "married"
+}
 
 
