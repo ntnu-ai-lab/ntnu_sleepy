@@ -5,7 +5,7 @@ from somnus.users.serializers import UserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
-    queryset = User.objects
+    queryset = User.objects.all()
 
 class AdminsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(admin=True)
