@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'somnus.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': env('DB_ENGINE', default='django.db.backends.postgresql'),
         'USER': env('DB_USER', default='django'),
         'HOST': env('DB_HOST', default='localhost'),
         'NAME': env('DB_NAME', default='django'),
