@@ -1,9 +1,11 @@
 .idea
 .vscode
 
-*.local
+.env
 
 venv
 **/__pycache__
 
 **/*.sqlite3
+
+*_pgpass
