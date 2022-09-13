@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_ory_auth',
     'somnus.users',
+    'somnus.modules',
 ]
 
 MIDDLEWARE = [
