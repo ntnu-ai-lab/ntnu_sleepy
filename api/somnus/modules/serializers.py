@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Answer, Answers, Input, Module, Page, Section
+from .models import Answer, AnswerList, Input, Module, Page, Section
 
 
 class ModuleSerializer(serializers.ModelSerializer[Module]):
@@ -19,9 +19,9 @@ class SectionSerializer(serializers.ModelSerializer[Section]):
         model = Section
         fields = ['id', 'rules', 'type', 'heading', 'content', 'uri', 'form', 'page']
 
-class AnswersSerializer(serializers.ModelSerializer[Answers]):
+class AnswersSerializer(serializers.ModelSerializer[AnswerList]):
     class Meta:
-        model = Answers
+        model = AnswerList
         fields = ['id', 'section', 'user', 'answers']
 
 class AnswerSerializer(serializers.ModelSerializer[Answer]):

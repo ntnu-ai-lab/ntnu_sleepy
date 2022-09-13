@@ -6,10 +6,12 @@ from somnus.users.models import User
 
 class Module(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    pages: models.Manager['Page']
 
 class Page(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     module = models.ForeignKey(to=Module, related_name='pages', on_delete=models.CASCADE)
+    sections: models.Manager['Section']
 
 class Section(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -18,6 +20,8 @@ class Section(models.Model):
     content = models.TextField(blank=True)
     uri = models.CharField(max_length=255, blank=True)
     page = models.ForeignKey(to=Page, related_name='sections', on_delete=models.CASCADE)
+    form: models.Manager['Input']
+    answer_lists: models.Manager['AnswerList']
 
     class Types(models.TextChoices):
         FORM = 'form', _('Form')
@@ -39,14 +43,16 @@ class Input(models.Model):
     helptext = models.CharField(max_length=255)
     value = models.CharField(max_length=255, blank=True)
     section = models.ForeignKey(to=Section, related_name='form', on_delete=models.CASCADE)
+    answers: models.Manager['Answer']
 
-class Answers(models.Model):
+class AnswerList(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    section = models.ForeignKey(to=Section, related_name='answers', on_delete=models.CASCADE)
-    user = models.ForeignKey(to=User, related_name='answers', on_delete=models.CASCADE)
+    section = models.ForeignKey(to=Section, related_name='answer_lists', on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, related_name='answer_lists', on_delete=models.CASCADE)
+    answers: models.Manager['Answer']
 
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     input = models.ForeignKey(to=Input, related_name='answer', on_delete=models.CASCADE)
-    answers = models.ForeignKey(to=Answers, related_name='answers', on_delete=models.CASCADE)
+    answers = models.ForeignKey(to=AnswerList, related_name='answers', on_delete=models.CASCADE)
     value = models.CharField(max_length=255)

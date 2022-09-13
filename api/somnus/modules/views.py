@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from .models import Answer, Answers, Input, Module, Page, Section
+from .models import Answer, AnswerList, Input, Module, Page, Section
 from .serializers import AnswerSerializer, AnswersSerializer, InputSerializer, ModuleSerializer, PageSerializer, SectionSerializer
 
 class ModuleViewSet(viewsets.ModelViewSet):
@@ -16,7 +16,7 @@ class SectionViewSet(viewsets.ModelViewSet):
     serializer_class = SectionSerializer
 
 class AnswersViewSet(viewsets.ModelViewSet):
-    queryset = Answers.objects.all()
+    queryset = AnswerList.objects.all()
     serializer_class = AnswersSerializer
 
 class AnswerViewSet(viewsets.ModelViewSet):
