@@ -6,9 +6,10 @@ import {
   LayoutRectangle,
   ScrollView,
   TouchableOpacity,
+  Touchable,
 } from "react-native";
 import { IconButton } from "./IconButton";
-import { SvgXml } from 'react-native-svg'
+import { SvgXml } from "react-native-svg";
 import { colors } from "../../styles/styles";
 
 export function Select(props: {
@@ -19,7 +20,8 @@ export function Select(props: {
   optionDisplay: (arg: any) => string;
   zIndex?: number;
 }) {
-  const { placeholderText, onChange, options, value, optionDisplay, zIndex } = props;
+  const { placeholderText, onChange, options, value, optionDisplay, zIndex } =
+    props;
   const [selected, setSelected] = useState<any>(value);
   const [targeted, setTargeted] = useState<boolean>(false);
   const [displayLayout, setDisplayLayout] = useState<LayoutRectangle>({
@@ -91,19 +93,22 @@ export function Select(props: {
 
   return (
     <View style={{ zIndex: zIndex ? zIndex : 100 }}>
-      <View
-        style={styles.wrapperDiv}
-        onLayout={(e) => {
-          setDisplayLayout(e.nativeEvent.layout);
-        }}
-      >
-        <Text style={styles.textStyle}>
-          {selected ? optionDisplay(selected) : placeholderText}
-        </Text>
-        <IconButton onClick={toggleDropdown}>
-          <SvgXml xml={angleXml} height={35} width={35}/>
-        </IconButton>
-      </View>
+      <TouchableOpacity onPress={toggleDropdown}>
+        <View
+          style={styles.wrapperDiv}
+          onLayout={(e) => {
+            setDisplayLayout(e.nativeEvent.layout);
+          }}
+        >
+          <Text style={styles.textStyle}>
+            {selected ? optionDisplay(selected) : placeholderText}
+          </Text>
+          <IconButton>
+            <SvgXml xml={angleXml} height={35} width={35} />
+          </IconButton>
+        </View>
+      </TouchableOpacity>
+
       <ScrollView style={styles.dropdown}>
         {options.map((option: any) => {
           return (

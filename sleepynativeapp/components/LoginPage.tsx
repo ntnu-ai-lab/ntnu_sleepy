@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import { Button } from "./material/Button";
 import { Card } from "./material/Card";
 import { TextField } from "./material/TextField";
@@ -15,7 +15,7 @@ export function LoginPage() {
     <PageTemplate>
       <View
         style={{
-          height: "100%",
+          height: Dimensions.get("window").height,
           width: "100%",
           paddingHorizontal: 20,
           justifyContent: "center",
