@@ -48,6 +48,10 @@ export function LoginPage() {
           <Button style={{ height: 20 }}>
             <Text style={{ fontSize: 14 }}>Glemt passord?</Text>
           </Button>
+          <Button style={{ height: 20 }} onClick={() => //@ts-ignore 
+          {navigation.navigate("profile");}}>
+            <Text style={{ fontSize: 14 }}>Midlertidig profilside test</Text>
+          </Button>
         </View>
       </View>
     </PageTemplate>

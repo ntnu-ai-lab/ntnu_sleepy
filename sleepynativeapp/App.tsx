@@ -4,6 +4,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { LoginPage } from "./components/LoginPage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SignupPage } from "./components/SignUpPage";
+import { ProfilePage } from "./components/ProfilePage";
+
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -22,6 +24,7 @@ export default function App() {
         >
           <Stack.Screen name="login" component={LoginPage} />
           <Stack.Screen name="signup" component={SignupPage} />
+          <Stack.Screen name="profile" component={ProfilePage} />
         </Stack.Navigator>
     </NavigationContainer>
   );
