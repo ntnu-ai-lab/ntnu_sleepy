@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  docker:
+  build-api:
     runs-on: ubuntu-latest
     steps:
       -
@@ -24,3 +24,5 @@ jobs:
         with:
           push: true
           tags: karlinator/somnus:latest
+          context: "{{defaultContext}}:api"
+
