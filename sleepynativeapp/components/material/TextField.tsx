@@ -10,6 +10,7 @@ export function TextField(props: {
   style?: any;
   textColor?: "white" | "black";
   password?: boolean;
+  error?: boolean
 }) {
   const {
     onChange,
@@ -19,12 +20,15 @@ export function TextField(props: {
     editable,
     textColor,
     password,
+    error,
   } = props;
 
   const styles = StyleSheet.create({
     wrapper: {
       justifyContent: "center",
       backgroundColor: colors.primary,
+      borderWidth: error ? 2 : 0,
+      borderColor: error ? colors.error : "",
       height: 56,
       width: "100%",
       maxWidth: "100%",

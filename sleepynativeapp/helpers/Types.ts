@@ -14,3 +14,5 @@ export interface User {
   occupation: string;
   relationshipStatus: relationshipStatus;
 }
+
+

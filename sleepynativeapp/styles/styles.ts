@@ -6,4 +6,5 @@ export const colors = {
     text_primary: "#000000",
     text_secondary: "#9999A9",
     text_white: "#FFFFFF",
+    error: "#CD4040"
 }
