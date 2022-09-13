@@ -9,10 +9,7 @@ To start a Postgres database locally for Django to use, ensure you have Docker i
 docker run -d -e POSTGRES_DB=django -e POSTGRES_PASSWORD=supersecret -e POSTGRES_USER=django --name=django-db --restart=always -p 5431:5432 postgres:alpine
 ```
 
-Then create a file in this folder called `.default_pgpass` with the content
-```
-localhost:5431:somnus:django:supersecret
-```
+If you want to change any of these parameters, make sure you also set them in the `.env` file (as `DB_USER` etc). 
 
 ### Python/Django
 
