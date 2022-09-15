@@ -18,7 +18,6 @@ env = environ.Env(
     DEBUG=(bool, False),
     HOST=(str, ''),
     DJANGO_SECRET=(str, 'django-insecure-=qq^h!%!1j6vi&h!vor)x2cv#v1^2*n^(gv^5mjxt!z(uv16iz'),
-    DB=(environ.Env.db_url, 'postgres://django:supersecret@localhost:5431/django'),
     ORY_SDK_URL=(str, 'auth.somnus.no'),
     ORY_UI_URL=(str, 'auth.somnus.no/ui')
 )
@@ -26,6 +25,7 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'somnus.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db_url('DB')
+    'default': env.db_url(default='postgres://django:supersecret@localhost:5431/django')
 }
 
 
