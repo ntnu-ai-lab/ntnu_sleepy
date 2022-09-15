@@ -27,7 +27,7 @@ jobs:
     - name: Run Tests
       working-directory: api
       run: |
-        python manage.py test
+        DATABASE_URL=sqlite:// python manage.py test
     - name: Mypy
       working-directory: api
       run: |
