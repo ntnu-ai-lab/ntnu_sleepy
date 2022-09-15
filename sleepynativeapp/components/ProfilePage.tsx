@@ -6,6 +6,7 @@ import { Card } from "./material/Card";
 import { relationshipStatus, UserEx } from "../helpers/Types";
 import { gender } from "../helpers/Types";
 import { Select } from "./material/Select";
+import { ProgressBar } from "./material/ProgressBar";
 
 export function ProfilePage() {
 
