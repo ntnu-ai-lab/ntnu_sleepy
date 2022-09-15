@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('somnus-auth/', include('rest_framework.urls')),
     path('users/', include('somnus.users.urls')),
+    path('modules/', include('somnus.modules.urls')),
 ]

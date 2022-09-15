@@ -8,4 +8,4 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
 class AdminsViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.filter(is_admin=True)
+    queryset = User.objects.filter(is_staff=True)
