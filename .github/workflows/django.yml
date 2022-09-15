@@ -27,7 +27,7 @@ jobs:
     - name: Run Tests
       working-directory: api
       run: |
-        DB_ENGINE=django.db.backends.sqlite3 python manage.py test
+        DB=sqlite:// python manage.py test
     - name: Mypy
       working-directory: api
       run: |
