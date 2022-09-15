@@ -48,10 +48,6 @@ export function LoginPage() {
           <Button style={{ height: 20 }}>
             <Text style={{ fontSize: 14 }}>Glemt passord?</Text>
           </Button>
-          <Button style={{ height: 20 }} onClick={() => //@ts-ignore 
-          {navigation.navigate("general");}}>
-            <Text style={{ fontSize: 14 }}>Midlertidig generelle tips side test</Text>
-          </Button>
         </View>
       </View>
     </PageTemplate>
