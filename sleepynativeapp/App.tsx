@@ -5,6 +5,7 @@ import { LoginPage } from "./components/LoginPage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SignupPage } from "./components/SignUpPage";
 import { ProfilePage } from "./components/ProfilePage";
+import { GeneralPage } from "./components/GeneralPage";
 
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="login" component={LoginPage} />
           <Stack.Screen name="signup" component={SignupPage} />
           <Stack.Screen name="profile" component={ProfilePage} />
+          <Stack.Screen name="general" component={GeneralPage} />
         </Stack.Navigator>
     </NavigationContainer>
   );
