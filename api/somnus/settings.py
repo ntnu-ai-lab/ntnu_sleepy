@@ -14,7 +14,14 @@ import environ
 
 from pathlib import Path
 
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False),
+    HOST=(str, ''),
+    DJANGO_SECRET=(str, 'django-insecure-=qq^h!%!1j6vi&h!vor)x2cv#v1^2*n^(gv^5mjxt!z(uv16iz'),
+    DB=(environ.Env.db_url, 'postgres://django:supersecret@localhost:5431/django'),
+    ORY_SDK_URL=(str, 'auth.somnus.no'),
+    ORY_UI_URL=(str, 'auth.somnus.no/ui')
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,14 +31,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET', default='django-insecure-=qq^h!%!1j6vi&h!vor)x2cv#v1^2*n^(gv^5mjxt!z(uv16iz')
+SECRET_KEY = env('DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG', cast=bool, default=False)
+DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS: list[str] = [
-    'somnus.no',
-    env('HOST', default=None), # Until we set up an actual hostname
+    'api.somnus.no',
+    env('HOST'), # Until we set up an actual hostname
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -88,14 +95,7 @@ WSGI_APPLICATION = 'somnus.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': env('DB_ENGINE', default='django.db.backends.postgresql'),
-        'USER': env('DB_USER', default='django'),
-        'HOST': env('DB_HOST', default='localhost'),
-        'NAME': env('DB_NAME', default='django'),
-        'PASSWORD': env('DB_PASSWORD', default='supersecret'), # This will _certainly_ not work in any kind of production environment.
-        'PORT': env('DB_PORT', default=5431),
-    }
+    'default': env.db_url('DB')
 }
 
 
@@ -144,8 +144,8 @@ AUTHENTICATION_BACKENDS = [
     "django_ory_auth.backend.OryBackend",
 ]
 
-ORY_SDK_URL=env("ORY_SDK_URL", default='https://auth.somnus.no')
-ORY_UI_URL=env("ORY_SDK_URL", default='https://auth.somnus.no/ui')
+ORY_SDK_URL=env("ORY_SDK_URL")
+ORY_UI_URL=env("ORY_UI_URL")
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
