@@ -86,7 +86,6 @@ export function ProfilePage() {
                     }}/>
                 </Card>
             </View>
-            <NavBar />
         </PageTemplate>
     )
 }
