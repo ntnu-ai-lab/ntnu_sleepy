@@ -141,7 +141,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTHENTICATION_BACKENDS = [
-    "django_ory_auth.backend.OryBackend",
+    "somnus.users.backends.AuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
