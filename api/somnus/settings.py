@@ -38,6 +38,7 @@ DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS: list[str] = [
     'api.somnus.no',
+    '10.0.2.2',
     env('HOST'), # Until we set up an actual hostname
 ]
 
@@ -60,6 +61,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_ory_auth.middleware.AuthenticationMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -150,6 +152,6 @@ ORY_UI_URL=env("ORY_UI_URL")
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
