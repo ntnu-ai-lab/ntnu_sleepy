@@ -5,9 +5,8 @@ export default (parent = {}) => {
     const { env = {} } = process || {}
   
     const {
-      // This is the URL of your deployment. In our case we use the ORY Demo
       // environment
-      KRATOS_URL = "https://localhost:4433",
+      KRATOS_URL = "http://localhost:4433",
 
     } = env
   

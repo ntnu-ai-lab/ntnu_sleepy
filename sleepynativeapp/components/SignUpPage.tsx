@@ -1,4 +1,4 @@
-import { SelfServiceRegistrationFlow, SubmitSelfServiceRegistrationFlowBody } from "@ory/kratos-client";
+import { SelfServiceRegistrationFlow, SubmitSelfServiceRegistrationFlowBody, SubmitSelfServiceRegistrationFlowWithPasswordMethodBody } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text } from "react-native";
@@ -13,6 +13,7 @@ import { Card } from "./material/Card";
 import { Select } from "./material/Select";
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
+
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -39,17 +40,21 @@ export function SignupPage() {
   const { setSession, isAuthenticated } = useContext(AuthContext)
 
   const initializeFlow = () =>
-    newKratosSdk(project)
+    { 
+      console.log(project)
+      newKratosSdk(project)
       .initializeSelfServiceRegistrationFlowWithoutBrowser()
       // The flow was initialized successfully, let's set the form data:
       .then(({ data: flow }) => {
         setConfig(flow)
       })
       .catch(console.error)
+    }
 
   // When the component is mounted, we initialize a new use login flow:
   useFocusEffect(
     React.useCallback(() => {
+      console.log("initializeflow")
       initializeFlow()
 
       return () => {
@@ -60,7 +65,7 @@ export function SignupPage() {
 
   useEffect(() => {
     if (isAuthenticated) { //@ts-ignore
-      navigation.navigate("Home")
+      navigation.navigate("profile")
     }
   }, [isAuthenticated])
 
@@ -76,6 +81,7 @@ export function SignupPage() {
       ? newKratosSdk(project)
           .submitSelfServiceRegistrationFlow(flow.id, payload)
           .then(({ data }) => {
+            console.log(data)
             // ORY Kratos can be configured in such a way that it requires a login after
             // registration. You could handle that case by navigating to the Login screen
             // but for simplicity we'll just print an error here:
@@ -136,6 +142,16 @@ export function SignupPage() {
         <Button
           variant="contained"
           style={{ width: "50%", alignSelf: "center" }}
+          onClick={() => {
+            const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody = {
+              method: "password",
+              password: password,
+              traits: {email: email}
+            }
+            console.log(flow)
+            console.log(userInput)
+            onSubmit(userInput)
+          }}
         >
           <Text style={{ fontSize: 20 }}>Registrer</Text>
         </Button>

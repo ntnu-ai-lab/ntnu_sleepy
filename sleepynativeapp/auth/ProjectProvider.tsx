@@ -16,7 +16,7 @@ interface Context {
 
 export const ProjectContext = createContext<Context>({
   setProject: () => {},
-  project: "playground",
+  project: "Sleepyapp",
 })
 
 interface Props {
@@ -24,7 +24,7 @@ interface Props {
 }
 
 export default ({ children }: Props) => {
-  const [project, setProject] = useState("playground")
+  const [project, setProject] = useState("Sleepyapp")
 
   return (
     <ProjectContext.Provider

@@ -1,6 +1,6 @@
 // A small which adds retries to axios
 
-import { AxiosInstance } from "axios"
+import { AxiosInstance } from "@ory/kratos-client/node_modules/axios/index"
 
 export const resilience = (axios: AxiosInstance) => {
   axios.interceptors.response.use(
