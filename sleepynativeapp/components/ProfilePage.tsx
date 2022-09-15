@@ -1,15 +1,17 @@
 import { PageTemplate } from "./PageTemplate";
-import React, {useState } from "react";
+import React, {useContext, useState } from "react";
 import { View, Text} from "react-native";
 import { TextField } from "./material/TextField";
 import { Card } from "./material/Card";
 import { relationshipStatus, UserEx } from "../helpers/Types";
 import { gender } from "../helpers/Types";
 import { Select } from "./material/Select";
+import { AuthContext } from "../auth/AuthProvider";
 
 export function ProfilePage() {
 
     const [state, setState] = useState(UserEx);
+    const {sessionToken} = useContext(AuthContext)
 
     const onEmailChange = (arg: string) => 
     setState((prev) => ({
@@ -58,6 +60,7 @@ export function ProfilePage() {
         <PageTemplate>
             <View style={{height: "100%", width: "100%", paddingHorizontal: 20, justifyContent: "center"}}>
                 <Text style={{paddingBottom: "10%" ,fontSize: 25, alignSelf: "center"}}>Din profil</Text>
+                <Text>{sessionToken}</Text>
                 <Card style={{padding: 20}}>
                     <Text style={{color: "white"}}>Email</Text>
                     <TextField value={state.email} onChange={onEmailChange} placeholderText={state.email}/>

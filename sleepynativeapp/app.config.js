@@ -6,7 +6,7 @@ export default (parent = {}) => {
   
     const {
       // environment
-      KRATOS_URL = "http://localhost:4433",
+      KRATOS_URL = "http://10.0.2.2:4433",
 
     } = env
   

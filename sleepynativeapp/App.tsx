@@ -1,3 +1,4 @@
+import 'react-native-url-polyfill/auto';
 import ProjectProvider from "./auth/ProjectProvider";
 import React from "react";
 import AuthProvider from "./auth/AuthProvider";
