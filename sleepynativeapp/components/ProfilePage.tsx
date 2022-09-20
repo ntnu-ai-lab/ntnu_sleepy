@@ -8,6 +8,7 @@ import { gender } from "../helpers/Types";
 import { Select } from "./material/Select";
 import { AuthContext } from "../auth/AuthProvider";
 import { Button } from "./material/Button";
+import { getTest } from "../api/userApi";
 
 export function ProfilePage() {
 
@@ -63,6 +64,7 @@ export function ProfilePage() {
                 <Text style={{paddingBottom: "10%" ,fontSize: 25, alignSelf: "center"}}>Din profil</Text>
                 <Text>{sessionToken} {session?.identity.id}</Text>{/* @ts-ignore */}
                 <Button variant="contained" onClick={() => setSession({session_token: undefined, session: undefined})}><Text>Logg ut</Text></Button>
+                <Button onClick={() => {if(sessionToken && session) getTest(session.identity.id,sessionToken);}}><Text>Test</Text></Button>
                 <Card style={{padding: 20}}>
                     <Text style={{color: "white"}}>Email</Text>
                     <TextField value={state.email} onChange={onEmailChange} placeholderText={state.email}/>

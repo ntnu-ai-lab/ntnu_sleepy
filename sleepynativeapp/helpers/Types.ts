@@ -15,9 +15,7 @@ export interface User {
   relationshipStatus: relationshipStatus;
 }
 export interface DjangoUser {
-  id: string;
-  username: string;
-  password: string;
+  name: string;
 }
 
 //temporary user before connecting to database

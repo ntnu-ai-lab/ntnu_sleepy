@@ -7,7 +7,7 @@ import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-import { gender, relationshipStatus } from "../helpers/Types";
+import { DjangoUser, gender, relationshipStatus } from "../helpers/Types";
 import { colors } from "../styles/styles";
 import { Button } from "./material/Button";
 import { Card } from "./material/Card";
@@ -65,9 +65,12 @@ export function SignupPage() {
   )
 
   useEffect(() => {
-    if (isAuthenticated && sessionToken && session) { //@ts-ignore
+    if (isAuthenticated && sessionToken && session) {
+      const user: DjangoUser = {
+        name: name
+      } //@ts-ignore
       navigation.navigate("profile")
-      createUser(session.identity.id, sessionToken)
+      createUser(user, session.identity.id, sessionToken)
     }
   }, [isAuthenticated])
 

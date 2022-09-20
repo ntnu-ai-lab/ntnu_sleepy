@@ -6,4 +6,4 @@ from somnus.users.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'is_staff', 'is_superuser', 'username']
+        fields = ['id', 'is_staff', 'is_superuser', 'username', 'name']
