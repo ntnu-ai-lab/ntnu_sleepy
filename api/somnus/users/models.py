@@ -11,4 +11,5 @@ if TYPE_CHECKING:
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=255, default='')
     answers: models.Manager['Answer']

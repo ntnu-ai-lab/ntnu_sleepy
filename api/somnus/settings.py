@@ -38,6 +38,7 @@ DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS: list[str] = [
     'api.somnus.no',
+    '10.0.2.2',
     env('HOST'), # Until we set up an actual hostname
 ]
 
@@ -63,10 +64,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'somnus.common.middleware.mobile_csrf_middleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_ory_auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'somnus.urls'
@@ -141,7 +144,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTHENTICATION_BACKENDS = [
-    "django_ory_auth.backend.OryBackend",
+    "somnus.users.backends.OryBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -150,6 +153,6 @@ ORY_UI_URL=env("ORY_UI_URL")
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
