@@ -12,16 +12,18 @@ export function NavBar() {
 
     const styles = StyleSheet.create ({
         NavBar: {
-            height: 60,
+            height: 75,
             width: "100%",
             backgroundColor: colors.primary,
             display: "flex",
+            flexDirection: "row",
+           
         },
         Image: {
-            height:50,
+            height: 50,
             width: 50,
-            padding: 5,
-            display: "flex", //fungerer ikke for å legge de på rekke
+            padding: 35,
+            flexDirection: "row",
         },
     });
 
