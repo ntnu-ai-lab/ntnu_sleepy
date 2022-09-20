@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { View, Text, Dimensions } from "react-native";
 import { Button } from "./material/Button";
 import { Card } from "./material/Card";
+import { ProgressBar } from "./material/ProgressBar";
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
 
