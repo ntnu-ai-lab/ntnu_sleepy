@@ -5,11 +5,16 @@ import Home from "../../assets/home.svg";
 import Stats from "../../assets/statistics.svg";
 import Assignment from "../../assets/assignment.svg";
 import Settings from "../../assets/settings.svg";
+import HomeSelected from "../../assets/homeselected.svg";
 import { colors } from "../../styles/styles";
 import { IconButton } from "./IconButton";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 export function NavBar() {
 
+    const navigation = useNavigation();
+    const route = useRoute();
+    
     const styles = StyleSheet.create ({
         NavBar: {
             height: 75,
@@ -29,8 +34,9 @@ export function NavBar() {
 
     return (
         <View style={styles.NavBar}>
-            <IconButton style={styles.Image}>
-            <Home />
+            <IconButton style={styles.Image} onClick={() => //@ts-ignore
+             { navigation.navigate("home")}}>
+            {route.name === "home" ? <HomeSelected /> : <Home />}
             </IconButton>
             <IconButton style={styles.Image}>
             <Tools />
