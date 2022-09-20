@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet} from "react-native";
+import { View, StyleSheet, Dimensions} from "react-native";
 import Tools from "../../assets/tools.svg";
 import ToolsSelected from "../../assets/toolsSelected.svg";
 import Home from "../../assets/home.svg";
@@ -24,9 +24,14 @@ export function NavBar() {
             height: 75,
             width: "100%",
             backgroundColor: colors.primary,
+            justifyContent: "space-evenly",
             display: "flex",
             flexDirection: "row",
-           
+            flex: 1,
+            zIndex: 100,
+            alignItems: "center",
+            position: "absolute",
+            bottom: 0,
         },
         Image: {
             height: 50,
@@ -37,7 +42,7 @@ export function NavBar() {
     });
 
     return (
-        <View style={styles.NavBar}>
+        <View style={styles.NavBar} >
             <IconButton style={styles.Image} onClick={() => //@ts-ignore
              { navigation.navigate("home")}}>
             {route.name === "home" ? <HomeSelected /> : <Home />}
