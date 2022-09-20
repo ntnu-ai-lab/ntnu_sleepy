@@ -24,7 +24,7 @@ class OryBackend(BaseBackend):
         if not user_id:
             return None
         user, created = UserModel._default_manager.get_or_create(
-            **{UserModel.USERNAME_FIELD: user_id, id: user_id}
+            **{UserModel.USERNAME_FIELD: user_id, 'id': user_id}
         )
 
         return user
