@@ -60,13 +60,13 @@ export function ProfilePage() {
                 <Text style={{paddingBottom: "10%" ,fontSize: 25, alignSelf: "center"}}>Din profil</Text>
                 <Card style={{padding: 20}}>
                     <Text style={{color: "white"}}>Email</Text>
-                    <TextField value={state.email} onChange={onEmailChange} placeholderText={state.email}/>
+                    <TextField editable={false} value={state.email} onChange={onEmailChange} placeholderText={state.email}/>
                     <Text style={{color: "white"}}>Navn</Text>
                     <TextField value={state.name} onChange={onNameChange} placeholderText={state.name}/>
                     <Text style={{color: "white"}}>Passord</Text>
-                    <TextField value={state.password} onChange={onPasswordChange} placeholderText={state.password}/> 
+                    <TextField editable={false} value={state.password} onChange={onPasswordChange} placeholderText={state.password}/> 
                     <Text style={{color: "white"}}>Fødselsdato</Text>
-                    <TextField value={state.dateOfBirth} onChange={onDateOfBirthChange} placeholderText={state.dateOfBirth}/> 
+                    <TextField editable={false} value={state.dateOfBirth} onChange={onDateOfBirthChange} placeholderText={state.dateOfBirth}/> 
                     <Text style={{color: "white"}}>Kjønn</Text>
                     <Select value={state.gender} onChange={onGenderChange} placeholderText={state.gender} options={["male", "female", "other"]} optionDisplay={(arg: gender) => {
                     if (arg === "male") return "Mann"
@@ -74,7 +74,7 @@ export function ProfilePage() {
                     else return "Annet"
                     }}/>
                     <Text style={{color: "white"}}>Yrke</Text>
-                    <TextField value={state.occupation} onChange={onOccupationChange} placeholderText={state.occupation}/>
+                    <TextField editable={false} value={state.occupation} onChange={onOccupationChange} placeholderText={state.occupation}/>
                     <Text style={{color: "white"}}>Sivilstatus</Text>
                     <Select value={state.relationshipStatus} onChange={onRelationshipStatusChange} placeholderText={state.relationshipStatus} options={["married", "coliving", "relationship", "single"]} optionDisplay={ (arg: relationshipStatus) => {
                     if (arg === "married") return "Gift"
