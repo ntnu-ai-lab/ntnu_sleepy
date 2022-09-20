@@ -9,6 +9,7 @@ import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
 import { Button } from "./material/Button";
 import { Card } from "./material/Card";
+import { ProgressBar } from "./material/ProgressBar";
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
 
