@@ -29,8 +29,8 @@ export function NavBar() {
 
     return (
         <View style={styles.NavBar}>
-           <IconButton style={styles.Image}>
-           <Home />
+            <IconButton style={styles.Image}>
+            <Home />
             </IconButton>
             <IconButton style={styles.Image}>
             <Tools />
