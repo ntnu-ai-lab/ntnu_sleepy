@@ -34,15 +34,15 @@ export function SignupPage() {
       </View>
       <Card style={{paddingVertical: 5, width: "90%", alignSelf: "center", alignItems: "center", justifyContent: "center" }}>
         <View style={{width: "90%"}}>
-          <TextField value={email} onChange={setEmail} placeholderText="Epost"/>
-          <TextField value={name} onChange={setName} placeholderText="Fullt Navn"/>
+          <TextField value={email} onChange={setEmail} placeholderText="E-postadresse"/>
+          <TextField value={name} onChange={setName} placeholderText="Fullt navn"/>
           <TextField value={password} onChange={setPassword} placeholderText="Passord" password/>
-          <TextField value={password2} onChange={setPassword2} placeholderText="Oppgi Passord på nytt" password error={!passwordMatch()}/>
+          <TextField value={password2} onChange={setPassword2} placeholderText="Oppgi passord på nytt" password error={!passwordMatch()}/>
           <Select placeholderText="Sivilstatus" options={["married", "coliving", "relationship", "single"]} optionDisplay={(arg: relationshipStatus) => {
             if (arg === "married") return "Gift"
             if (arg === "coliving") return "Samboer"
             if (arg === "relationship") return "Fast forhold"
-            return "Single"
+            return "Singel"
           }}/>
           <Select placeholderText="Kjønn" options={["male", "female", "other"]} optionDisplay={(arg: gender) => {
             if (arg === "male") return "Mann"
