@@ -22,7 +22,7 @@ export function NavBar() {
         Image: {
             height: 50,
             width: 50,
-            padding: 35,
+            padding: 37,
             flexDirection: "row",
         },
     });
@@ -30,19 +30,19 @@ export function NavBar() {
     return (
         <View style={styles.NavBar}>
            <IconButton style={styles.Image}>
-            <Tools />
+           <Home />
             </IconButton>
             <IconButton style={styles.Image}>
-            <Home />
+            <Tools />
             </IconButton>
             <IconButton style={styles.Image}>
             <Stats />
             </IconButton>
             <IconButton style={styles.Image}>
-            <Settings />
+            <Assignment />
             </IconButton>
             <IconButton style={styles.Image}>
-            <Assignment />
+            <Settings />
             </IconButton>
         </View>
     );
