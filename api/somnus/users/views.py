@@ -1,5 +1,6 @@
 from rest_framework import viewsets, views
 from rest_framework.response import Response
+from rest_framework.request import Request
 from somnus.users.models import User
 
 from somnus.users.serializers import UserSerializer
@@ -12,7 +13,7 @@ class AdminsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_staff=True)
 
 class TestView(views.APIView):
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         print(request.headers)
         print(request.user)
         return Response()
