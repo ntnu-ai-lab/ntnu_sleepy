@@ -1,14 +1,18 @@
 import React from "react";
 import { View, StyleSheet} from "react-native";
 import Tools from "../../assets/tools.svg";
+import ToolsSelected from "../../assets/toolsSelected.svg";
 import Home from "../../assets/home.svg";
 import Stats from "../../assets/statistics.svg";
+import StatsSelected from "../../assets/statsSelected.svg";
 import Assignment from "../../assets/assignment.svg";
+import AssignmentSelected from "../../assets/assignmentSelected.svg";
 import Settings from "../../assets/settings.svg";
+import SettingsSelected from "../../assets/settingsSelected.svg";
 import HomeSelected from "../../assets/homeselected.svg";
 import { colors } from "../../styles/styles";
 import { IconButton } from "./IconButton";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationRouteContext, useNavigation, useRoute } from "@react-navigation/native";
 
 export function NavBar() {
 
@@ -38,17 +42,21 @@ export function NavBar() {
              { navigation.navigate("home")}}>
             {route.name === "home" ? <HomeSelected /> : <Home />}
             </IconButton>
-            <IconButton style={styles.Image}>
-            <Tools />
+            <IconButton style={styles.Image} onClick={() => //@ts-ignore
+            {navigation.navigate("tools")}}>
+            {route.name === "tools" ? <ToolsSelected /> : <Tools />}
             </IconButton>
-            <IconButton style={styles.Image}>
-            <Stats />
+            <IconButton style={styles.Image} onClick={() => //@ts-ignore
+            {navigation.navigate("stats")}}>
+            {route.name === "stats" ? <StatsSelected /> : <Stats />}
             </IconButton>
-            <IconButton style={styles.Image}>
-            <Assignment />
+            <IconButton style={styles.Image} onClick={() => //@ts-ignore
+            {navigation.navigate("assignment")}}>
+                {route.name === "assignment" ? <AssignmentSelected /> : <Assignment />}
             </IconButton>
-            <IconButton style={styles.Image}>
-            <Settings />
+            <IconButton style={styles.Image} onClick={() => //@ts-ignore
+            {navigation.navigate("settings")}}>
+                {route.name === "settings" ? <SettingsSelected /> : <Settings />}
             </IconButton>
         </View>
     );

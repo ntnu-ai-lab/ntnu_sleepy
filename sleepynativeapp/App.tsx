@@ -27,6 +27,12 @@ export default function App() {
           <Stack.Screen name="signup" component={SignupPage} />
           <Stack.Screen name="profile" component={ProfilePage} />
           <Stack.Screen name="test" component={TestPage} />
+          {/*Just for testing*/}
+          <Stack.Screen name="home" component={TestPage} />
+          <Stack.Screen name="tools" component={TestPage} />
+          <Stack.Screen name="stats" component={TestPage} />
+          <Stack.Screen name="assignment" component={TestPage} />
+          <Stack.Screen name="settings" component={TestPage} />
         </Stack.Navigator>
     </NavigationContainer>
   );
