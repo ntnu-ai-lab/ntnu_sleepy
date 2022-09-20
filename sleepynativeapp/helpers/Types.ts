@@ -14,6 +14,12 @@ export interface User {
   occupation: string;
   relationshipStatus: relationshipStatus;
 }
+export interface DjangoUser {
+  id: string;
+  username: string;
+  password: string;
+}
+
 //temporary user before connecting to database
 export const UserEx: User = {
   email: "test@test.com",

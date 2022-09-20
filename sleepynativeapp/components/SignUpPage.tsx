@@ -2,6 +2,7 @@ import { SelfServiceRegistrationFlow, SubmitSelfServiceRegistrationFlowBody, Sub
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text } from "react-native";
+import { createUser } from "../api/userApi";
 import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
@@ -37,7 +38,7 @@ export function SignupPage() {
     undefined,
   )
   const { project } = useContext(ProjectContext)
-  const { setSession, isAuthenticated } = useContext(AuthContext)
+  const { setSession, isAuthenticated, sessionToken, session } = useContext(AuthContext)
 
   const initializeFlow = () =>
     { 
@@ -64,8 +65,9 @@ export function SignupPage() {
   )
 
   useEffect(() => {
-    if (isAuthenticated) { //@ts-ignore
+    if (isAuthenticated && sessionToken && session) { //@ts-ignore
       navigation.navigate("profile")
+      createUser(session.identity.id, sessionToken)
     }
   }, [isAuthenticated])
 
@@ -148,8 +150,6 @@ export function SignupPage() {
               password: password,
               traits: {email: email}
             }
-            console.log(flow)
-            console.log(userInput)
             onSubmit(userInput)
           }}
         >

@@ -7,11 +7,12 @@ import { relationshipStatus, UserEx } from "../helpers/Types";
 import { gender } from "../helpers/Types";
 import { Select } from "./material/Select";
 import { AuthContext } from "../auth/AuthProvider";
+import { Button } from "./material/Button";
 
 export function ProfilePage() {
 
     const [state, setState] = useState(UserEx);
-    const {sessionToken} = useContext(AuthContext)
+    const {sessionToken, session, setSession} = useContext(AuthContext)
 
     const onEmailChange = (arg: string) => 
     setState((prev) => ({
@@ -60,7 +61,8 @@ export function ProfilePage() {
         <PageTemplate>
             <View style={{height: "100%", width: "100%", paddingHorizontal: 20, justifyContent: "center"}}>
                 <Text style={{paddingBottom: "10%" ,fontSize: 25, alignSelf: "center"}}>Din profil</Text>
-                <Text>{sessionToken}</Text>
+                <Text>{sessionToken} {session?.identity.id}</Text>{/* @ts-ignore */}
+                <Button variant="contained" onClick={() => setSession({session_token: undefined, session: undefined})}><Text>Logg ut</Text></Button>
                 <Card style={{padding: 20}}>
                     <Text style={{color: "white"}}>Email</Text>
                     <TextField value={state.email} onChange={onEmailChange} placeholderText={state.email}/>
