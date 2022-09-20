@@ -11,9 +11,3 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class AdminsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.filter(is_staff=True)
-
-class TestView(views.APIView):
-    def get(self, request: Request) -> Response:
-        print(request.headers)
-        print(request.user)
-        return Response()
