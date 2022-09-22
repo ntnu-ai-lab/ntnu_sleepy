@@ -5,6 +5,7 @@ import { AuthContext } from "../auth/AuthProvider";
 import { LoginPage } from "./LoginPage";
 import { ProfilePage } from "./ProfilePage";
 import { SignupPage } from "./SignUpPage";
+import { TestModulePage } from "./TestModulePage";
 
 export function Navigation() {
     const Stack = createNativeStackNavigator();
@@ -25,6 +26,12 @@ export function Navigation() {
             <Stack.Screen name="login" component={LoginPage} />
             <Stack.Screen name="signup" component={SignupPage} />
             <Stack.Screen name="profile" component={ProfilePage} />
+            <Stack.Screen name="testmodule" component={TestModulePage} />
+            <Stack.Screen name="home" component={TestModulePage} />
+            <Stack.Screen name="settings" component={TestModulePage} />
+            <Stack.Screen name="assignments" component={TestModulePage} />
+            <Stack.Screen name="statistics" component={TestModulePage} />
+            <Stack.Screen name="tools" component={TestModulePage} />
           </Stack.Navigator>
         </NavigationContainer>
     )
