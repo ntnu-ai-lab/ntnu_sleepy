@@ -1,6 +1,9 @@
+import { storeLocalUser } from "../devicestorage/StorageController"
 import { DjangoUser } from "../helpers/Types"
 
 export async function createUser(user: DjangoUser, identiyId: string, token: string) {
+
+    console.log(user)
 
     const response = await fetch(
         `http://10.0.2.2:8000/users/${identiyId}/`,
@@ -30,6 +33,11 @@ export async function getTest(identiyId: string, token: string) {
             body: null
         }
     )
-
-    console.log(await response.json())
+    await response.json().then(r => {
+        console.log(r);
+        const user: DjangoUser = {
+            name: r.name
+        }
+        storeLocalUser(user)
+    })
 }

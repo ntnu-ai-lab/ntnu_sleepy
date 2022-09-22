@@ -1,6 +1,6 @@
 import { PageTemplate } from "./PageTemplate";
 import React, {useContext, useState } from "react";
-import { View, Text} from "react-native";
+import { View, Text, ScrollView} from "react-native";
 import { TextField } from "./material/TextField";
 import { Card } from "./material/Card";
 import { relationshipStatus, UserEx } from "../helpers/Types";
@@ -9,10 +9,13 @@ import { Select } from "./material/Select";
 import { AuthContext } from "../auth/AuthProvider";
 import { Button } from "./material/Button";
 import { getTest } from "../api/userApi";
+import { useRecoilState, useRecoilValue } from "recoil"
+import { loggedInUser } from "../state/atoms";
 
 export function ProfilePage() {
 
     const [state, setState] = useState(UserEx);
+    const [thisUser, ] = useRecoilState(loggedInUser);
     const {sessionToken, session, setSession} = useContext(AuthContext)
 
     const onEmailChange = (arg: string) => 
@@ -60,18 +63,12 @@ export function ProfilePage() {
 
     return (
         <PageTemplate>
-            <View style={{height: "100%", width: "100%", paddingHorizontal: 20, justifyContent: "center"}}>
-                <Text style={{paddingBottom: "10%" ,fontSize: 25, alignSelf: "center"}}>Din profil</Text>
-                <Text>{sessionToken} {session?.identity.id}</Text>{/* @ts-ignore */}
-                <Button variant="contained" onClick={() => setSession({session_token: undefined, session: undefined})}><Text>Logg ut</Text></Button>
-                <Button onClick={() => {if(sessionToken && session) getTest(session.identity.id,sessionToken);}}><Text>Test</Text></Button>
+            <ScrollView style={{height: "100%", width: "100%", paddingHorizontal: 20,}}>
                 <Card style={{padding: 20}}>
                     <Text style={{color: "white"}}>Email</Text>
                     <TextField editable={false} value={state.email} onChange={onEmailChange} placeholderText={state.email}/>
                     <Text style={{color: "white"}}>Navn</Text>
-                    <TextField value={state.name} onChange={onNameChange} placeholderText={state.name}/>
-                    <Text style={{color: "white"}}>Passord</Text>
-                    <TextField editable={false} value={state.password} onChange={onPasswordChange} placeholderText={state.password}/> 
+                    <TextField value={thisUser ? thisUser.name : "Logg inn på nytt"} editable={false} />
                     <Text style={{color: "white"}}>Fødselsdato</Text>
                     <TextField editable={false} value={state.dateOfBirth} onChange={onDateOfBirthChange} placeholderText={state.dateOfBirth}/> 
                     <Text style={{color: "white"}}>Kjønn</Text>
@@ -88,9 +85,11 @@ export function ProfilePage() {
                     if (arg === "coliving") return "Samboer"
                     if (arg === "relationship") return "Fast forhold"
                     return "Single"
-                    }}/>
+                    }}/>{/*@ts-ignore */}
+                    <Button variant="contained" onClick={() => setSession({session_token: undefined, session: undefined})}><Text>Logg ut</Text></Button>
+                    <Button onClick={() => {if(sessionToken && session) getTest(session.identity.id,sessionToken);}}><Text>Test</Text></Button>
                 </Card>
-            </View>
+            </ScrollView>
         </PageTemplate>
     )
 }
