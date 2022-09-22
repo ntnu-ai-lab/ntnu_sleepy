@@ -8,7 +8,7 @@ export type relationshipStatus =
 export interface User {
   email: string;
   name: string;
-  password: string;
+  password?: string;
   dateOfBirth: string;
   gender: gender;
   occupation: string;

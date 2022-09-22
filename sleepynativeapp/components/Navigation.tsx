@@ -35,6 +35,7 @@ export function Navigation() {
         ) : (
           <>
             <Stack.Screen name="login" component={LoginPage} />
+            <Stack.Screen name="tools" component={TestModulePage} />
             <Stack.Screen name="signup" component={SignupPage} />
           </>
         )}
