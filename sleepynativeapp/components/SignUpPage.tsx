@@ -11,7 +11,7 @@ import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-import { DjangoUser, gender, relationshipStatus } from "../helpers/Types";
+import { DjangoUser, gender, relationshipStatus } from "../types/Types";
 import { colors } from "../styles/styles";
 import { Button } from "./material/Button";
 import { Card } from "./material/Card";
