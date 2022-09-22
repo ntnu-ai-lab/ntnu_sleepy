@@ -7,6 +7,7 @@ import { HomePage } from "./HomePage";
 import { LoginPage } from "./LoginPage";
 import { ProfilePage } from "./ProfilePage";
 import { SignupPage } from "./SignUpPage";
+import { TestModulePage } from "./TestModulePage";
 
 export function Navigation() {
   const Stack = createNativeStackNavigator();
@@ -28,11 +29,13 @@ export function Navigation() {
           <>
             <Stack.Screen name="profile" component={ProfilePage} />
             <Stack.Screen name="home" component={HomePage} />
+            <Stack.Screen name="tools" component={TestModulePage} />
             <Stack.Screen name="assignment" component={GeneralPage} />
           </>
         ) : (
           <>
             <Stack.Screen name="login" component={LoginPage} />
+            <Stack.Screen name="tools" component={TestModulePage} />
             <Stack.Screen name="signup" component={SignupPage} />
           </>
         )}

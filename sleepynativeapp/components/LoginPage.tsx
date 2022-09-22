@@ -127,6 +127,13 @@ export function LoginPage() {
             <Text style={{ fontSize: 14 }}>Midlertidig profilside test</Text>
           </Button>
         </View>
+        <View>
+          <Button style={{height: 20}}
+          onClick={() => { //@ts-ignore
+            navigation.navigate("tools");
+          }}><Text style={{fontSize: 14}}>Midlertidig modulside </Text>
+            </Button>
+        </View>
       </View>
     </PageTemplate>
   );
