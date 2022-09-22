@@ -8,6 +8,17 @@ export interface Input {
     section: string;
 }
 
+export interface Module {
+    id: string;
+    pages: Page[];
+}
+
+export interface Page {
+    id: string;
+    module: string;
+    sections: Section[];
+}
+
 export interface BaseSection {
     id: string;
     heading: string;
