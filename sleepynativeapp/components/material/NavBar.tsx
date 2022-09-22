@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Dimensions} from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import Tools from "../../assets/tools.svg";
 import ToolsSelected from "../../assets/toolsSelected.svg";
 import Home from "../../assets/home.svg";
@@ -18,8 +18,8 @@ export function NavBar() {
 
     const navigation = useNavigation();
     const route = useRoute();
-    
-    const styles = StyleSheet.create ({
+
+    const styles = StyleSheet.create({
         NavBar: {
             height: 75,
             width: "100%",
@@ -32,6 +32,7 @@ export function NavBar() {
             alignItems: "center",
             position: "absolute",
             bottom: 0,
+            //top: Dimensions.get("window").height - 10
         },
         Image: {
             height: 50,
@@ -44,23 +45,23 @@ export function NavBar() {
     return (
         <View style={styles.NavBar} >
             <IconButton style={styles.Image} onClick={() => //@ts-ignore
-             { navigation.navigate("home")}}>
-            {route.name === "home" ? <HomeSelected /> : <Home />}
+            { navigation.navigate("home") }}>
+                {route.name === "home" ? <HomeSelected /> : <Home />}
             </IconButton>
             <IconButton style={styles.Image} onClick={() => //@ts-ignore
-            {navigation.navigate("tools")}}>
-            {route.name === "tools" ? <ToolsSelected /> : <Tools />}
+            { navigation.navigate("tools") }}>
+                {route.name === "tools" ? <ToolsSelected /> : <Tools />}
             </IconButton>
             <IconButton style={styles.Image} onClick={() => //@ts-ignore
-            {navigation.navigate("stats")}}>
-            {route.name === "stats" ? <StatsSelected /> : <Stats />}
+            { navigation.navigate("stats") }}>
+                {route.name === "stats" ? <StatsSelected /> : <Stats />}
             </IconButton>
             <IconButton style={styles.Image} onClick={() => //@ts-ignore
-            {navigation.navigate("assignment")}}>
+            { navigation.navigate("assignment") }}>
                 {route.name === "assignment" ? <AssignmentSelected /> : <Assignment />}
             </IconButton>
             <IconButton style={styles.Image} onClick={() => //@ts-ignore
-            {navigation.navigate("settings")}}>
+            { navigation.navigate("settings") }}>
                 {route.name === "settings" ? <SettingsSelected /> : <Settings />}
             </IconButton>
         </View>

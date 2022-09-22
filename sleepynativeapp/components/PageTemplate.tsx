@@ -13,8 +13,8 @@ export function PageTemplate(props: {
       style={[
         {
           backgroundColor: colors.primary_dark,
-          width: Dimensions.get("screen").width,
-          height: Dimensions.get("screen").height,
+          width: "100%",
+          height: "100%",
           paddingTop: 80,
         },
         style,
