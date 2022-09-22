@@ -8,9 +8,7 @@ services:
     environment:
       DSN: postgresql://postgres:postgres@db:5432/kratos
     volumes:
-      - type: bind
-        source: ./config
-        target: /etc/config/kratos
+      - ./config:/etc/config/kratos:z
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
     restart: on-failure
     networks:
@@ -27,9 +25,7 @@ services:
       DSN: postgresql://postgres:postgres@db:5432/kratos
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
     volumes:
-      - type: bind
-        source: ./config
-        target: /etc/config/kratos
+      - ./config:/etc/config/kratos:z
     networks:
       - kratos 
   db:
@@ -41,6 +37,7 @@ services:
       - db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
       POSTGRES_DB: kratos
 
 networks:
