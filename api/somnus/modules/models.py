@@ -15,7 +15,7 @@ class Page(models.Model):
 
 class Section(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    rules = models.CharField(max_length=255)
+    rules = models.CharField(max_length=255, default='true')
     heading = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
     uri = models.CharField(max_length=255, blank=True)
