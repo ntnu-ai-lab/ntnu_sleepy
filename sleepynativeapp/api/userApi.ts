@@ -1,5 +1,5 @@
 import { storeLocalUser } from "../devicestorage/StorageController"
-import { DjangoUser } from "../helpers/Types"
+import { DjangoUser } from "../types/Types"
 
 export async function createUser(user: DjangoUser, identiyId: string, token: string) {
 
