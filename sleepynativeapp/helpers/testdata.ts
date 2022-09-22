@@ -1,7 +1,7 @@
-import { User } from '../../helpers/Types';
-import {Module, Page, Section, Answer, AnswerList} from '../../types/modules'
+import { User } from '../types/Types';
+import {Module, Page, Section, Answer, AnswerList, TextSection, FormSection, ImageSection} from '../types/modules'
 
-const testTextSection: Section = {
+const testTextSection: TextSection = {
     id: "test-section",
     heading: "Test heading",
     content: "Test Content",
@@ -11,7 +11,7 @@ const testTextSection: Section = {
 
 
 
-const testFormSection: Section = {
+const testFormSection: FormSection = {
     id: "test-section",
     heading: "Test heading",
     form: [
@@ -48,6 +48,16 @@ const testFormSection: Section = {
             }
         ]
     }]
+}
+
+const testImageSection: ImageSection = {
+    id: "test-section",
+    heading: "Test heading",
+    content: "Test content",
+    uri: "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/325353_2200-1200x628.jpg",
+    page: "test-page",
+    type: "img",
+    
 }
 
 const user: User = {

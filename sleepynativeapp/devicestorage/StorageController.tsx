@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { ReactNode, useEffect } from "react";
-import { DjangoUser } from "../helpers/Types";
+import { DjangoUser } from "../types/Types";
 import { useRecoilState } from "recoil";
 import { loggedInUser } from "../state/atoms";
 
