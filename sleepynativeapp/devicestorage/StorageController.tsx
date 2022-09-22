@@ -5,7 +5,6 @@ import { useRecoilState } from "recoil";
 import { loggedInUser } from "../state/atoms";
 
 export async function storeLocalUser(user: DjangoUser) {
-  console.log("set new user in storage")
   const userAsString = JSON.stringify(user);
   await AsyncStorage.setItem("Local_User", userAsString);
 }
@@ -23,8 +22,8 @@ export function StorageController(props: {
     };
 
     const user: DjangoUser = await getData();
-    if (user != null){ console.log("set User from disk"); setLocalUser(user);
-  }}
+    if (user != null) setLocalUser(user);
+  }
 
   useEffect(() => {
     getLocalUser();

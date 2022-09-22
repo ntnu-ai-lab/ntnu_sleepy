@@ -45,7 +45,6 @@ export function SignupPage() {
     useContext(AuthContext);
 
   const initializeFlow = () => {
-    console.log(project);
     newKratosSdk(project)
       .initializeSelfServiceRegistrationFlowWithoutBrowser()
       // The flow was initialized successfully, let's set the form data:
@@ -58,7 +57,6 @@ export function SignupPage() {
   // When the component is mounted, we initialize a new use login flow:
   useFocusEffect(
     React.useCallback(() => {
-      console.log("initializeflow");
       initializeFlow();
 
       return () => {
@@ -88,7 +86,6 @@ export function SignupPage() {
       ? newKratosSdk(project)
           .submitSelfServiceRegistrationFlow(flow.id, payload)
           .then(({ data }) => {
-            console.log(data);
             // ORY Kratos can be configured in such a way that it requires a login after
             // registration. You could handle that case by navigating to the Login screen
             // but for simplicity we'll just print an error here:
@@ -108,7 +105,6 @@ export function SignupPage() {
           // Let's log the user in!
           .then((s) => {
             setSession(s);
-            console.log("Opprette bruker i django");
             const user: DjangoUser = {
               name: name,
             };
