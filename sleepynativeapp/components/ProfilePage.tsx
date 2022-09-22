@@ -6,6 +6,8 @@ import { Card } from "./material/Card";
 import { relationshipStatus, UserEx } from "../helpers/Types";
 import { gender } from "../helpers/Types";
 import { Select } from "./material/Select";
+import { NavBar } from "./material/NavBar";
+import { ProgressBar } from "./material/ProgressBar";
 import { AuthContext } from "../auth/AuthProvider";
 import { Button } from "./material/Button";
 import { getTest } from "../api/userApi";

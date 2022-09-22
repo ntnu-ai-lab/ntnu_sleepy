@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Dimensions, ScrollView } from "react-native";
+import { Dimensions, ScrollView, View } from "react-native";
 import { colors } from "../styles/styles";
 
 export function PageTemplate(props: {
@@ -9,18 +9,18 @@ export function PageTemplate(props: {
   const { children, style } = props;
 
   return (
-    <ScrollView
+    <View
       style={[
         {
           backgroundColor: colors.primary_dark,
-          width: Dimensions.get("screen").width,
-          height: Dimensions.get("screen").height,
+          width: "100%",
+          height: "100%",
           paddingTop: 80,
         },
         style,
       ]}
     >
       {children}
-    </ScrollView>
+    </View>
   );
 }
