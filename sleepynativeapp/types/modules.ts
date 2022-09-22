@@ -1,3 +1,16 @@
+export interface Answer {
+    id: string;
+    input: string;
+    answers: string;
+    value: string;
+
+}
+export interface AnswerList {
+    id: string;
+    section: string;
+    user : string;
+    answers: Answer[];
+}
 export interface Input {
     id: string;
     type: string;
@@ -6,6 +19,7 @@ export interface Input {
     helptext: string;
     value: string;
     section: string;
+    answers?: Answer[];
 }
 
 export interface Module {
@@ -43,7 +57,8 @@ export interface VideoSection extends BaseSection {
 
 export interface FormSection extends BaseSection {
     type: 'form';
-    form: Input[]
+    form: Input[];
+    answer_lists?: AnswerList[];
 }
 
 export type Section = TextSection | ImageSection | VideoSection | FormSection;

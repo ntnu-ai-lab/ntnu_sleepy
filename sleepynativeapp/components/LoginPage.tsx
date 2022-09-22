@@ -130,7 +130,7 @@ export function LoginPage() {
         <View>
           <Button style={{height: 20}}
           onClick={() => { //@ts-ignore
-            navigation.navigate("testmodule");
+            navigation.navigate("tools");
           }}><Text style={{fontSize: 14}}>Midlertidig modulside </Text>
             </Button>
         </View>
