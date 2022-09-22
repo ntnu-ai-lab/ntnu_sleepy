@@ -21,7 +21,7 @@ export interface Page {
 
 export interface BaseSection {
     id: string;
-    heading: string;
+    heading?: string;
     page: string;
 }
 
