@@ -2,6 +2,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../auth/AuthProvider";
+import { GeneralPage } from "./GeneralPage";
+import { HomePage } from "./HomePage";
 import { LoginPage } from "./LoginPage";
 import { ProfilePage } from "./ProfilePage";
 import { SignupPage } from "./SignUpPage";
@@ -25,6 +27,8 @@ export function Navigation() {
         {isAuthenticated ? (
           <>
             <Stack.Screen name="profile" component={ProfilePage} />
+            <Stack.Screen name="home" component={HomePage} />
+            <Stack.Screen name="assignment" component={GeneralPage} />
           </>
         ) : (
           <>

@@ -61,8 +61,8 @@ export function NavBar() {
                 {route.name === "assignment" ? <AssignmentSelected /> : <Assignment />}
             </IconButton>
             <IconButton style={styles.Image} onClick={() => //@ts-ignore
-            { navigation.navigate("settings") }}>
-                {route.name === "settings" ? <SettingsSelected /> : <Settings />}
+            { navigation.navigate("profile") }}>
+                {route.name === "profile" ? <SettingsSelected /> : <Settings />}
             </IconButton>
         </View>
     );

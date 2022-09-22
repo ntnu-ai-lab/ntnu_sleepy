@@ -13,6 +13,7 @@ import { Button } from "./material/Button";
 import { getTest } from "../api/userApi";
 import { useRecoilState, useRecoilValue } from "recoil"
 import { loggedInUser } from "../state/atoms";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function ProfilePage() {
 
@@ -63,9 +64,22 @@ export function ProfilePage() {
         relationshipStatus : (arg as relationshipStatus),
     }));
 
+    function logOut() { //@ts-ignore
+        setSession({session_token: undefined, session: undefined});
+
+        const removeUserFromStorage = async () => {
+            try {
+                await AsyncStorage.removeItem('Local_user')
+              } catch(e) {
+                console.error
+              }
+        }
+        removeUserFromStorage()
+    }
+
     return (
         <PageTemplate>
-            <ScrollView style={{height: "100%", width: "100%", paddingHorizontal: 20,}}>
+            <ScrollView style={{width: "100%", paddingHorizontal: 20}}>
                 <Card style={{padding: 20}}>
                     <Text style={{color: "white"}}>Email</Text>
                     <TextField editable={false} value={state.email} onChange={onEmailChange} placeholderText={state.email}/>
@@ -87,11 +101,13 @@ export function ProfilePage() {
                     if (arg === "coliving") return "Samboer"
                     if (arg === "relationship") return "Fast forhold"
                     return "Single"
-                    }}/>{/*@ts-ignore */}
-                    <Button variant="contained" onClick={() => setSession({session_token: undefined, session: undefined})}><Text>Logg ut</Text></Button>
-                    <Button onClick={() => {if(sessionToken && session) getTest(session.identity.id,sessionToken);}}><Text>Test</Text></Button>
+                    }}/>
+                    <Button variant="contained" onClick={logOut}><Text>Logg ut</Text></Button>
+                    <Button variant="contained" onClick={() => {if(sessionToken && session) getTest(session.identity.id,sessionToken);}}><Text>Test</Text></Button>
                 </Card>
+                <View style={{height: 80, width: "100%"}} />
             </ScrollView>
+            <NavBar />
         </PageTemplate>
     )
 }

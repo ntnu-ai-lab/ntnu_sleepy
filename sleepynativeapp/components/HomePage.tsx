@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
+import { NavBar } from "./material/NavBar";
 import { PageTemplate } from "./PageTemplate";
 
 export function HomePage() {
@@ -11,6 +12,7 @@ export function HomePage() {
                     This is the homepage
                 </Text>
             </View>
+            <NavBar />
         </PageTemplate>
     )
 }
