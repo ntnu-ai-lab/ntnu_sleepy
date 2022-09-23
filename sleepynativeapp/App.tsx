@@ -5,16 +5,19 @@ import AuthProvider from "./auth/AuthProvider";
 import { Navigation } from "./components/Navigation";
 import { RecoilRoot } from "recoil";
 import { StorageController } from "./devicestorage/StorageController";
+import { Provider as PaperProvider } from "react-native-paper";
 
 export default function App() {
   return (
     <ProjectProvider>
       <AuthProvider>
-        <RecoilRoot>
-          <StorageController>
-            <Navigation />
-          </StorageController>
-        </RecoilRoot>
+        <PaperProvider>
+          <RecoilRoot>
+            <StorageController>
+              <Navigation />
+            </StorageController>
+          </RecoilRoot>
+        </PaperProvider>
       </AuthProvider>
     </ProjectProvider>
   );

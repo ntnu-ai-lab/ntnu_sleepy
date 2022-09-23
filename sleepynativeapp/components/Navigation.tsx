@@ -34,6 +34,8 @@ export function Navigation() {
           </>
         ) : (
           <>
+            <Stack.Screen name="profile" component={ProfilePage} />
+
             <Stack.Screen name="login" component={LoginPage} />
             <Stack.Screen name="tools" component={TestModulePage} />
             <Stack.Screen name="signup" component={SignupPage} />

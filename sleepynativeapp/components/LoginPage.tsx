@@ -7,8 +7,10 @@ import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-import { Button } from "./material/Button";
-import { Card } from "./material/Card";
+//import { Button } from "./material/Button";
+//import { Card } from "./material/Card";
+import { Card, Title, Paragraph, Button, TextInput } from 'react-native-paper'
+
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
 
@@ -59,16 +61,16 @@ export function LoginPage() {
   const onSubmit = (payload: SubmitSelfServiceLoginFlowBody) =>
     flow
       ? newKratosSdk(project)
-          .submitSelfServiceLoginFlow(flow.id, payload, sessionToken)
-          .then(({ data }) => Promise.resolve(data as SessionContext))
-          // Looks like everything worked and we have a session!
-          .then((session) => {
-            setSession(session)
-            setTimeout(() => { // @ts-ignore
-              navigation.navigate("profile")
-            }, 100)
-          })
-          .catch(handleFormSubmitError(setFlow, initializeFlow))
+        .submitSelfServiceLoginFlow(flow.id, payload, sessionToken)
+        .then(({ data }) => Promise.resolve(data as SessionContext))
+        // Looks like everything worked and we have a session!
+        .then((session) => {
+          setSession(session)
+          setTimeout(() => { // @ts-ignore
+            navigation.navigate("profile")
+          }, 100)
+        })
+        .catch(handleFormSubmitError(setFlow, initializeFlow))
       : Promise.resolve()
 
   return (
@@ -82,18 +84,18 @@ export function LoginPage() {
         }}
       >
         <Card style={{ padding: 20 }}>
-          <TextField
+          <TextInput
             value={email}
-            onChange={setEmail}
-            placeholderText={"Epost"}
+            onChangeText={setEmail}
+            placeholder={"Epost"}
           />
-          <TextField
+          <TextInput
             value={password}
-            onChange={setPassword}
-            password
-            placeholderText={"Passord"}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+            placeholder={"Passord"}
           />
-          <Button variant="contained" onClick={() => {
+          <Button onPress={() => {
             const userInput: SubmitSelfServiceLoginFlowWithPasswordMethodBody = {
               identifier: email,
               method: "password",
@@ -101,39 +103,41 @@ export function LoginPage() {
             }
             onSubmit(userInput)
           }}>
-            <Text style={{ fontSize: 20 }}>Log in</Text>
+            <Text style={{ fontSize: 20 }}>Logg inn</Text>
           </Button>
         </Card>
-        <Button
-          onClick={() => {
-            //@ts-ignore'
-            navigation.navigate("signup");
-          }}
-        >
-          <Text style={{ fontSize: 20 }}>Opprett ny bruker</Text>
-        </Button>
-        <View>
-          <Button style={{ height: 20 }}>
-            <Text style={{ fontSize: 14 }}>Glemt passord?</Text>
-          </Button>
+        <Card>
           <Button
-            style={{ height: 20 }}
-            onClick={() =>
-              { //@ts-ignore
+            onPress={() => {
+              //@ts-ignore'
+              navigation.navigate("signup");
+            }}
+          >
+            <Text style={{ fontSize: 20 }}>Opprett ny bruker</Text>
+          </Button>
+          <View>
+            <Button style={{ height: 20 }}>
+              Glemt passord?
+            </Button>
+            <Button
+              onPress={() => { //@ts-ignore
                 navigation.navigate("profile");
               }
-            }
-          >
-            <Text style={{ fontSize: 14 }}>Midlertidig profilside test</Text>
-          </Button>
-        </View>
-        <View>
-          <Button style={{height: 20}}
-          onClick={() => { //@ts-ignore
-            navigation.navigate("tools");
-          }}><Text style={{fontSize: 14}}>Midlertidig modulside </Text>
+              }
+            >
+              Midlertidig profilside test
             </Button>
-        </View>
+          </View>
+          <View>
+            <Button
+              onPress={() => { //@ts-ignore
+                navigation.navigate("tools");
+              }} >
+              Midlertidig modulside
+            </Button>
+
+          </View>
+        </Card>
       </View>
     </PageTemplate>
   );
