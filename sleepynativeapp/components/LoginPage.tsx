@@ -1,18 +1,17 @@
 import { SelfServiceLoginFlow, SubmitSelfServiceLoginFlowBody, SubmitSelfServiceLoginFlowWithPasswordMethodBody } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import { SessionContext } from "../auth/Auth";
 import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-//import { Button } from "./material/Button";
-//import { Card } from "./material/Card";
-import { Card, Title, Paragraph, Button, TextInput } from 'react-native-paper'
 
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
+import { Card, Title, Paragraph, Button, TextInput, Text } from 'react-native-paper'
+import { colors } from "../styles/styles";
 
 export function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -81,20 +80,19 @@ export function LoginPage() {
           width: "100%",
           paddingHorizontal: 20,
           justifyContent: "center",
-          borderRadius: 10,
         }}
       >
         <Card style={{ padding: 20 }}>
           <TextInput
             value={email}
             onChangeText={setEmail}
-            placeholder={"Epost"}
+            label={"Epost"}
           />
           <TextInput
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
-            placeholder={"Passord"}
+            label={"Passord"}
           />
           <Button onPress={() => {
             const userInput: SubmitSelfServiceLoginFlowWithPasswordMethodBody = {
@@ -104,40 +102,36 @@ export function LoginPage() {
             }
             onSubmit(userInput)
           }}>
-            <Text style={{ fontSize: 20 }}>Logg inn</Text>
+            <Text >Logg inn</Text>
           </Button>
-        </Card>
-        <Card>
+
           <Button
             onPress={() => {
               //@ts-ignore'
               navigation.navigate("signup");
-            }}
-          >
-            <Text style={{ fontSize: 20 }}>Opprett ny bruker</Text>
+            }}>
+            <Text >Opprett ny bruker</Text>
           </Button>
-          <View>
-            <Button style={{ height: 20 }}>
-              Glemt passord?
-            </Button>
-            <Button
-              onPress={() => { //@ts-ignore
-                navigation.navigate("profile");
-              }
-              }
-            >
-              Midlertidig profilside test
-            </Button>
-          </View>
-          <View>
-            <Button
-              onPress={() => { //@ts-ignore
-                navigation.navigate("home");
-              }} >
-              Midlertidig modulside
-            </Button>
 
-          </View>
+          <Button mode="text">
+            Glemt passord?
+          </Button>
+        </Card>
+        <Card style={{ margin: 20 }}>
+          <Button
+            style={{ margin: 20 }}
+            mode="contained"
+            onPress={() => { //@ts-ignore
+              navigation.navigate("home");
+            }}>
+            Midlertidig profilside test
+          </Button>
+          <Button mode="contained"
+            style={{ margin: 20 }}
+            onPress={() => { //@ts-ignore
+              navigation.navigate("home");
+            }}> Midlertidig modulside
+          </Button>
         </Card>
       </View>
     </PageTemplate>
