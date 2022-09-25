@@ -40,6 +40,7 @@ ALLOWED_HOSTS: list[str] = [
     'api.somnus.no',
     '10.0.2.2',
     env('HOST'), # Until we set up an actual hostname
+    env('HOST2'), # Until we set up an actual hostname
 ]
 
 AUTH_USER_MODEL = 'users.User'
