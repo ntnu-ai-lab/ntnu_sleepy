@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
-  Text,
   LayoutRectangle,
   ScrollView,
   TouchableOpacity,
   Touchable,
 } from "react-native";
-import { IconButton } from "./IconButton";
+//import { IconButton } from "./IconButton";
 import { SvgXml } from "react-native-svg";
 import { colors } from "../../styles/styles";
+import { Card, Title, Paragraph, Button, TextInput, Text, IconButton } from 'react-native-paper'
+
 
 export function Select(props: {
   placeholderText?: string;
@@ -47,8 +48,7 @@ export function Select(props: {
   const styles = StyleSheet.create({
     wrapperDiv: {
       height: 56,
-      borderRadius: 20,
-      backgroundColor: colors.primary,
+      borderRadius: 10,
       width: "100%",
       maxWidth: "100%",
       justifyContent: "space-between",
@@ -72,10 +72,9 @@ export function Select(props: {
       top: displayLayout.y + displayLayout.height,
       left: displayLayout.x,
       width: displayLayout.width,
-      maxHeight: 160,
       backgroundColor: "#FFF",
       zIndex: 15000,
-      borderRadius: 20,
+      borderRadius: 10,
       overflow: "hidden",
       borderColor: "rgba(0, 0, 0, 0.24)",
       borderWidth: 1,
@@ -103,9 +102,8 @@ export function Select(props: {
           <Text style={styles.textStyle}>
             {selected ? optionDisplay(selected) : placeholderText}
           </Text>
-          <IconButton>
-            <SvgXml xml={angleXml} height={35} width={35} />
-          </IconButton>
+          <IconButton icon="arrow-down-drop-circle-outline" />
+
         </View>
       </TouchableOpacity>
 

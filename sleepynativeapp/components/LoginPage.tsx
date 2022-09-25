@@ -81,6 +81,7 @@ export function LoginPage() {
           width: "100%",
           paddingHorizontal: 20,
           justifyContent: "center",
+          borderRadius: 10,
         }}
       >
         <Card style={{ padding: 20 }}>
@@ -131,7 +132,7 @@ export function LoginPage() {
           <View>
             <Button
               onPress={() => { //@ts-ignore
-                navigation.navigate("tools");
+                navigation.navigate("home");
               }} >
               Midlertidig modulside
             </Button>

@@ -39,6 +39,7 @@
     "@babel/core": "^7.12.9",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.69.1",
+    "@types/react-native-vector-icons": "^6.4.12",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "eslint": "^8.23.0",
     "eslint-config-standard-with-typescript": "^22.0.0",

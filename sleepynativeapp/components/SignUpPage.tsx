@@ -135,17 +135,22 @@ export function SignupPage() {
               value={name}
               onChangeText={setName}
               label="Fullt navn"
+              style={{ marginBottom: 10 }}
             />
             <TextInput
               value={email}
               onChangeText={setEmail}
               label="E-postadresse"
+              style={{ marginBottom: 10 }}
+
             />
             <TextInput
               value={password}
               onChangeText={setPassword}
               label="Passord"
               secureTextEntry={true}
+              style={{ marginBottom: 10 }}
+
             />
             <TextInput
               value={password2}
@@ -153,6 +158,8 @@ export function SignupPage() {
               label="Oppgi passord på nytt"
               secureTextEntry={true}
               error={!passwordMatch()}
+              style={{ marginBottom: 10 }}
+
             />
             <Select
               placeholderText="Sivilstatus"
@@ -174,21 +181,10 @@ export function SignupPage() {
               }}
               zIndex={90}
             />
-            <Text
-              style={{
-                textTransform: "uppercase",
-                fontSize: 12,
-                color: colors.text_secondary,
-                paddingLeft: 15,
-              }}
-            >
-              {" "}
-              Fødselsdato på format: ddmmåååå
-            </Text>
             <TextInput
               value={dateOfBirth}
               onChangeText={setDateOfBirth}
-              label="Fødselsdato"
+              label="Fødselsdato på format: ddmmåååå"
             />
             <TextInput
               value={occupation}
@@ -215,6 +211,6 @@ export function SignupPage() {
 
 
       </Card>
-    </PageTemplate>
+    </PageTemplate >
   );
 }

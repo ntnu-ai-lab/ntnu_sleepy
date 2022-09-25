@@ -146,7 +146,6 @@ export function ProfilePage() {
         </Card>
         <View style={{ height: 80, width: "100%" }} />
       </ScrollView>
-      <NavBar />
     </PageTemplate>
   );
 }
