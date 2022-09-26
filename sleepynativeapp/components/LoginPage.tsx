@@ -82,10 +82,11 @@ export function LoginPage() {
           justifyContent: "center",
         }}
       >
-        <Card style={{ padding: 20 }}>
+        <Card style={{ padding: 20, borderRadius: 10 }}>
           <TextInput
             value={email}
             onChangeText={setEmail}
+            style={{ marginBottom: 10 }}
             label={"Epost"}
           />
           <TextInput
