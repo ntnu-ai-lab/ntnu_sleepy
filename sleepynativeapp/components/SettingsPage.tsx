@@ -17,9 +17,6 @@ export function SettingsPage() {
                 { navigation.navigate("login") }}>
                     logout
                 </Button>
-                <Text>
-                    This is the settings
-                </Text>
             </View>
         </PageTemplate>
     )

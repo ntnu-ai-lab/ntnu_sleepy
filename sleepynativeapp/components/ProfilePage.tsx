@@ -143,7 +143,7 @@ export function ProfilePage() {
               dropdownStyle={{ width: "90%", borderRadius: 10 }}
               data={[genders.male, genders.female, genders.other]}
               onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
+                //console.log(selectedItem, index);
                 setGender(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {
@@ -169,7 +169,7 @@ export function ProfilePage() {
               dropdownStyle={{ width: "90%", borderRadius: 10 }}
               data={[relationshipStatuses.married, relationshipStatuses.coliving, relationshipStatuses.relationship, relationshipStatuses.single]}
               onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
+                //console.log(selectedItem, index);
                 setRelationship(selectedItem);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {

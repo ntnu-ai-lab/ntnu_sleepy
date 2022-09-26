@@ -125,13 +125,7 @@ export function LoginPage() {
             onPress={() => { //@ts-ignore
               navigation.navigate("home");
             }}>
-            Midlertidig profilside test
-          </Button>
-          <Button mode="contained"
-            style={{ margin: 20 }}
-            onPress={() => { //@ts-ignore
-              navigation.navigate("home");
-            }}> Midlertidig modulside
+            Midlertidig profilside
           </Button>
         </Card>
       </View>
