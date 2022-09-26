@@ -25,7 +25,7 @@ export const UserEx: User = {
   password: "*******",
   dateOfBirth: "20.02.1999",
   gender: "male",
-  occupation: "lawyer",
+  occupation: "Advokat",
   relationshipStatus: "married"
 }
 

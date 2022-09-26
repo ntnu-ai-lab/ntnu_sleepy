@@ -107,7 +107,7 @@ export function Select(props: {
         </View>
       </TouchableOpacity>
 
-      <ScrollView style={styles.dropdown}>
+      <ScrollView style={styles.dropdown} scrollToOverflowEnabled={true}>
         {options.map((option: any) => {
           return (
             <TouchableOpacity
@@ -124,6 +124,6 @@ export function Select(props: {
           );
         })}
       </ScrollView>
-    </View>
+    </View >
   );
 }

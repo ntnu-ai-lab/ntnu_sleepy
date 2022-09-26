@@ -18,7 +18,7 @@ import { colors } from "../styles/styles";
 import { Select } from "./material/Select";
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
-import { Card, Title, Paragraph, Button, TextInput } from 'react-native-paper'
+import { Card, Title, Paragraph, Button, TextInput, Divider } from 'react-native-paper'
 
 
 export function SignupPage() {
@@ -129,8 +129,8 @@ export function SignupPage() {
         </Text>
       </View>
       <Card style={{ alignSelf: "center" }}>
-        <Card.Actions style={{ alignSelf: "center" }}>
-          <ScrollView style={{ width: "90%" }}>
+        <Card.Actions style={{ alignSelf: "center", marginBottom: 10 }}>
+          <ScrollView style={{ width: "90%" }} alwaysBounceVertical={false} automaticallyAdjustKeyboardInsets={true} keyboardDismissMode={"on-drag"}>
             <TextInput
               value={name}
               onChangeText={setName}
@@ -181,36 +181,40 @@ export function SignupPage() {
               }}
               zIndex={90}
             />
+            <Divider style={{ margin: 5 }} />
+
             <TextInput
               value={dateOfBirth}
               onChangeText={setDateOfBirth}
+              style={{ marginBottom: 10 }}
               label="Fødselsdato på format: ddmmåååå"
             />
             <TextInput
               value={occupation}
               onChangeText={setOccupation}
+              style={{ marginBottom: 10 }}
               label="Yrke"
             />
-            <Button
-              style={{ width: "50%", alignSelf: "center" }}
-              onPress={() => {
-                const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
-                {
-                  method: "password",
-                  password: password,
-                  traits: { email: email },
-                };
-                onSubmit(userInput);
-              }}
-            >
-              <Text style={{ fontSize: 20 }}>Registrer</Text>
-            </Button>
           </ScrollView>
 
         </Card.Actions>
 
-
+        <Button
+          style={{ width: "50%", alignSelf: "center" }}
+          onPress={() => {
+            const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
+            {
+              method: "password",
+              password: password,
+              traits: { email: email },
+            };
+            onSubmit(userInput);
+          }}
+        >
+          <Text style={{ fontSize: 20 }}>Registrer</Text>
+        </Button>
       </Card>
+
     </PageTemplate >
   );
 }
