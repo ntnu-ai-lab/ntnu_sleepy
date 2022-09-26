@@ -102,12 +102,14 @@ export function ProfilePage() {
               onChangeText={onEmailChange}
               placeholder={state.email}
               label="Epostadresse"
+              mode="outlined"
             />
             <Divider style={{ margin: 5 }} />
             <TextInput
               value={thisUser ? thisUser.name : "Logg inn på nytt"}
               editable={false}
               label="Navn"
+              mode="outlined"
               onChangeText={onNameChange}
             />
             <Divider style={{ margin: 5 }} />
@@ -117,6 +119,7 @@ export function ProfilePage() {
               onChangeText={onDateOfBirthChange}
               placeholder={state.dateOfBirth}
               label="Fødselsdato"
+              mode="outlined"
             />
             <Divider style={{ margin: 5 }} />
 
@@ -204,8 +207,8 @@ export function ProfilePage() {
               onChangeText={onOccupationChange}
               placeholder={state.occupation}
               label="Yrke"
+              mode="outlined"
             />
-            <Text style={{ color: "white" }}>Sivilstatus</Text>
           </ScrollView>
 
 

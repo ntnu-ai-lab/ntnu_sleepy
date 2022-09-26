@@ -21,7 +21,6 @@ export function TestModulePage2() {
 
     return (
         <PageTemplate>
-
             <KeyboardAwareScrollView viewIsInsideTabBar={true} enableAutomaticScroll={true} enableResetScrollToCoords={false}>
                 <Card>
                     <Card.Content>
