@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { View, ScrollView, Text, Dimensions } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { NavBar } from "./material/NavBar";
 import { PageTemplate } from "./PageTemplate";
 import { Card, Title, Paragraph, Button, TextInput, ProgressBar } from 'react-native-paper'
 import { TextField } from "./material/TextField";
 import { colors } from "../styles/styles";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-export function TestModulePage() {
+export function TestModulePage2() {
 
     const [answer1, setAnswer1] = useState<string>("");
     const [answer2, setAnswer2] = useState<string>("");
@@ -20,7 +21,8 @@ export function TestModulePage() {
 
     return (
         <PageTemplate>
-            <ScrollView contentInset={{ bottom: 200, top: 0 }} keyboardDismissMode={"on-drag"} alwaysBounceVertical={true}   >
+
+            <KeyboardAwareScrollView viewIsInsideTabBar={true} enableAutomaticScroll={true} enableResetScrollToCoords={false}>
                 <Card>
                     <Card.Content>
                         <ProgressBar progress={progress} color={colors.primary_dark} />
@@ -91,7 +93,7 @@ export function TestModulePage() {
                         </Card.Actions>
                     </Card.Content>
                 </Card>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </PageTemplate>
     )
 }
