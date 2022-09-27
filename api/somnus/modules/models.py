@@ -6,10 +6,12 @@ from somnus.users.models import User
 
 class Module(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    title = models.CharField(default='', max_length=255)
     pages: models.Manager['Page']
 
 class Page(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    title = models.CharField(default='', max_length=255)
     module = models.ForeignKey(to=Module, related_name='pages', on_delete=models.CASCADE)
     sections: models.Manager['Section']
 
