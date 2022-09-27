@@ -15,7 +15,7 @@ class SectionViewSet(viewsets.ModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
 
-class AnswersViewSet(viewsets.ModelViewSet):
+class AnswerListViewSet(viewsets.ModelViewSet):
     queryset = AnswerList.objects.all()
     serializer_class = AnswerListSerializer
 
