@@ -3,7 +3,7 @@ certifi==2022.6.15
 charset-normalizer==2.1.1
 coreapi==2.3.3
 coreschema==0.0.4
-Django==4.1
+Django==4.1.1
 django-environ==0.9.0
 django-filter==22.1
 django-ory-auth==0.1.3
