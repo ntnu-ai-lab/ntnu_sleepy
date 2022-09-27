@@ -3,7 +3,8 @@ export type relationshipStatus =
   | "married"
   | "coliving"
   | "relationship"
-  | "single";
+  | "single"
+  | "undefined";
 
 export interface User {
   email: string;

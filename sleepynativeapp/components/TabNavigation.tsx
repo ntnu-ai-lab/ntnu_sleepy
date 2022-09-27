@@ -13,6 +13,7 @@ import { SettingsPage } from "./SettingsPage";
 import { LoginPage } from "./LoginPage";
 import { colors } from "../styles/styles";
 import { TestModulePage2 } from "./TestModulePage2";
+import { QuestionnairePage } from "./QuestionnairePage";
 
 export function TabNavigation() {
     const Tab = createBottomTabNavigator();
@@ -56,13 +57,13 @@ export function TabNavigation() {
                     isAuthenticated ? (
                         <>
                             <Tab.Screen name="Profile" component={ProfilePage} options={{ tabBarLabel: "Profile" }} />
-                            <Tab.Screen name="Home" component={TestModulePage2} options={{ tabBarLabel: "Home" }} />
+                            <Tab.Screen name="Home" component={QuestionnairePage} options={{ tabBarLabel: "Home" }} />
                             <Tab.Screen name="Settings" component={SettingsPage} options={{ tabBarLabel: "Settings" }} />
                             <Tab.Screen name="Assignment" component={GeneralPage} options={{ tabBarLabel: "Assignment" }} />
 
                         </>) : (<>
                             <Tab.Screen name="Profile" component={ProfilePage} options={{ tabBarLabel: "Profile" }} />
-                            <Tab.Screen name="Home" component={TestModulePage2} options={{ tabBarLabel: "Home" }} />
+                            <Tab.Screen name="Home" component={QuestionnairePage} options={{ tabBarLabel: "Home" }} />
                             <Tab.Screen name="Settings" component={SettingsPage} options={{ tabBarLabel: "Settings" }} />
                             <Tab.Screen name="Assignment" component={GeneralPage} options={{ tabBarLabel: "Assignment" }} />
                         </>)
