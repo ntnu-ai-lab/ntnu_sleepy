@@ -9,8 +9,8 @@ router = DefaultRouter()
 router.register('pages', PageViewSet)
 router.register('sections', SectionViewSet)
 router.register('modules', ModuleViewSet)
-router.register('answers', AnswerListViewSet)
-router.register('answer', AnswerViewSet)
+router.register('answer-list', AnswerListViewSet, 'answer-lists')
+router.register('answer', AnswerViewSet, 'answers')
 router.register('inputs', InputViewSet)
 
 

@@ -1,28 +1,31 @@
 from rest_framework import viewsets
+from django.db import models
 
 from .models import Answer, AnswerList, Input, Module, Page, Section
 from .serializers import AnswerSerializer, AnswerListSerializer, InputSerializer, ModuleSerializer, PageSerializer, SectionSerializer
 
-class ModuleViewSet(viewsets.ModelViewSet):
+class ModuleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
 
-class PageViewSet(viewsets.ModelViewSet):
+class PageViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
 
-class SectionViewSet(viewsets.ModelViewSet):
+class SectionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
 
 class AnswerListViewSet(viewsets.ModelViewSet):
-    queryset = AnswerList.objects.all()
+    def get_queryset(self) -> models.QuerySet[AnswerList]:
+        return AnswerList.objects.filter(user=self.request.user)
     serializer_class = AnswerListSerializer
 
 class AnswerViewSet(viewsets.ModelViewSet):
-    queryset = Answer.objects.all()
+    def get_queryset(self) -> models.QuerySet[Answer]:
+        return super().get_queryset()
     serializer_class = AnswerSerializer
 
-class InputViewSet(viewsets.ModelViewSet):
+class InputViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Input.objects.all()
     serializer_class = InputSerializer
