@@ -20,22 +20,22 @@ class Section(models.Model):
     rules = models.CharField(max_length=255, default='true')
     heading = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
-    uri = models.CharField(max_length=255, blank=True)
     page = models.ForeignKey(to=Page, related_name='sections', on_delete=models.CASCADE)
+
+
+class TextSection(Section):
+    pass
+
+class FormSection(Section):
     form: models.Manager['Input']
     answer_lists: models.Manager['AnswerList']
 
-    class Types(models.TextChoices):
-        FORM = 'form', _('Form')
-        TEXT = 'text', _('Text')
-        IMG = 'img', _('Image')
-        VIDEO = 'video', _('Video')
+class ImageSection(Section):
+    uri = models.CharField(max_length=255, blank=True)
 
-    type = models.CharField(
-        max_length=5,
-        choices=Types.choices,
-        default=Types.TEXT
-    )
+class VideoSection(Section):
+    uri = models.CharField(max_length=255, blank=True)
+
 
 class Input(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -44,12 +44,12 @@ class Input(models.Model):
     label = models.CharField(max_length=255)
     helptext = models.CharField(max_length=255)
     value = models.CharField(max_length=255, blank=True)
-    section = models.ForeignKey(to=Section, related_name='form', on_delete=models.CASCADE)
+    section = models.ForeignKey(to=FormSection, related_name='form', on_delete=models.CASCADE)
     answers: models.Manager['Answer']
 
 class AnswerList(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    section = models.ForeignKey(to=Section, related_name='answer_lists', on_delete=models.CASCADE)
+    section = models.ForeignKey(to=FormSection, related_name='answer_lists', on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, related_name='answer_lists', on_delete=models.CASCADE)
     answers: models.Manager['Answer']
 
