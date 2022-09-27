@@ -2,17 +2,39 @@ from django.contrib import admin
 import nested_admin # type: ignore[import]
 
 
-from .models import Module, Page, Section, Input
+from .models import Module, Page, TextSection, FormSection, ImageSection, VideoSection, Input
 
-class SectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+
+class ImageSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
-    model = Section
+    model = ImageSection
+    exclude = ('id',)
+
+
+class VideoSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = VideoSection
+    exclude = ('id',)
+class TextSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = TextSection
+    exclude = ('id',)
+
+class InputAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = Input
+    exclude = ('id',)
+
+class FormSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = FormSection
+    inlines = [InputAdmin]
     exclude = ('id',)
 
 class PageAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = Page
-    inlines = [SectionAdmin,]
+    inlines = [TextSectionAdmin, FormSectionAdmin, ImageSectionAdmin, VideoSectionAdmin]
     exclude = ('id',)
 
 class ModuleAdmin(nested_admin.NestedModelAdmin): # type: ignore[no-any-unimported]
