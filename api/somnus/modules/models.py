@@ -56,5 +56,5 @@ class AnswerList(models.Model):
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     input = models.ForeignKey(to=Input, related_name='answer', on_delete=models.CASCADE)
-    answers = models.ForeignKey(to=AnswerList, related_name='answers', on_delete=models.CASCADE)
+    answer_list = models.ForeignKey(to=AnswerList, related_name='answers', on_delete=models.CASCADE)
     value = models.CharField(max_length=255)
