@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'nested_admin',
     'rest_framework',
     'django_ory_auth',
     'somnus.users',
@@ -155,6 +156,6 @@ ORY_UI_URL=env("ORY_UI_URL")
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ]
 }
