@@ -8,6 +8,7 @@ router.register(r'pages', PageViewSet)
 router.register(r'sections', SectionViewSet)
 router.register(r'inputs', InputViewSet)
 router.register(r'answer-lists', AnswerListViewSet, basename='answer_lists')
+router.register(r'answers', AnswerViewSet, basename='answers')
 router.register('', ModuleViewSet)
 
 modules_router = routers.NestedSimpleRouter(router, '', lookup='module')
