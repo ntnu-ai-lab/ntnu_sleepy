@@ -56,10 +56,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'nested_admin',
     'rest_framework',
     'django_ory_auth',
     'somnus.users',
     'somnus.modules',
+    'adminsortable2',
 ]
 
 MIDDLEWARE = [
