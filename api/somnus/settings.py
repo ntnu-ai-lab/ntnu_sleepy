@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'somnus.users',
     'somnus.modules',
     'adminsortable2',
-    'model_utils',
 ]
 
 MIDDLEWARE = [
