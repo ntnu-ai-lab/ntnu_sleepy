@@ -1,22 +1,39 @@
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
-from .models import Answer, AnswerList, Input, Module, Page, Section
+from .models import Answer, AnswerList, FormSection, ImageSection, Input, Module, Page, Section, TextSection, VideoSection
 
 class InputSerializer(serializers.ModelSerializer[Input]):
     class Meta:
         model = Input
         fields = ['type', 'name', 'label', 'helptext', 'value', 'answers', 'section']
 
-class SectionSerializer(FlexFieldsModelSerializer[Section]): # type: ignore [no-any-unimported]
+class SectionSerializer(serializers.ModelSerializer[Section]):
     class Meta:
         model = Section
-        fields = ['id', 'type', 'heading', 'content', 'uri', 'form', 'page']
+        fields = ['id', 'heading', 'content', 'page']
 
+class TextSectionSerializer(serializers.ModelSerializer[TextSection]):
+    class Meta(SectionSerializer.Meta):
+        model = TextSection
+
+class ImageSectionSerializer(serializers.ModelSerializer[ImageSection]):
+    class Meta(SectionSerializer.Meta):
+        model = ImageSection
+        fields = SectionSerializer.Meta.fields + ['uri']
+
+class VideoSectionSerializer(serializers.ModelSerializer[VideoSection]):
+    class Meta(SectionSerializer.Meta):
+        model = VideoSection
+        fields = SectionSerializer.Meta.fields + ['uri']
+
+class FormSectionSerializer(FlexFieldsModelSerializer[FormSection]): # type: ignore[no-any-unimported]
     expandable_fields = {
         'form': (InputSerializer) 
     }
-
+    class Meta(SectionSerializer.Meta):
+        model = FormSection
+        fields = SectionSerializer.Meta.fields + ['form']
 
 class PageSerializer(FlexFieldsModelSerializer[Page]): # type: ignore [no-any-unimported]
     class Meta:

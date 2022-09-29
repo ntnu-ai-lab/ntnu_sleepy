@@ -1,8 +1,12 @@
+from typing import Any
 from rest_framework import viewsets
+from rest_framework.request import Request
+from rest_framework.response import Response
 from django.db import models
+import itertools
 
-from .models import Answer, AnswerList, Input, Module, Page, Section
-from .serializers import AnswerSerializer, AnswerListSerializer, InputSerializer, ModuleSerializer, PageSerializer, SectionSerializer
+from .models import Answer, AnswerList, FormSection, ImageSection, Input, Module, Page, Section, TextSection, VideoSection
+from .serializers import AnswerSerializer, AnswerListSerializer, FormSectionSerializer, ImageSectionSerializer, InputSerializer, ModuleSerializer, PageSerializer, SectionSerializer, TextSectionSerializer, VideoSectionSerializer
 
 class ModuleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Module.objects.all()
@@ -13,8 +17,20 @@ class PageViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PageSerializer
 
 class SectionViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Section.objects.all()
-    serializer_class = SectionSerializer
+    queryset = Section.objects.select_subclasses()
+    serializers = {
+        FormSection: FormSectionSerializer,
+        TextSection: TextSectionSerializer,
+        ImageSection: ImageSectionSerializer,
+        VideoSection: VideoSectionSerializer,
+    }
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        return Response([self.serializers[type(section)](section).data for section in self.queryset])
+
+    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        section = self.queryset.get(id=kwargs.get('pk'))
+        return Response(self.serializers[type(section)](section).data)
 
 class AnswerListViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> models.QuerySet[AnswerList]:
