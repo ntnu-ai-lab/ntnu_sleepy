@@ -15,11 +15,14 @@ class Module(models.Model):
         db_index=True,
     )
 
+    def __str__(self) -> str:
+        return self.title
+
     class Meta:
         ordering = ['ordering']
 
 class Page(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(default='', max_length=255)
     module = models.ForeignKey(to=Module, related_name='pages', on_delete=models.CASCADE)
     sections: models.Manager['Section']
@@ -30,11 +33,14 @@ class Page(models.Model):
         db_index=True,
     )
 
+    def __str__(self) -> str:
+        return self.title
+
     class Meta:
         ordering = ['ordering']
 
 class Section(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     rules = models.CharField(max_length=255, default='true')
     heading = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
@@ -45,6 +51,9 @@ class Section(models.Model):
         null=False,
         db_index=True,
     )
+
+    def __str__(self) -> str:
+        return self.heading
 
     class Meta:
         ordering = ['ordering']
@@ -65,7 +74,7 @@ class VideoSection(Section):
 
 
 class Input(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     label = models.CharField(max_length=255)
@@ -80,17 +89,20 @@ class Input(models.Model):
     )
     answers: models.Manager['Answer']
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
         ordering = ['ordering']
 
 class AnswerList(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     section = models.ForeignKey(to=FormSection, related_name='answer_lists', on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, related_name='answer_lists', on_delete=models.CASCADE)
     answers: models.Manager['Answer']
 
 class Answer(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     input = models.ForeignKey(to=Input, related_name='answer', on_delete=models.CASCADE)
     answer_list = models.ForeignKey(to=AnswerList, related_name='answers', on_delete=models.CASCADE)
     value = models.CharField(max_length=255)
