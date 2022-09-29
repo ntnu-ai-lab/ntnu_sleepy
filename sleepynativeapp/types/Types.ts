@@ -3,7 +3,8 @@ export type relationshipStatus =
   | "married"
   | "coliving"
   | "relationship"
-  | "single";
+  | "single"
+  | "undefined";
 
 export interface User {
   email: string;
@@ -25,7 +26,7 @@ export const UserEx: User = {
   password: "*******",
   dateOfBirth: "20.02.1999",
   gender: "male",
-  occupation: "lawyer",
+  occupation: "Advokat",
   relationshipStatus: "married"
 }
 

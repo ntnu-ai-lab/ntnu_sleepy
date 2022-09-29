@@ -15,7 +15,7 @@ export function PageTemplate(props: {
           backgroundColor: colors.primary_dark,
           width: "100%",
           height: "100%",
-          paddingTop: 80,
+          paddingTop: 0,
         },
         style,
       ]}
