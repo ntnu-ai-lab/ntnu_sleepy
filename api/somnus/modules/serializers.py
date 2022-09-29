@@ -45,7 +45,7 @@ class ChildSectionSerializer(serializers.Serializer):
         VideoSection: VideoSectionSerializer,
     }
     def to_representation(self, instance: Section) -> Any:
-        section = Section.objects.get_subclass(id=instance.id)
+        section = Section.objects.get_subclass(id=instance.id) if type(instance) == Section else instance
         return self.serializers[type(section)](section).data
 
 class PageSerializer(FlexFieldsModelSerializer[Page]): # type: ignore [no-any-unimported]
