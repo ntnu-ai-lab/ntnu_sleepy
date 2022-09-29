@@ -18,8 +18,14 @@ import { colors } from "../styles/styles";
 import { Select } from "./material/Select";
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
-import { Card, Title, Paragraph, Button, TextInput, Divider } from 'react-native-paper'
-
+import {
+  Card,
+  Title,
+  Paragraph,
+  Button,
+  TextInput,
+  Divider,
+} from "react-native-paper";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -86,39 +92,39 @@ export function SignupPage() {
   ): Promise<void> =>
     flow
       ? newKratosSdk(project)
-        .submitSelfServiceRegistrationFlow(flow.id, payload)
-        .then(({ data }) => {
-          // ORY Kratos can be configured in such a way that it requires a login after
-          // registration. You could handle that case by navigating to the Login screen
-          // but for simplicity we'll just print an error here:
-          if (!data.session_token || !data.session) {
-            const err = new Error(
-              "It looks like you configured ORY Kratos to not issue a session automatically after registration. This edge-case is currently not supported in this example app. You can find more information on enabling this feature here: https://www.ory.sh/kratos/docs/next/self-service/flows/user-registration#successful-registration"
-            );
-            return Promise.reject(err);
-          }
+          .submitSelfServiceRegistrationFlow(flow.id, payload)
+          .then(({ data }) => {
+            // ORY Kratos can be configured in such a way that it requires a login after
+            // registration. You could handle that case by navigating to the Login screen
+            // but for simplicity we'll just print an error here:
+            if (!data.session_token || !data.session) {
+              const err = new Error(
+                "It looks like you configured ORY Kratos to not issue a session automatically after registration. This edge-case is currently not supported in this example app. You can find more information on enabling this feature here: https://www.ory.sh/kratos/docs/next/self-service/flows/user-registration#successful-registration"
+              );
+              return Promise.reject(err);
+            }
 
-          // Looks like we got a session!
-          return Promise.resolve({
-            session: data.session,
-            session_token: data.session_token,
-          });
-        })
-        // Let's log the user in!
-        .then((s) => {
-          setSession(s);
-          const user: DjangoUser = {
-            name: name,
-          };
-          createUser(user, s.session.identity.id, s.session_token); //@ts-ignore
-          //navigation.navigate("profile");
-        })
-        .catch(
-          handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
-            setConfig,
-            initializeFlow
+            // Looks like we got a session!
+            return Promise.resolve({
+              session: data.session,
+              session_token: data.session_token,
+            });
+          })
+          // Let's log the user in!
+          .then((s) => {
+            setSession(s);
+            const user: DjangoUser = {
+              name: name,
+            };
+            createUser(user, s.session.identity.id); //@ts-ignore
+            //navigation.navigate("profile");
+          })
+          .catch(
+            handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
+              setConfig,
+              initializeFlow
+            )
           )
-        )
       : Promise.resolve();
 
   return (
@@ -130,7 +136,12 @@ export function SignupPage() {
       </View>
       <Card style={{ alignSelf: "center" }}>
         <Card.Actions style={{ alignSelf: "center", marginBottom: 10 }}>
-          <ScrollView style={{ width: "90%" }} alwaysBounceVertical={false} automaticallyAdjustKeyboardInsets={true} keyboardDismissMode={"on-drag"}>
+          <ScrollView
+            style={{ width: "90%" }}
+            alwaysBounceVertical={false}
+            automaticallyAdjustKeyboardInsets={true}
+            keyboardDismissMode={"on-drag"}
+          >
             <TextInput
               value={name}
               onChangeText={setName}
@@ -142,7 +153,6 @@ export function SignupPage() {
               onChangeText={setEmail}
               label="E-postadresse"
               style={{ marginBottom: 10 }}
-
             />
             <TextInput
               value={password}
@@ -150,7 +160,6 @@ export function SignupPage() {
               label="Passord"
               secureTextEntry={true}
               style={{ marginBottom: 10 }}
-
             />
             <TextInput
               value={password2}
@@ -159,7 +168,6 @@ export function SignupPage() {
               secureTextEntry={true}
               error={!passwordMatch()}
               style={{ marginBottom: 10 }}
-
             />
             <Select
               placeholderText="Sivilstatus"
@@ -196,25 +204,23 @@ export function SignupPage() {
               label="Yrke"
             />
           </ScrollView>
-
         </Card.Actions>
 
         <Button
           style={{ width: "50%", alignSelf: "center" }}
           onPress={() => {
             const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
-            {
-              method: "password",
-              password: password,
-              traits: { email: email },
-            };
+              {
+                method: "password",
+                password: password,
+                traits: { email: email },
+              };
             onSubmit(userInput);
           }}
         >
           <Text style={{ fontSize: 20 }}>Registrer</Text>
         </Button>
       </Card>
-
-    </PageTemplate >
+    </PageTemplate>
   );
 }
