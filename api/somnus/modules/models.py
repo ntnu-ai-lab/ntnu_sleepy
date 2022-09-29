@@ -1,6 +1,7 @@
 import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from model_utils.managers import InheritanceManager # type: ignore[import]
 
 from somnus.users.models import User
 
@@ -52,6 +53,8 @@ class Section(models.Model):
         db_index=True,
     )
 
+    objects = InheritanceManager()
+
     def __str__(self) -> str:
         return self.heading
 
@@ -60,16 +63,19 @@ class Section(models.Model):
 
 
 class TextSection(Section):
-    pass
+    type = 'text'
 
 class FormSection(Section):
+    type = 'form'
     form: models.Manager['Input']
     answer_lists: models.Manager['AnswerList']
 
 class ImageSection(Section):
+    type = 'img'
     uri = models.CharField(max_length=255, blank=True)
 
 class VideoSection(Section):
+    type = 'video'
     uri = models.CharField(max_length=255, blank=True)
 
 
