@@ -14,10 +14,17 @@ import { getTest } from "../api/userApi";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loggedInUser } from "../state/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Card, Title, Paragraph, Button, TextInput, Divider, List } from 'react-native-paper'
+import {
+  Card,
+  Title,
+  Paragraph,
+  Button,
+  TextInput,
+  Divider,
+  List,
+} from "react-native-paper";
 import { colors } from "../styles/styles";
 import SelectDropdown from "react-native-select-dropdown";
-
 
 export function ProfilePage() {
   const [state, setState] = useState(UserEx);
@@ -27,12 +34,17 @@ export function ProfilePage() {
   const [expanded, setExpanded] = useState(true);
 
   const handlePress = () => setExpanded(!expanded);
-  const genders = { "male": "Mann", "female": "Kvinne", "other": "Annet" }
-  const relationshipStatuses = { "married": "Gift", "coliving": "Samboer", "relationship": "Fast forhold", "single": "Singel" }
+  const genders = { male: "Mann", female: "Kvinne", other: "Annet" };
+  const relationshipStatuses = {
+    married: "Gift",
+    coliving: "Samboer",
+    relationship: "Fast forhold",
+    single: "Singel",
+  };
   const [gender, setGender] = useState<string>(UserEx.gender);
-  const [relationship, setRelationship] = useState<string>(UserEx.relationshipStatus);
-
-
+  const [relationship, setRelationship] = useState<string>(
+    UserEx.relationshipStatus
+  );
 
   const onEmailChange = (arg: string) =>
     setState((prev) => ({
@@ -91,10 +103,16 @@ export function ProfilePage() {
   }
 
   return (
-    <PageTemplate >
+    <PageTemplate>
       <Card style={{ margin: 10 }}>
         <Card.Actions style={{ alignSelf: "center", marginBottom: 10 }}>
-          <ScrollView style={{ width: "100%" }} automaticallyAdjustKeyboardInsets={true} alwaysBounceVertical={false} endFillColor={colors.primary_dark} scrollToOverflowEnabled={true}>
+          <ScrollView
+            style={{ width: "100%" }}
+            automaticallyAdjustKeyboardInsets={true}
+            alwaysBounceVertical={false}
+            endFillColor={colors.primary_dark}
+            scrollToOverflowEnabled={true}
+          >
             <Divider style={{ margin: 5 }} />
             <TextInput
               editable={false}
@@ -123,7 +141,6 @@ export function ProfilePage() {
             />
             <Divider style={{ margin: 5 }} />
 
-
             {/* <Select
               value={state.gender}
               onChange={onGenderChange}
@@ -135,7 +152,6 @@ export function ProfilePage() {
                 else return "Annet";
               }}
             /> */}
-
 
             <SelectDropdown
               defaultButtonText={genders[UserEx.gender]}
@@ -152,25 +168,32 @@ export function ProfilePage() {
               buttonTextAfterSelection={(selectedItem, index) => {
                 // text represented after item is selected
                 // if data array is an array of objects then return selectedItem.property to render after item is selected
-                return selectedItem
+                return selectedItem;
               }}
               rowTextForSelection={(item, index) => {
                 // text represented for each item in dropdown
                 // if data array is an array of objects then return item.property to represent item in dropdown
-                return item
+                return item;
               }}
             />
 
             <Divider style={{ margin: 5 }} />
 
             <SelectDropdown
-              defaultButtonText={relationshipStatuses[UserEx.relationshipStatus]}
+              defaultButtonText={
+                relationshipStatuses[UserEx.relationshipStatus]
+              }
               selectedRowStyle={{ backgroundColor: colors.primary_dark }}
               defaultValue={relationshipStatuses[UserEx.relationshipStatus]}
               buttonStyle={{ width: "100%", borderRadius: 10 }}
               buttonTextStyle={{ textAlign: "left" }}
               dropdownStyle={{ width: "90%", borderRadius: 10 }}
-              data={[relationshipStatuses.married, relationshipStatuses.coliving, relationshipStatuses.relationship, relationshipStatuses.single]}
+              data={[
+                relationshipStatuses.married,
+                relationshipStatuses.coliving,
+                relationshipStatuses.relationship,
+                relationshipStatuses.single,
+              ]}
               onSelect={(selectedItem, index) => {
                 //console.log(selectedItem, index);
                 setRelationship(selectedItem);
@@ -178,16 +201,15 @@ export function ProfilePage() {
               buttonTextAfterSelection={(selectedItem, index) => {
                 // text represented after item is selected
                 // if data array is an array of objects then return selectedItem.property to render after item is selected
-                return selectedItem
+                return selectedItem;
               }}
               rowTextForSelection={(item, index) => {
                 // text represented for each item in dropdown
                 // if data array is an array of objects then return item.property to represent item in dropdown
-                return item
+                return item;
               }}
             />
             <Divider style={{ margin: 5 }} />
-
 
             {/* <Select
               value={state.relationshipStatus}
@@ -210,8 +232,6 @@ export function ProfilePage() {
               mode="outlined"
             />
           </ScrollView>
-
-
         </Card.Actions>
         <Button mode="text" onPress={logOut}>
           <Text>Logg ut</Text>
@@ -219,13 +239,11 @@ export function ProfilePage() {
         <Button
           mode="text"
           onPress={() => {
-            if (sessionToken && session)
-              getTest(session.identity.id, sessionToken);
+            if (sessionToken && session) getTest(session.identity.id);
           }}
         >
           <Text>Test</Text>
         </Button>
-
       </Card>
 
       <View style={{ height: 80, width: "100%" }} />
