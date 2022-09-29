@@ -8,12 +8,30 @@ class Module(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     title = models.CharField(default='', max_length=255)
     pages: models.Manager['Page']
+    ordering = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        db_index=True,
+    )
+
+    class Meta:
+        ordering = ['ordering']
 
 class Page(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     title = models.CharField(default='', max_length=255)
     module = models.ForeignKey(to=Module, related_name='pages', on_delete=models.CASCADE)
     sections: models.Manager['Section']
+    ordering = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        db_index=True,
+    )
+
+    class Meta:
+        ordering = ['ordering']
 
 class Section(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -21,6 +39,15 @@ class Section(models.Model):
     heading = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
     page = models.ForeignKey(to=Page, related_name='sections', on_delete=models.CASCADE)
+    ordering = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        db_index=True,
+    )
+
+    class Meta:
+        ordering = ['ordering']
 
 
 class TextSection(Section):
@@ -45,7 +72,16 @@ class Input(models.Model):
     helptext = models.CharField(max_length=255)
     value = models.CharField(max_length=255, blank=True)
     section = models.ForeignKey(to=FormSection, related_name='form', on_delete=models.CASCADE)
+    ordering = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        db_index=True,
+    )
     answers: models.Manager['Answer']
+
+    class Meta:
+        ordering = ['ordering']
 
 class AnswerList(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
