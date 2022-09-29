@@ -9,5 +9,6 @@ export async function getModules(identiyId: string) {
 
   if (response.data) {
     const modules: Module[] = response.data;
+    storeCachedModules(modules);
   }
 }
