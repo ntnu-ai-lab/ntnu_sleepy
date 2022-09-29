@@ -108,7 +108,7 @@ export function SignupPage() {
             const user: DjangoUser = {
               name: name,
             };
-            createUser(user, s.session.identity.id, s.session_token); //@ts-ignore
+            createUser(user, s.session.identity.id); //@ts-ignore
             //navigation.navigate("profile");
           })
           .catch(

@@ -2,11 +2,7 @@ import { storeLocalUser } from "../devicestorage/StorageController";
 import { callApi } from "../helpers/callApi";
 import { DjangoUser } from "../types/Types";
 
-export async function createUser(
-  user: DjangoUser,
-  identiyId: string,
-  token: string
-) {
+export async function createUser(user: DjangoUser, identiyId: string) {
   await callApi<DjangoUser>(`/users/${identiyId}/`, {
     method: "PATCH",
     body: JSON.stringify(user),
