@@ -1,8 +1,8 @@
 import { atom } from "recoil";
 import { Module } from "../types/modules";
-import { DjangoUser } from "../types/Types";
+import { User } from "../types/Types";
 
-export const loggedInUser = atom<DjangoUser>({
+export const loggedInUser = atom<User>({
   key: "loggedInUser",
   default: undefined,
 });

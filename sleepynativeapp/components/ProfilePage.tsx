@@ -154,9 +154,9 @@ export function ProfilePage() {
             /> */}
 
             <SelectDropdown
-              defaultButtonText={genders[UserEx.gender]}
+              defaultButtonText={UserEx.gender}
               selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-              defaultValue={genders[UserEx.gender]}
+              defaultValue={UserEx.gender}
               buttonStyle={{ width: "100%", borderRadius: 10 }}
               buttonTextStyle={{ textAlign: "left" }}
               dropdownStyle={{ width: "90%", borderRadius: 10 }}
@@ -180,11 +180,9 @@ export function ProfilePage() {
             <Divider style={{ margin: 5 }} />
 
             <SelectDropdown
-              defaultButtonText={
-                relationshipStatuses[UserEx.relationshipStatus]
-              }
+              defaultButtonText={UserEx.relationshipStatus}
               selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-              defaultValue={relationshipStatuses[UserEx.relationshipStatus]}
+              defaultValue={UserEx.relationshipStatus}
               buttonStyle={{ width: "100%", borderRadius: 10 }}
               buttonTextStyle={{ textAlign: "left" }}
               dropdownStyle={{ width: "90%", borderRadius: 10 }}

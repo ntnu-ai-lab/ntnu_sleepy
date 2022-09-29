@@ -11,7 +11,7 @@ import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-import { DjangoUser, gender, relationshipStatus } from "../types/Types";
+import { User, gender, relationshipStatus } from "../types/Types";
 import { colors } from "../styles/styles";
 //import { Button } from "./material/Button";
 //import { Card } from "./material/Card";
@@ -26,6 +26,7 @@ import {
   TextInput,
   Divider,
 } from "react-native-paper";
+import SelectDropdown from "react-native-select-dropdown";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -33,11 +34,27 @@ export function SignupPage() {
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
-  const [gender, setGender] = useState<gender>();
   const [occupation, setOccupation] = useState<string>("");
-  const [relationshipStatus, setRelationshipStatus] =
-    useState<relationshipStatus>();
+
   const navigation = useNavigation();
+
+  const genders = {
+    male: "Mann",
+    female: "Kvinne",
+    other: "Annet",
+    undefined: "",
+  };
+  const relationshipStatuses = {
+    married: "Gift",
+    coliving: "Samboer",
+    relationship: "Fast forhold",
+    single: "Singel",
+    undefined: "",
+  };
+
+  const [gender, setGender] = useState<gender>("undefined");
+  const [relationship, setRelationship] =
+    useState<relationshipStatus>("undefined");
 
   function passwordMatch() {
     if (!password2) return true;
@@ -113,8 +130,13 @@ export function SignupPage() {
           // Let's log the user in!
           .then((s) => {
             setSession(s);
-            const user: DjangoUser = {
+            const user: User = {
               name: name,
+              email: email,
+              dateOfBirth: dateOfBirth,
+              gender: gender,
+              occupation: occupation,
+              relationshipStatus: relationship,
             };
             createUser(user, s.session.identity.id); //@ts-ignore
             //navigation.navigate("profile");
@@ -169,25 +191,65 @@ export function SignupPage() {
               error={!passwordMatch()}
               style={{ marginBottom: 10 }}
             />
-            <Select
-              placeholderText="Sivilstatus"
-              options={["married", "coliving", "relationship", "single"]}
-              optionDisplay={(arg: relationshipStatus) => {
-                if (arg === "married") return "Gift";
-                if (arg === "coliving") return "Samboer";
-                if (arg === "relationship") return "Fast forhold";
-                return "Singel";
+            <Card.Actions>
+              <Text>Sivilstatus</Text>
+            </Card.Actions>
+            <SelectDropdown
+              defaultButtonText={"Velg et alternativ"}
+              selectedRowStyle={{ backgroundColor: colors.primary_dark }}
+              //defaultValue={}
+              buttonStyle={{ width: "100%", borderRadius: 10 }}
+              buttonTextStyle={{ textAlign: "left" }}
+              dropdownStyle={{ width: "90%", borderRadius: 10 }}
+              data={[
+                relationshipStatuses.married,
+                relationshipStatuses.coliving,
+                relationshipStatuses.relationship,
+                relationshipStatuses.single,
+                relationshipStatuses.undefined,
+              ]}
+              onSelect={(selectedItem, index) => {
+                //console.log(selectedItem, index);
+                setRelationship(selectedItem);
+              }}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                // text represented after item is selected
+                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                // text represented for each item in dropdown
+                // if data array is an array of objects then return item.property to represent item in dropdown
+                return item;
               }}
             />
-            <Select
-              placeholderText="Kjønn"
-              options={["male", "female", "other"]}
-              optionDisplay={(arg: gender) => {
-                if (arg === "male") return "Mann";
-                else if (arg === "female") return "Kvinne";
-                else return "Annet";
+            <SelectDropdown
+              defaultButtonText={"Velg et alternativ"}
+              selectedRowStyle={{ backgroundColor: colors.primary_dark }}
+              defaultValue={"undefined"}
+              buttonStyle={{ width: "100%", borderRadius: 10 }}
+              buttonTextStyle={{ textAlign: "left" }}
+              dropdownStyle={{ width: "90%", borderRadius: 10 }}
+              data={[
+                genders.male,
+                genders.female,
+                genders.other,
+                genders.undefined,
+              ]}
+              onSelect={(selectedItem, index) => {
+                //console.log(selectedItem, index);
+                setGender(selectedItem);
               }}
-              zIndex={90}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                // text represented after item is selected
+                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                // text represented for each item in dropdown
+                // if data array is an array of objects then return item.property to represent item in dropdown
+                return item;
+              }}
             />
             <Divider style={{ margin: 5 }} />
 
