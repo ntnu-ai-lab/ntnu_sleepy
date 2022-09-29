@@ -1,44 +1,73 @@
 from django.contrib import admin
 import nested_admin # type: ignore[import]
+from adminsortable2 import admin as sortableadmin # type: ignore[import]
 
 
-from .models import Module, Page, TextSection, FormSection, ImageSection, VideoSection, Input
+from .models import Module, Page, Section, TextSection, FormSection, ImageSection, VideoSection, Input
 
 
 class ImageSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = ImageSection
-    exclude = ('id',)
+    exclude = ('ordering',)
 
 
 class VideoSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = VideoSection
-    exclude = ('id',)
+    exclude = ('ordering',)
 class TextSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = TextSection
-    exclude = ('id',)
+    exclude = ('ordering',)
 
 class InputAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = Input
-    exclude = ('id',)
+    exclude = ('ordering',)
 
 class FormSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = FormSection
     inlines = [InputAdmin]
-    exclude = ('id',)
+    exclude = ('ordering',)
 
-class PageAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+class SectionAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = Section
+class PageAdminNested(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = Page
     inlines = [TextSectionAdmin, FormSectionAdmin, ImageSectionAdmin, VideoSectionAdmin]
-    exclude = ('id',)
+    exclude = ('ordering',)
+
+class PageAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-any-unimported]
+    model = Page
+    extra = 0
+    show_change_link = True
+    can_delete = False
+
+class PageAdmin(sortableadmin.SortableAdminMixin, admin.ModelAdmin): # type: ignore[no-any-unimported]
+    exclude = ['id']
+    inlines = [SectionAdminSortable]
 
 class ModuleAdmin(nested_admin.NestedModelAdmin): # type: ignore[no-any-unimported]
-    inlines = [PageAdmin,]
-    exclude = ('id',)
+    inlines = [PageAdminNested,]
+    exclude = ('ordering',)
+
+class ModuleProxy(Module):
+    class Meta:
+        proxy = True
+        verbose_name = 'Module ordering'
+        verbose_name_plural = 'Module Ordering'
+
+class ModuleAdminList(sortableadmin.SortableAdminMixin, admin.ModelAdmin): # type: ignore[no-any-unimported]
+    exclude = ['id']
+    inlines = [PageAdminSortable]
+    show_change_link = True
+    
+    
 
 admin.site.register(Module, ModuleAdmin)
+admin.site.register(ModuleProxy, ModuleAdminList)
+admin.site.register(Page, PageAdmin)
