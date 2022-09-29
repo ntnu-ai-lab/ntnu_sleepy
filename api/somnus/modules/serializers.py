@@ -11,7 +11,7 @@ class InputSerializer(serializers.ModelSerializer[Input]):
 class SectionSerializer(serializers.ModelSerializer[Section]):
     class Meta:
         model = Section
-        fields = ['id', 'heading', 'content', 'page']
+        fields = ['id', 'heading', 'content', 'page', 'type']
 
 class TextSectionSerializer(serializers.ModelSerializer[TextSection]):
     class Meta(SectionSerializer.Meta):
