@@ -54,6 +54,7 @@ class Section(models.Model):
     )
 
     objects = InheritanceManager()
+    type = 'none'
 
     def __str__(self) -> str:
         return self.heading
