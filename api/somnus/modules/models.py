@@ -6,7 +6,7 @@ from model_utils.managers import InheritanceManager # type: ignore[import]
 from somnus.users.models import User
 
 class Module(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(default='', max_length=255)
     pages: models.Manager['Page']
     ordering = models.PositiveIntegerField(
