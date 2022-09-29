@@ -239,8 +239,7 @@ export function ProfilePage() {
         <Button
           mode="text"
           onPress={() => {
-            if (sessionToken && session)
-              getTest(session.identity.id, sessionToken);
+            if (sessionToken && session) getTest(session.identity.id);
           }}
         >
           <Text>Test</Text>
