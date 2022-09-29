@@ -1,10 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { ReactNode, useEffect } from "react";
-import { DjangoUser } from "../types/Types";
+import { User } from "../types/Types";
 import { useRecoilState } from "recoil";
 import { loggedInUser } from "../state/atoms";
 
-export async function storeLocalUser(user: DjangoUser) {
+export async function storeLocalUser(user: User) {
   const userAsString = JSON.stringify(user);
   await AsyncStorage.setItem("Local_User", userAsString);
 }
@@ -21,7 +21,7 @@ export function StorageController(props: {
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     };
 
-    const user: DjangoUser = await getData();
+    const user: User = await getData();
     if (user != null) setLocalUser(user);
   }
 
