@@ -1,3 +1,4 @@
+from typing import Any
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
@@ -12,6 +13,7 @@ class SectionSerializer(serializers.ModelSerializer[Section]):
     class Meta:
         model = Section
         fields = ['id', 'heading', 'content', 'page', 'type']
+
 
 class TextSectionSerializer(serializers.ModelSerializer[TextSection]):
     class Meta(SectionSerializer.Meta):
@@ -35,13 +37,24 @@ class FormSectionSerializer(FlexFieldsModelSerializer[FormSection]): # type: ign
         model = FormSection
         fields = SectionSerializer.Meta.fields + ['form']
 
+class ChildSectionSerializer(serializers.Serializer):
+    serializers = {
+        FormSection: FormSectionSerializer,
+        TextSection: TextSectionSerializer,
+        ImageSection: ImageSectionSerializer,
+        VideoSection: VideoSectionSerializer,
+    }
+    def to_representation(self, instance: Section) -> Any:
+        section = Section.objects.get_subclass(id=instance.id)
+        return self.serializers[type(section)](section).data
+
 class PageSerializer(FlexFieldsModelSerializer[Page]): # type: ignore [no-any-unimported]
     class Meta:
         model = Page
         fields = ['id', 'module', 'sections']
 
     expandable_fields = {
-        'sections': (SectionSerializer, {'many': True})
+        'sections': (ChildSectionSerializer, {'many': True})
     }
 
 
