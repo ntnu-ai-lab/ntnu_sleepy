@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'django_ory_auth',
     'somnus.users',
     'somnus.modules',
+    'adminsortable2',
 ]
 
 MIDDLEWARE = [
