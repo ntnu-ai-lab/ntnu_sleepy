@@ -137,8 +137,7 @@ export function ProfilePage() {
           <Button
             variant="contained"
             onClick={() => {
-              if (sessionToken && session)
-                getTest(session.identity.id, sessionToken);
+              if (sessionToken && session) getTest(session.identity.id);
             }}
           >
             <Text>Test</Text>

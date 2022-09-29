@@ -1,43 +1,27 @@
-import { storeLocalUser } from "../devicestorage/StorageController"
-import { DjangoUser } from "../types/Types"
+import { storeLocalUser } from "../devicestorage/StorageController";
+import { callApi } from "../helpers/callApi";
+import { DjangoUser } from "../types/Types";
 
-export async function createUser(user: DjangoUser, identiyId: string, token: string) {
-
-    console.log(user)
-
-    const response = await fetch(
-        `http://10.0.2.2:8000/users/${identiyId}/`,
-        {
-            method: "PATCH",
-            headers: new Headers({
-                "X-Session-Token": token,
-                "Content-Type": "application/json",
-            }),
-            body: JSON.stringify(user)
-        }
-    )
-
-    console.log(await response.json())
+export async function createUser(
+  user: DjangoUser,
+  identiyId: string,
+  token: string
+) {
+  await callApi<DjangoUser>(`/users/${identiyId}/`, {
+    method: "PATCH",
+    body: JSON.stringify(user),
+  });
 }
 
-export async function getTest(identiyId: string, token: string) {
+export async function getTest(identiyId: string) {
+  const response = await callApi<DjangoUser>(`/users/${identiyId}/`, {
+    method: "GET",
+  });
 
-    const response = await fetch(
-        `http://10.0.2.2:8000/users/${identiyId}/`,
-        {
-            method: "GET",
-            headers: new Headers({
-                "X-Session-Token": token,
-                "Content-Type": "application/json",
-            }),
-            body: null
-        }
-    )
-    await response.json().then(r => {
-        console.log(r);
-        const user: DjangoUser = {
-            name: r.name
-        }
-        storeLocalUser(user)
-    })
+  if (response.data) {
+    const user: DjangoUser = {
+      name: response.data.name,
+    };
+    storeLocalUser(user);
+  }
 }
