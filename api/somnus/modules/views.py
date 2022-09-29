@@ -23,7 +23,7 @@ class AnswerListViewSet(viewsets.ModelViewSet):
 
 class AnswerViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> models.QuerySet[Answer]:
-        return super().get_queryset()
+        return Answer.objects.filter(answer_list__user=self.request.user)
     serializer_class = AnswerSerializer
 
 class InputViewSet(viewsets.ReadOnlyModelViewSet):

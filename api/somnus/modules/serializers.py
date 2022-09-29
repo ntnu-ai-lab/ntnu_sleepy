@@ -71,7 +71,7 @@ class ModuleSerializer(FlexFieldsModelSerializer[Module]): # type: ignore [no-an
 class AnswerSerializer(serializers.ModelSerializer[Answer]):
     class Meta:
         model = Answer
-        fields = ['id', 'input', 'answers', 'value']
+        fields = ['id', 'input', 'answer_list', 'value']
 
 class AnswerListSerializer(FlexFieldsModelSerializer[AnswerList]): # type: ignore [no-any-unimported]
     class Meta:
