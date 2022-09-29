@@ -17,6 +17,7 @@ from pathlib import Path
 env = environ.Env(
     DEBUG=(bool, False),
     HOST=(str, ''),
+    HOST2=(str, ''),
     DJANGO_SECRET=(str, 'django-insecure-=qq^h!%!1j6vi&h!vor)x2cv#v1^2*n^(gv^5mjxt!z(uv16iz'),
     ORY_SDK_URL=(str, 'auth.somnus.no'),
     ORY_UI_URL=(str, 'auth.somnus.no/ui')
