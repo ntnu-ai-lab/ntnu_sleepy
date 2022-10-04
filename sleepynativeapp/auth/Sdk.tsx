@@ -11,6 +11,7 @@ const canonicalize = (url: string = "") => url.replace(/\/+$/, "");
 
 // This value comes from ../../app.config.js
 export const kratosUrl = (project: string = "Sleepyapp") => {
+<<<<<<< HEAD
   const url =
     canonicalize(
       Constants.manifest?.debuggerHost
@@ -19,6 +20,9 @@ export const kratosUrl = (project: string = "Sleepyapp") => {
     ) || "";
 
   console.log(url);
+=======
+  const url = canonicalize(Constants.manifest?.extra?.kratosUrl) || "";
+>>>>>>> f4a4fc4 (update for testing)
 
   if (url.indexOf("https://playground.projects.oryapis.com/") == -1) {
     // The URL is not from Ory, so let's just return it.
@@ -31,7 +35,11 @@ export const kratosUrl = (project: string = "Sleepyapp") => {
 };
 
 export const newKratosSdk = (project: string) => {
+<<<<<<< HEAD
   console.log(kratosUrl(project));
+=======
+  // console.log(kratosUrl(project))
+>>>>>>> f4a4fc4 (update for testing)
   return new V0alpha2Api(
     new Configuration({
       basePath: kratosUrl(project),
