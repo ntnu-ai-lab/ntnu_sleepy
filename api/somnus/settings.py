@@ -38,11 +38,13 @@ SECRET_KEY = env('DJANGO_SECRET')
 DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS: list[str] = [
-    'api.somnus.no',
-    '10.0.2.2',
-    env('HOST'), # Until we set up an actual hostname
-    env('HOST2'), # Until we set up an actual hostname
+    'api.somnus.kehofseth.no',
+    env.str('HOST'),
+    env.str('HOST2'),
 ]
+
+if env.bool('DEBUG'):
+    ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'users.User'
 
