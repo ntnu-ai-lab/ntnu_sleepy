@@ -1,18 +1,22 @@
-import React, { useState } from "react";
-import { getModule } from "../api/modulesApi";
-import { Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { getAllModules, getModule } from "../api/modulesApi";
+import { View } from "react-native";
 import { Module } from "../types/modules";
-import { Card } from "react-native-paper";
 
 export function TestGetModules() {
-  const module = getModule("d37565e2-4241-46ed-985d-ca5c3755f2e1");
-  console.log("module", module);
+  const [module, setModule] = useState<Module | undefined>(undefined);
+  console.log(module);
 
-  return (
-    <View>
-      <Card>
-        <Text>{module.toString()}</Text>
-      </Card>
-    </View>
-  );
+  async function handleGetModules() {
+    const modules = await getAllModules();
+    modules && setModule(await getModule(modules[0].id));
+  }
+
+  useEffect(() => {
+    handleGetModules();
+  }, []);
+
+  useEffect(() => console.log(module));
+
+  return <View></View>;
 }
