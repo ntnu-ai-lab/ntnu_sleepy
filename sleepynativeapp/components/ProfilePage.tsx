@@ -192,7 +192,7 @@ export function ProfilePage() {
             />
 
             <Divider style={{ margin: 5 }} />
-{/*
+            {/*
             <SelectDropdown
               disabled={true}
               defaultButtonText={UserEx.relationshipStatus}
@@ -251,7 +251,6 @@ export function ProfilePage() {
           mode="text"
           onPress={() => {
             logOut();
-
           }}
         >
           <Text>Logg ut</Text>
@@ -259,7 +258,8 @@ export function ProfilePage() {
         <Button
           mode="text"
           onPress={() => {
-            if (sessionToken && session) getTest("d10e1d18-db25-4e47-ab19-efad53248123");
+            if (sessionToken && session)
+              getTest("d10e1d18-db25-4e47-ab19-efad53248123");
           }}
         >
           <Text>Test</Text>
