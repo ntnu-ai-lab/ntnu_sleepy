@@ -2,7 +2,7 @@ import { PageTemplate } from "./PageTemplate";
 import React, { useContext, useRef, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { TextField } from "./material/TextField";
-import { Card } from "./material/Card";
+//import { Card } from "./material/Card";
 import { relationshipStatus, UserEx } from "../types/Types";
 import { gender } from "../types/Types";
 import { Select } from "./material/Select";
@@ -178,7 +178,7 @@ export function ProfilePage() {
             />
 
             <Divider style={{ margin: 5 }} />
-
+{/*
             <SelectDropdown
               defaultButtonText={
                 relationshipStatuses[UserEx.relationshipStatus]
@@ -209,6 +209,7 @@ export function ProfilePage() {
                 return item;
               }}
             />
+            */}
             <Divider style={{ margin: 5 }} />
 
             {/* <Select

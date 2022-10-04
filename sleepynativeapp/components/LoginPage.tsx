@@ -7,7 +7,6 @@ import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
 import { Card, Title, Paragraph, Button, TextInput, Text } from 'react-native-paper'
@@ -118,23 +117,6 @@ export function LoginPage() {
             Glemt passord?
           </Button>
         </Card>
-        <Card style={{ margin: 20 }}>
-          <Button
-            style={{ margin: 20 }}
-            mode="contained"
-            onPress={() => { //@ts-ignore
-              navigation.navigate("home");
-            }}>
-            Midlertidig profilside
-          </Button>
-        </View>
-        <View>
-          <Button style={{height: 20}}
-          onClick={() => { //@ts-ignore
-            navigation.navigate("tools");
-          }}><Text style={{fontSize: 14}}>Midlertidig modulside </Text>
-            </Button>
-        </View>
       </View>
     </PageTemplate>
   );

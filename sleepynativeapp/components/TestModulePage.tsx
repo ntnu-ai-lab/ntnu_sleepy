@@ -20,7 +20,7 @@ export function TestModulePage() {
 
     return (
         <PageTemplate>
-            <ScrollView contentInset={{ bottom: 200, top: 0 }} keyboardDismissMode={"on-drag"} alwaysBounceVertical={true}   >
+            <ScrollView contentInset={{ bottom: 200, top: 0 }} keyboardDismissMode={"on-drag"} alwaysBounceVertical={true} style={{padding: 10}}  >
                 <Card>
                     <Card.Content>
                         <ProgressBar progress={progress} color={colors.primary_dark} />
@@ -91,6 +91,7 @@ export function TestModulePage() {
                         </Card.Actions>
                     </Card.Content>
                 </Card>
+                <View style={{height: 100}}/>
             </ScrollView>
         </PageTemplate>
     )

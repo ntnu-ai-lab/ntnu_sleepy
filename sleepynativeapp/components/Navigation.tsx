@@ -28,18 +28,12 @@ export function Navigation() {
       >
         {isAuthenticated ? (
           <>
-            <Stack.Screen name="profile" component={ProfilePage} />
-            <Stack.Screen name="home" component={HomePage} />
-            <Stack.Screen name="tools" component={TestModulePage} />
-            <Stack.Screen name="assignment" component={GeneralPage} />
+            <Stack.Screen name="home" component={TabNavigation} />
           </>
         ) : (
           <>
             <Stack.Screen name="login" component={LoginPage} />
-            <Stack.Screen name="tools" component={TestModulePage} />
             <Stack.Screen name="signup" component={SignupPage} />
-
-            <Stack.Screen name="login" component={LoginPage} />
           </>
         )}
       </Stack.Navigator>

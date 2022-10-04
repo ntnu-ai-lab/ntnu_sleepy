@@ -3,8 +3,8 @@ import {Module, Page, Section, Answer, AnswerList, TextSection, FormSection, Ima
 
 const testTextSection: TextSection = {
     id: "test-section",
-    heading: "Test heading",
-    content: "Test Content",
+    heading: "En Text-section",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     page: "test-page",
     type: "text"
 }
@@ -52,8 +52,8 @@ const testFormSection: FormSection = {
 
 const testImageSection: ImageSection = {
     id: "test-section",
-    heading: "Test heading",
-    content: "Test content",
+    heading: "En Bilde-section",
+    content: "Sovende mann",
     uri: "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/325353_2200-1200x628.jpg",
     page: "test-page",
     type: "img",
@@ -69,10 +69,10 @@ const user: User = {
     relationshipStatus: "married"
 };
 
-const testPage: Page =  {
+export const testPage: Page =  {
     id: "test-page",
     module: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
-    sections: [testTextSection]
+    sections: [testTextSection, testFormSection, testImageSection]
 };
 
 

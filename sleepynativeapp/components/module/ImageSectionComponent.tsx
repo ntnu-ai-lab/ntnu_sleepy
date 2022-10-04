@@ -12,7 +12,10 @@ export function ImageSectionComponent(props: { section: ImageSection }) {
       color: colors.text_white,
       fontSize: 20,
     },
-    img: {},
+    img: {
+      width: 200,
+      height: 200,
+    },
     caption: {
       color: colors.text_secondary,
       fontSize: 12,
@@ -21,9 +24,9 @@ export function ImageSectionComponent(props: { section: ImageSection }) {
 
   return (
     <Card>
-      <Text style={styles.heading}></Text>
+      {section.heading ? <Text style={styles.heading}>{section.heading}</Text> : <View />}
       <Image style={styles.img} source={{ uri: section.uri }} />
-      <Text style={styles.caption}></Text>
+      <Text style={styles.caption}>{section.content}</Text>
     </Card>
   );
 }
