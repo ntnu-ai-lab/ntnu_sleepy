@@ -3,7 +3,7 @@ import React, { useContext, useRef, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { TextField } from "./material/TextField";
 //import { Card } from "./material/Card";
-import { relationshipStatus, UserEx } from "../types/Types";
+import { relationshipStatus, User, UserEx } from "../types/Types";
 import { gender } from "../types/Types";
 import { Select } from "./material/Select";
 import { NavBar } from "./material/NavBar";
@@ -25,6 +25,8 @@ import {
 } from "react-native-paper";
 import { colors } from "../styles/styles";
 import SelectDropdown from "react-native-select-dropdown";
+import { Navigation } from "./Navigation";
+import { useNavigation } from "@react-navigation/native";
 
 export function ProfilePage() {
   const [state, setState] = useState(UserEx);
@@ -32,6 +34,14 @@ export function ProfilePage() {
   const { sessionToken, session, setSession } = useContext(AuthContext);
 
   const [expanded, setExpanded] = useState(true);
+  const navigation = useNavigation();
+
+  const getLocalUser = async () => {
+    const user_string = await AsyncStorage.getItem("Local_User");
+    return user_string != null ? JSON.parse(user_string) : null;
+  };
+
+  const user = getLocalUser();
 
   const handlePress = () => setExpanded(!expanded);
   const genders = { male: "Mann", female: "Kvinne", other: "Annet" };
@@ -100,6 +110,10 @@ export function ProfilePage() {
       }
     };
     removeUserFromStorage();
+    setTimeout(() => {
+      //@ts-ignore
+      navigation.navigate("login");
+    }, 1000);
   }
 
   return (
@@ -231,7 +245,12 @@ export function ProfilePage() {
             />
           </ScrollView>
         </Card.Actions>
-        <Button mode="text" onPress={logOut}>
+        <Button
+          mode="text"
+          onPress={() => {
+            logOut;
+          }}
+        >
           <Text>Logg ut</Text>
         </Button>
         <Button

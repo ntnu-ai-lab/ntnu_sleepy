@@ -3,14 +3,14 @@ import { callApi } from "../helpers/callApi";
 import { User } from "../types/Types";
 
 export async function createUser(user: User, identiyId: string) {
-  await callApi<User>(`/users/${identiyId}/`, {
+  await callApi<User>(`users/${identiyId}/`, {
     method: "PATCH",
     body: JSON.stringify(user),
   });
 }
 
 export async function getTest(identiyId: string) {
-  const response = await callApi<User>(`/users/${identiyId}/`, {
+  const response = await callApi<User>(`users/${identiyId}/`, {
     method: "GET",
   });
 

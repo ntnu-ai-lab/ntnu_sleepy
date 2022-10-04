@@ -16,12 +16,10 @@ export function SettingsPage() {
         <Card.Content>
           <Card.Actions style={{ alignSelf: "center" }}>
             <Button
-              onPress={() =>
+              onPress={() => {
                 //@ts-ignore
-                {
-                  navigation.navigate("login");
-                }
-              }
+                navigation.navigate("login");
+              }}
             >
               logout
             </Button>

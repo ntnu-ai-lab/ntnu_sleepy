@@ -27,6 +27,7 @@ import {
   Divider,
 } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -42,14 +43,14 @@ export function SignupPage() {
     male: "Mann",
     female: "Kvinne",
     other: "Annet",
-    undefined: "",
+    undefined: "-",
   };
   const relationshipStatuses = {
     married: "Gift",
     coliving: "Samboer",
     relationship: "Fast forhold",
     single: "Singel",
-    undefined: "",
+    undefined: "-",
   };
 
   const [gender, setGender] = useState<gender>("undefined");
@@ -158,11 +159,11 @@ export function SignupPage() {
       </View>
       <Card style={{ alignSelf: "center" }}>
         <Card.Actions style={{ alignSelf: "center", marginBottom: 10 }}>
-          <ScrollView
+          <KeyboardAwareScrollView
+            viewIsInsideTabBar={true}
+            enableAutomaticScroll={true}
+            enableResetScrollToCoords={false}
             style={{ width: "90%" }}
-            alwaysBounceVertical={false}
-            automaticallyAdjustKeyboardInsets={true}
-            keyboardDismissMode={"on-drag"}
           >
             <TextInput
               value={name}
@@ -194,63 +195,73 @@ export function SignupPage() {
             <Card.Actions>
               <Text>Sivilstatus</Text>
             </Card.Actions>
-            <SelectDropdown
-              defaultButtonText={"Velg et alternativ"}
-              selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-              //defaultValue={}
-              buttonStyle={{ width: "100%", borderRadius: 10 }}
-              buttonTextStyle={{ textAlign: "left" }}
-              dropdownStyle={{ width: "90%", borderRadius: 10 }}
-              data={[
-                relationshipStatuses.married,
-                relationshipStatuses.coliving,
-                relationshipStatuses.relationship,
-                relationshipStatuses.single,
-                relationshipStatuses.undefined,
-              ]}
-              onSelect={(selectedItem, index) => {
-                //console.log(selectedItem, index);
-                setRelationship(selectedItem);
-              }}
-              buttonTextAfterSelection={(selectedItem, index) => {
-                // text represented after item is selected
-                // if data array is an array of objects then return selectedItem.property to render after item is selected
-                return selectedItem;
-              }}
-              rowTextForSelection={(item, index) => {
-                // text represented for each item in dropdown
-                // if data array is an array of objects then return item.property to represent item in dropdown
-                return item;
-              }}
-            />
-            <SelectDropdown
-              defaultButtonText={"Velg et alternativ"}
-              selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-              defaultValue={"undefined"}
-              buttonStyle={{ width: "100%", borderRadius: 10 }}
-              buttonTextStyle={{ textAlign: "left" }}
-              dropdownStyle={{ width: "90%", borderRadius: 10 }}
-              data={[
-                genders.male,
-                genders.female,
-                genders.other,
-                genders.undefined,
-              ]}
-              onSelect={(selectedItem, index) => {
-                //console.log(selectedItem, index);
-                setGender(selectedItem);
-              }}
-              buttonTextAfterSelection={(selectedItem, index) => {
-                // text represented after item is selected
-                // if data array is an array of objects then return selectedItem.property to render after item is selected
-                return selectedItem;
-              }}
-              rowTextForSelection={(item, index) => {
-                // text represented for each item in dropdown
-                // if data array is an array of objects then return item.property to represent item in dropdown
-                return item;
-              }}
-            />
+            <Card.Content>
+              <SelectDropdown
+                defaultButtonText={"Velg et alternativ"}
+                selectedRowStyle={{ backgroundColor: colors.primary_dark }}
+                //defaultValue={}
+                buttonStyle={{ width: "100%", borderRadius: 10 }}
+                buttonTextStyle={{ textAlign: "center" }}
+                dropdownStyle={{ width: "90%", borderRadius: 10 }}
+                data={[
+                  relationshipStatuses.married,
+                  relationshipStatuses.coliving,
+                  relationshipStatuses.relationship,
+                  relationshipStatuses.single,
+                  relationshipStatuses.undefined,
+                ]}
+                onSelect={(selectedItem, index) => {
+                  //console.log(selectedItem, index);
+                  setRelationship(selectedItem);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  // text represented after item is selected
+                  // if data array is an array of objects then return selectedItem.property to render after item is selected
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  // text represented for each item in dropdown
+                  // if data array is an array of objects then return item.property to represent item in dropdown
+                  return item;
+                }}
+              />
+            </Card.Content>
+            <Card.Actions>
+              <Text>Kjønn</Text>
+            </Card.Actions>
+            <Card.Content>
+              <SelectDropdown
+                defaultButtonText={"Velg et alternativ"}
+                selectedRowStyle={{ backgroundColor: colors.primary_dark }}
+                defaultValue={"undefined"}
+                buttonStyle={{ width: "100%", borderRadius: 10 }}
+                buttonTextStyle={{ textAlign: "center" }}
+                dropdownStyle={{
+                  width: "90%",
+                  borderRadius: 10,
+                }}
+                data={[
+                  genders.male,
+                  genders.female,
+                  genders.other,
+                  genders.undefined,
+                ]}
+                onSelect={(selectedItem, index) => {
+                  //console.log(selectedItem, index);
+                  setGender(selectedItem);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  // text represented after item is selected
+                  // if data array is an array of objects then return selectedItem.property to render after item is selected
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  // text represented for each item in dropdown
+                  // if data array is an array of objects then return item.property to represent item in dropdown
+                  return item;
+                }}
+              />
+            </Card.Content>
             <Divider style={{ margin: 5 }} />
 
             <TextInput
@@ -265,7 +276,7 @@ export function SignupPage() {
               style={{ marginBottom: 10 }}
               label="Yrke"
             />
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </Card.Actions>
 
         <Button
@@ -278,6 +289,8 @@ export function SignupPage() {
                 traits: { email: email },
               };
             onSubmit(userInput);
+            //@ts-ignore
+            navigation.navigate("login");
           }}
         >
           <Text style={{ fontSize: 20 }}>Registrer</Text>
