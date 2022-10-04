@@ -25,5 +25,6 @@ export async function getAllModules() {
   if (response.data) {
     const modules: Module[] = response.data;
     storeCachedModules(modules);
+    return modules;
   }
 }
