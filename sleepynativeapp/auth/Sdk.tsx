@@ -1,31 +1,42 @@
-import { Configuration, V0alpha2Api } from "@ory/kratos-client"
-import Constants from "expo-constants"
-import axiosFactory from "@ory/kratos-client/node_modules/axios/index"
-import { resilience } from "./axios"
+import { Configuration, V0alpha2Api } from "@ory/kratos-client";
+import Constants from "expo-constants";
+import axiosFactory from "@ory/kratos-client/node_modules/axios/index";
+import { resilience } from "./axios";
 
-const axios = axiosFactory.create()
-resilience(axios) // Adds retry mechanism to axios
+const axios = axiosFactory.create();
+resilience(axios); // Adds retry mechanism to axios
 
 // canonicalize removes the trailing slash from URLs.
-const canonicalize = (url: string = "") => url.replace(/\/+$/, "")
+const canonicalize = (url: string = "") => url.replace(/\/+$/, "");
 
 // This value comes from ../../app.config.js
 export const kratosUrl = (project: string = "Sleepyapp") => {
-  const url = canonicalize(Constants.manifest?.extra?.kratosUrl) || ""
-  
+  const url =
+    (typeof Constants.manifest?.packagerOpts === `object` &&
+      Constants.manifest.packagerOpts.dev &&
+      canonicalize(
+        Constants.manifest.debuggerHost
+          ? "http://" +
+              Constants.manifest.debuggerHost
+                .split(`:`)
+                .shift()
+                ?.concat(`:4433`)
+          : Constants.manifest?.extra?.kratosUrl
+      )) ||
+    "";
+
   if (url.indexOf("https://playground.projects.oryapis.com/") == -1) {
     // The URL is not from Ory, so let's just return it.
-    return url
+    return url;
   }
 
   // We handle a special case where we allow the project to be changed
   // if you use an ory project.
-  return url
-}
+  return url;
+};
 
-export const newKratosSdk = (project: string) =>
-  { 
-    console.log(kratosUrl(project))
+export const newKratosSdk = (project: string) => {
+  console.log(kratosUrl(project));
   return new V0alpha2Api(
     new Configuration({
       basePath: kratosUrl(project),
@@ -40,6 +51,6 @@ export const newKratosSdk = (project: string) =>
     }),
     "",
     // Ensure that we are using the axios client with retry. ¨
-    axios,
-  )
-}
+    axios
+  );
+};
