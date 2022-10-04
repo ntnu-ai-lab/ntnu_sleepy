@@ -3,13 +3,13 @@ import { callApi } from "../helpers/callApi";
 import { Module } from "../types/modules";
 
 //gets specific module based on id
-export async function getModule(identiyId: string) {
-  const response = await callApi<Module>(`modules/${identiyId}/`, {
+export async function getModule(id: string) {
+  const response = await callApi<Module>(`modules/${id}/`, {
     method: "GET",
   });
 
   if (response.data) {
-    const module: Module = response.data;
+    return response.data;
   }
 }
 
