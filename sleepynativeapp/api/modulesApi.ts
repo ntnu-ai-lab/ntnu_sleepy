@@ -4,9 +4,12 @@ import { Module } from "../types/modules";
 
 //gets specific module based on id
 export async function getModule(id: string) {
-  const response = await callApi<Module>(`modules/${id}/`, {
-    method: "GET",
-  });
+  const response = await callApi<Module>(
+    `modules/${id}/?expand=pages,pages.sections`,
+    {
+      method: "GET",
+    }
+  );
 
   if (response.data) {
     return response.data;
