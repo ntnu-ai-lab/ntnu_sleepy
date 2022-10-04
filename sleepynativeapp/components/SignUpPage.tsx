@@ -301,6 +301,7 @@ export function SignupPage() {
         </Button>
         <TestGetModules />
       </Card>
+      <TestGetModules />
     </PageTemplate>
   );
 }
