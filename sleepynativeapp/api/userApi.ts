@@ -3,14 +3,14 @@ import { callApi } from "../helpers/callApi";
 import { DjangoUser } from "../types/Types";
 
 export async function createUser(user: DjangoUser, identiyId: string) {
-  await callApi<DjangoUser>(`/users/${identiyId}/`, {
+  await callApi<DjangoUser>(`users/${identiyId}/`, {
     method: "PATCH",
     body: JSON.stringify(user),
   });
 }
 
 export async function getTest(identiyId: string) {
-  const response = await callApi<DjangoUser>(`/users/${identiyId}/`, {
+  const response = await callApi<DjangoUser>(`users/${identiyId}/`, {
     method: "GET",
   });
 
