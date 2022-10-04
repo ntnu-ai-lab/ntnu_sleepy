@@ -5,7 +5,7 @@ import {
 } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { createUser } from "../api/userApi";
 import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
@@ -13,11 +13,19 @@ import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
 import { DjangoUser, gender, relationshipStatus } from "../types/Types";
 import { colors } from "../styles/styles";
-import { Button } from "./material/Button";
-import { Card } from "./material/Card";
+//import { Button } from "./material/Button";
+//import { Card } from "./material/Card";
 import { Select } from "./material/Select";
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
+import {
+  Card,
+  Title,
+  Paragraph,
+  Button,
+  TextInput,
+  Divider,
+} from "react-native-paper";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -108,7 +116,7 @@ export function SignupPage() {
             const user: DjangoUser = {
               name: name,
             };
-            createUser(user, s.session.identity.id, s.session_token); //@ts-ignore
+            createUser(user, s.session.identity.id); //@ts-ignore
             //navigation.navigate("profile");
           })
           .catch(
@@ -126,86 +134,81 @@ export function SignupPage() {
           Registrer ny bruker
         </Text>
       </View>
-      <Card
-        style={{
-          paddingVertical: 5,
-          width: "90%",
-          alignSelf: "center",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <View style={{ width: "90%" }}>
-          <TextField
-            value={email}
-            onChange={setEmail}
-            placeholderText="E-postadresse"
-          />
-          <TextField
-            value={name}
-            onChange={setName}
-            placeholderText="Fullt navn"
-          />
-          <TextField
-            value={password}
-            onChange={setPassword}
-            placeholderText="Passord"
-            password
-          />
-          <TextField
-            value={password2}
-            onChange={setPassword2}
-            placeholderText="Oppgi passord på nytt"
-            password
-            error={!passwordMatch()}
-          />
-          <Select
-            placeholderText="Sivilstatus"
-            options={["married", "coliving", "relationship", "single"]}
-            optionDisplay={(arg: relationshipStatus) => {
-              if (arg === "married") return "Gift";
-              if (arg === "coliving") return "Samboer";
-              if (arg === "relationship") return "Fast forhold";
-              return "Singel";
-            }}
-          />
-          <Select
-            placeholderText="Kjønn"
-            options={["male", "female", "other"]}
-            optionDisplay={(arg: gender) => {
-              if (arg === "male") return "Mann";
-              else if (arg === "female") return "Kvinne";
-              else return "Annet";
-            }}
-            zIndex={90}
-          />
-          <Text
-            style={{
-              textTransform: "uppercase",
-              fontSize: 12,
-              color: colors.text_secondary,
-              paddingLeft: 15,
-            }}
+      <Card style={{ alignSelf: "center" }}>
+        <Card.Actions style={{ alignSelf: "center", marginBottom: 10 }}>
+          <ScrollView
+            style={{ width: "90%" }}
+            alwaysBounceVertical={false}
+            automaticallyAdjustKeyboardInsets={true}
+            keyboardDismissMode={"on-drag"}
           >
-            {" "}
-            Fødselsdato på format: ddmmåååå
-          </Text>
-          <TextField
-            value={dateOfBirth}
-            onChange={setDateOfBirth}
-            placeholderText="Fødselsdato"
-          />
-          <TextField
-            value={occupation}
-            onChange={setOccupation}
-            placeholderText="Yrke"
-          />
-        </View>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              label="Fullt navn"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              label="E-postadresse"
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              label="Passord"
+              secureTextEntry={true}
+              style={{ marginBottom: 10 }}
+            />
+            <TextInput
+              value={password2}
+              onChangeText={setPassword2}
+              label="Oppgi passord på nytt"
+              secureTextEntry={true}
+              error={!passwordMatch()}
+              style={{ marginBottom: 10 }}
+            />
+            <Select
+              placeholderText="Sivilstatus"
+              options={["married", "coliving", "relationship", "single"]}
+              optionDisplay={(arg: relationshipStatus) => {
+                if (arg === "married") return "Gift";
+                if (arg === "coliving") return "Samboer";
+                if (arg === "relationship") return "Fast forhold";
+                return "Singel";
+              }}
+            />
+            <Select
+              placeholderText="Kjønn"
+              options={["male", "female", "other"]}
+              optionDisplay={(arg: gender) => {
+                if (arg === "male") return "Mann";
+                else if (arg === "female") return "Kvinne";
+                else return "Annet";
+              }}
+              zIndex={90}
+            />
+            <Divider style={{ margin: 5 }} />
+
+            <TextInput
+              value={dateOfBirth}
+              onChangeText={setDateOfBirth}
+              style={{ marginBottom: 10 }}
+              label="Fødselsdato på format: ddmmåååå"
+            />
+            <TextInput
+              value={occupation}
+              onChangeText={setOccupation}
+              style={{ marginBottom: 10 }}
+              label="Yrke"
+            />
+          </ScrollView>
+        </Card.Actions>
 
         <Button
-          variant="contained"
           style={{ width: "50%", alignSelf: "center" }}
-          onClick={() => {
+          onPress={() => {
             const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
               {
                 method: "password",

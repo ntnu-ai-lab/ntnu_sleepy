@@ -5,12 +5,11 @@ import { AuthContext } from "../auth/AuthProvider";
 import { GeneralPage } from "./GeneralPage";
 import { HomePage } from "./HomePage";
 import { LoginPage } from "./LoginPage";
-import { TabNavigation } from "./TabNavigation";
 import { ProfilePage } from "./ProfilePage";
 import { SignupPage } from "./SignUpPage";
 import { TestModulePage } from "./TestModulePage";
 
-export function Navigation() {
+export function OldNavigation() {
   const Stack = createNativeStackNavigator();
   const { isAuthenticated } = useContext(AuthContext);
 
@@ -38,8 +37,6 @@ export function Navigation() {
             <Stack.Screen name="login" component={LoginPage} />
             <Stack.Screen name="tools" component={TestModulePage} />
             <Stack.Screen name="signup" component={SignupPage} />
-
-            <Stack.Screen name="login" component={LoginPage} />
           </>
         )}
       </Stack.Navigator>

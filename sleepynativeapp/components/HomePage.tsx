@@ -12,7 +12,6 @@ export function HomePage() {
                     This is the homepage
                 </Text>
             </View>
-            <NavBar />
         </PageTemplate>
     )
 }

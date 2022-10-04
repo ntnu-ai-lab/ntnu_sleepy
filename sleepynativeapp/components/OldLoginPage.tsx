@@ -1,19 +1,18 @@
 import { SelfServiceLoginFlow, SubmitSelfServiceLoginFlowBody, SubmitSelfServiceLoginFlowWithPasswordMethodBody } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import { SessionContext } from "../auth/Auth";
 import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-
+import { Button } from "./material/Button";
+import { Card } from "./material/Card";
 import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
-import { Card, Title, Paragraph, Button, TextInput, Text } from 'react-native-paper'
-import { colors } from "../styles/styles";
 
-export function LoginPage() {
+export function OldLoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigation();
@@ -60,16 +59,16 @@ export function LoginPage() {
   const onSubmit = (payload: SubmitSelfServiceLoginFlowBody) =>
     flow
       ? newKratosSdk(project)
-        .submitSelfServiceLoginFlow(flow.id, payload, sessionToken)
-        .then(({ data }) => Promise.resolve(data as SessionContext))
-        // Looks like everything worked and we have a session!
-        .then((session) => {
-          setSession(session)
-          setTimeout(() => { // @ts-ignore
-            navigation.navigate("profile")
-          }, 100)
-        })
-        .catch(handleFormSubmitError(setFlow, initializeFlow))
+          .submitSelfServiceLoginFlow(flow.id, payload, sessionToken)
+          .then(({ data }) => Promise.resolve(data as SessionContext))
+          // Looks like everything worked and we have a session!
+          .then((session) => {
+            setSession(session)
+            setTimeout(() => { // @ts-ignore
+              navigation.navigate("profile")
+            }, 100)
+          })
+          .catch(handleFormSubmitError(setFlow, initializeFlow))
       : Promise.resolve()
 
   return (
@@ -82,20 +81,19 @@ export function LoginPage() {
           justifyContent: "center",
         }}
       >
-        <Card style={{ padding: 20, borderRadius: 10 }}>
-          <TextInput
+        <Card style={{ padding: 20 }}>
+          <TextField
             value={email}
-            onChangeText={setEmail}
-            style={{ marginBottom: 10 }}
-            label={"Epost"}
+            onChange={setEmail}
+            placeholderText={"Epost"}
           />
-          <TextInput
+          <TextField
             value={password}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-            label={"Passord"}
+            onChange={setPassword}
+            password
+            placeholderText={"Passord"}
           />
-          <Button onPress={() => {
+          <Button variant="contained" onClick={() => {
             const userInput: SubmitSelfServiceLoginFlowWithPasswordMethodBody = {
               identifier: email,
               method: "password",
@@ -103,29 +101,30 @@ export function LoginPage() {
             }
             onSubmit(userInput)
           }}>
-            <Text >Logg inn</Text>
-          </Button>
-
-          <Button
-            onPress={() => {
-              //@ts-ignore'
-              navigation.navigate("signup");
-            }}>
-            <Text >Opprett ny bruker</Text>
-          </Button>
-
-          <Button mode="text">
-            Glemt passord?
+            <Text style={{ fontSize: 20 }}>Log in</Text>
           </Button>
         </Card>
-        <Card style={{ margin: 20 }}>
+        <Button
+          onClick={() => {
+            //@ts-ignore'
+            navigation.navigate("signup");
+          }}
+        >
+          <Text style={{ fontSize: 20 }}>Opprett ny bruker</Text>
+        </Button>
+        <View>
+          <Button style={{ height: 20 }}>
+            <Text style={{ fontSize: 14 }}>Glemt passord?</Text>
+          </Button>
           <Button
-            style={{ margin: 20 }}
-            mode="contained"
-            onPress={() => { //@ts-ignore
-              navigation.navigate("home");
-            }}>
-            Midlertidig profilside
+            style={{ height: 20 }}
+            onClick={() =>
+              { //@ts-ignore
+                navigation.navigate("profile");
+              }
+            }
+          >
+            <Text style={{ fontSize: 14 }}>Midlertidig profilside test</Text>
           </Button>
         </View>
         <View>
