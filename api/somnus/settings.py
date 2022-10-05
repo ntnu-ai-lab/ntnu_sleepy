@@ -19,8 +19,8 @@ env = environ.Env(
     HOST=(str, ''),
     HOST2=(str, ''),
     DJANGO_SECRET=(str, 'django-insecure-=qq^h!%!1j6vi&h!vor)x2cv#v1^2*n^(gv^5mjxt!z(uv16iz'),
-    ORY_SDK_URL=(str, 'auth.somnus.no'),
-    ORY_UI_URL=(str, 'auth.somnus.no/ui')
+    ORY_SDK_URL=(str, 'somnus.idi.ntnu.no/auth'),
+    ORY_UI_URL=(str, 'somnus.idi.ntnu.no/auth/ui')
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,7 +38,7 @@ SECRET_KEY = env('DJANGO_SECRET')
 DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS: list[str] = [
-    'api.somnus.kehofseth.no',
+    'somnus.idi.ntnu.no',
     env.str('HOST'),
     env.str('HOST2'),
 ]
@@ -137,6 +137,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+FIRST_DAY_OF_WEEK = 1
 
 
 # Static files (CSS, JavaScript, Images)
