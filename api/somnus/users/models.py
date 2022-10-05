@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 
 import uuid
 from django.db import models
-from django.contrib import auth
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.auth.base_user import BaseUserManager as BaseUserManager
@@ -79,9 +78,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     dateOfBirth = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=10, choices=Gender.choices)
+    gender = models.CharField(max_length=10, choices=Gender.choices, default=Gender.UNDEFINED)
     occupation = models.CharField(max_length=255, blank=True)
-    relationshipstatus = models.CharField(max_length=20, choices=Relationshipstatus.choices)
+    relationshipstatus = models.CharField(max_length=20, choices=Relationshipstatus.choices, default=Relationshipstatus.UNDEFINED)
     answers: models.Manager['Answer']
 
     EMAIL_FIELD = "email"
