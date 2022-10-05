@@ -26,7 +26,7 @@ export function SettingsPage() {
           </Card.Actions>
         </Card.Content>
         <Card.Cover
-          source={{ uri: "http://static.somnus.kehofseth.no/bed.jpg" }}
+          source={{ uri: "https://somnus.idi.ntnu.no/static/bed.jpg" }}
           style={{ width: "50%", maxHeight: "50%", alignSelf: "center" }}
         />
       </Card>
