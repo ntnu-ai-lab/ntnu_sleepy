@@ -1,5 +1,5 @@
 import { User } from '../types/Types';
-import {Module, Page, Section, Answer, AnswerList, TextSection, FormSection, ImageSection} from '../types/modules'
+import {Module, Page, Section, Answer, AnswerList, TextSection, FormSection, ImageSection, VideoSection} from '../types/modules'
 
 const testTextSection: TextSection = {
     id: "test-section",
@@ -60,6 +60,14 @@ const testImageSection: ImageSection = {
     
 }
 
+const testVideoSection: VideoSection = {
+    type: 'video',
+    uri: 'https://media.istockphoto.com/videos/happy-young-couple-cuddling-together-in-the-bed-sleeping-at-night-video-id1126490961',
+    id: 'test-section',
+    heading: 'Test video heading',
+    page: 'test-page'
+}
+
 const user: User = {
     email: "user@example.com",
     name: "User Name",
@@ -69,10 +77,10 @@ const user: User = {
     relationshipStatus: "married"
 };
 
-const testPage: Page =  {
+export const testPage: Page =  {
     id: "test-page",
     module: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
-    sections: [testTextSection]
+    sections: [testTextSection, testVideoSection]
 };
 
 
@@ -81,3 +89,4 @@ export const testData: Module = {
     pages: [testPage]
 
 };
+
