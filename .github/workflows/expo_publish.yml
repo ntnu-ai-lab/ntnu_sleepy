@@ -2,6 +2,12 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches: ["main"]
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -29,4 +35,4 @@ jobs:
         run: npm ci
 
       - name: 🚀 Publish app
-        run: expo publish --non-interactive
+        run: expo publish --non-interactive --release-channel $BRANCH_NAME
