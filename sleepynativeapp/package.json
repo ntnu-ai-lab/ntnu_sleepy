@@ -5,8 +5,11 @@
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
+    "build:android": "eas build -p android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "np": "np --no-publish",
+    "postversion": "react-native-version"
   },
   "dependencies": {
     "@ory/kratos-client": "^0.0.0-next.a36dda23f209",
@@ -17,6 +20,7 @@
     "@react-navigation/native": "^6.0.12",
     "@react-navigation/native-stack": "^6.8.0",
     "axios": "^0.27.2",
+    "eas-cli": "^2.1.0",
     "expo": "~46.0.9",
     "expo-secure-store": "~11.3.0",
     "expo-status-bar": "~1.4.0",
@@ -49,7 +53,13 @@
     "eslint-plugin-n": "^15.2.5",
     "eslint-plugin-promise": "^6.0.1",
     "eslint-plugin-react": "^7.31.7",
+    "np": "^7.6.2",
+    "react-native-version": "^4.0.0",
     "typescript": "^4.8.2"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ntnu-ai-lab/ntnu_sleepy.git"
+  }
 }
