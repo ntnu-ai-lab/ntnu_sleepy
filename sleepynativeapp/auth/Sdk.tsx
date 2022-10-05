@@ -12,18 +12,13 @@ const canonicalize = (url: string = "") => url.replace(/\/+$/, "");
 // This value comes from ../../app.config.js
 export const kratosUrl = (project: string = "Sleepyapp") => {
   const url =
-    (typeof Constants.manifest?.packagerOpts === `object` &&
-      Constants.manifest.packagerOpts.dev &&
-      canonicalize(
-        Constants.manifest.debuggerHost
-          ? "http://" +
-              Constants.manifest.debuggerHost
-                .split(`:`)
-                .shift()
-                ?.concat(`:4433`)
-          : Constants.manifest?.extra?.kratosUrl
-      )) ||
-    "";
+    canonicalize(
+      Constants.manifest?.debuggerHost
+        ? `http://${Constants.manifest.debuggerHost.split(":").shift()}:4433`
+        : Constants.manifest?.extra?.kratosUrl
+    ) || "";
+
+  console.log(url);
 
   if (url.indexOf("https://playground.projects.oryapis.com/") == -1) {
     // The URL is not from Ory, so let's just return it.
