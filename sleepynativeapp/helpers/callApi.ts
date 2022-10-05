@@ -7,7 +7,7 @@ const api =
   manifest.packagerOpts.dev &&
   manifest.debuggerHost
     ? "http://" + manifest.debuggerHost.split(`:`).shift()?.concat(`:8000`)
-    : `https://api.somnus.kehofseth.no`;
+    : `https://somnus.idi.ntnu.no/api`;
 
 export async function callApi<T>(
   path: string,
