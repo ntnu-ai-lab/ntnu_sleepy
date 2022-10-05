@@ -76,17 +76,14 @@ export function LoginPage() {
   const onSubmit = (payload: SubmitSelfServiceLoginFlowBody) =>
     flow
       ? newKratosSdk(project)
-          .submitSelfServiceLoginFlow(flow.id, payload, sessionToken)
-          .then(({ data }) => Promise.resolve(data as SessionContext))
-          // Looks like everything worked and we have a session!
-          .then((session) => {
-            setSession(session);
-            setTimeout(() => {
-              // @ts-ignore
-              navigation.navigate("home");
-            }, 100);
-          })
-          .catch(handleFormSubmitError(setFlow, initializeFlow))
+        .submitSelfServiceLoginFlow(flow.id, payload, sessionToken)
+        .then(({ data }) => Promise.resolve(data as SessionContext))
+        // Looks like everything worked and we have a session!
+        .then((session) => {
+          setSession(session);
+
+        })
+        .catch(handleFormSubmitError(setFlow, initializeFlow))
       : Promise.resolve();
 
   return (
@@ -115,11 +112,11 @@ export function LoginPage() {
           <Button
             onPress={() => {
               const userInput: SubmitSelfServiceLoginFlowWithPasswordMethodBody =
-                {
-                  identifier: email,
-                  method: "password",
-                  password: password,
-                };
+              {
+                identifier: email,
+                method: "password",
+                password: password,
+              };
               onSubmit(userInput);
             }}
           >
@@ -136,18 +133,6 @@ export function LoginPage() {
           </Button>
 
           <Button mode="text">Glemt passord?</Button>
-        </Card>
-        <Card style={{ margin: 20 }}>
-          <Button
-            style={{ margin: 20 }}
-            mode="contained"
-            onPress={() => {
-              //@ts-ignore
-              navigation.navigate("home");
-            }}
-          >
-            Midlertidig profilside
-          </Button>
         </Card>
       </View>
     </PageTemplate>

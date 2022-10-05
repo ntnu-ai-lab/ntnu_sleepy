@@ -110,44 +110,44 @@ export function SignupPage() {
   ): Promise<void> =>
     flow
       ? newKratosSdk(project)
-          .submitSelfServiceRegistrationFlow(flow.id, payload)
-          .then(({ data }) => {
-            // ORY Kratos can be configured in such a way that it requires a login after
-            // registration. You could handle that case by navigating to the Login screen
-            // but for simplicity we'll just print an error here:
-            if (!data.session_token || !data.session) {
-              const err = new Error(
-                "It looks like you configured ORY Kratos to not issue a session automatically after registration. This edge-case is currently not supported in this example app. You can find more information on enabling this feature here: https://www.ory.sh/kratos/docs/next/self-service/flows/user-registration#successful-registration"
-              );
-              return Promise.reject(err);
-            }
+        .submitSelfServiceRegistrationFlow(flow.id, payload)
+        .then(({ data }) => {
+          // ORY Kratos can be configured in such a way that it requires a login after
+          // registration. You could handle that case by navigating to the Login screen
+          // but for simplicity we'll just print an error here:
+          if (!data.session_token || !data.session) {
+            const err = new Error(
+              "It looks like you configured ORY Kratos to not issue a session automatically after registration. This edge-case is currently not supported in this example app. You can find more information on enabling this feature here: https://www.ory.sh/kratos/docs/next/self-service/flows/user-registration#successful-registration"
+            );
+            return Promise.reject(err);
+          }
 
-            // Looks like we got a session!
-            return Promise.resolve({
-              session: data.session,
-              session_token: data.session_token,
-            });
-          })
-          // Let's log the user in!
-          .then((s) => {
-            setSession(s);
-            const user: User = {
-              name: name,
-              email: email,
-              dateOfBirth: dateOfBirth,
-              gender: gender,
-              occupation: occupation,
-              relationshipStatus: relationship,
-            };
-            createUser(user, s.session.identity.id); //@ts-ignore
-            //navigation.navigate("profile");
-          })
-          .catch(
-            handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
-              setConfig,
-              initializeFlow
-            )
+          // Looks like we got a session!
+          return Promise.resolve({
+            session: data.session,
+            session_token: data.session_token,
+          });
+        })
+        // Let's log the user in!
+        .then((s) => {
+          setSession(s);
+          const user: User = {
+            name: name,
+            email: email,
+            dateOfBirth: dateOfBirth,
+            gender: gender,
+            occupation: occupation,
+            relationshipStatus: relationship,
+          };
+          createUser(user, s.session.identity.id); //@ts-ignore
+          navigation.navigate("profile");
+        })
+        .catch(
+          handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
+            setConfig,
+            initializeFlow
           )
+        )
       : Promise.resolve();
 
   return (
@@ -163,6 +163,7 @@ export function SignupPage() {
             viewIsInsideTabBar={true}
             enableAutomaticScroll={true}
             enableResetScrollToCoords={false}
+            enableOnAndroid={true}
             style={{ width: "90%" }}
           >
             <TextInput
@@ -195,14 +196,15 @@ export function SignupPage() {
             <Card.Actions>
               <Text>Sivilstatus</Text>
             </Card.Actions>
-            <Card.Content>
+            <Card.Content
+            >
               <SelectDropdown
                 defaultButtonText={"Velg et alternativ"}
                 selectedRowStyle={{ backgroundColor: colors.primary_dark }}
                 //defaultValue={}
                 buttonStyle={{ width: "100%", borderRadius: 10 }}
                 buttonTextStyle={{ textAlign: "center" }}
-                dropdownStyle={{ width: "90%", borderRadius: 10 }}
+                dropdownStyle={{ width: "90%", borderRadius: 10, justifyContent: 'center' }}
                 data={[
                   relationshipStatuses.married,
                   relationshipStatuses.coliving,
@@ -283,14 +285,12 @@ export function SignupPage() {
           style={{ width: "50%", alignSelf: "center" }}
           onPress={() => {
             const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
-              {
-                method: "password",
-                password: password,
-                traits: { email: email },
-              };
+            {
+              method: "password",
+              password: password,
+              traits: { email: email },
+            };
             onSubmit(userInput);
-            //@ts-ignore
-            navigation.navigate("login");
           }}
         >
           <Text style={{ fontSize: 20 }}>Registrer</Text>

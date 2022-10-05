@@ -12,6 +12,7 @@
     "postversion": "react-native-version"
   },
   "dependencies": {
+    "@expo/webpack-config": "^0.17.0",
     "@ory/kratos-client": "^0.0.0-next.a36dda23f209",
     "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-cookies/cookies": "^6.2.1",
@@ -40,13 +41,13 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.7",
     "recoil": "^0.7.5",
-    "url": "^0.11.0",
-    "@expo/webpack-config": "^0.17.0"
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.69.1",
+    "@types/react-native-material-dropdown": "^0.11.5",
     "@types/react-native-vector-icons": "^6.4.12",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "eslint": "^8.23.0",

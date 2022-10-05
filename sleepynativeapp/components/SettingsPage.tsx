@@ -13,18 +13,7 @@ export function SettingsPage() {
     <PageTemplate>
       <View></View>
       <Card>
-        <Card.Content>
-          <Card.Actions style={{ alignSelf: "center" }}>
-            <Button
-              onPress={() => {
-                //@ts-ignore
-                navigation.navigate("login");
-              }}
-            >
-              logout
-            </Button>
-          </Card.Actions>
-        </Card.Content>
+
         <Card.Cover
           source={{ uri: "https://somnus.idi.ntnu.no/static/bed.jpg" }}
           style={{ width: "50%", maxHeight: "50%", alignSelf: "center" }}

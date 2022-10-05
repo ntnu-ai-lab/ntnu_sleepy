@@ -43,7 +43,6 @@ export function ProfilePage() {
 
   const user = getLocalUser();
 
-  const handlePress = () => setExpanded(!expanded);
   const genders = { male: "Mann", female: "Kvinne", other: "Annet" };
   const relationshipStatuses = {
     married: "Gift",
@@ -113,7 +112,7 @@ export function ProfilePage() {
     setTimeout(() => {
       //@ts-ignore
       navigation.navigate("login");
-    }, 1000);
+    }, 100);
   }
 
   return (
@@ -168,6 +167,7 @@ export function ProfilePage() {
             /> */}
 
             <SelectDropdown
+              disabled={true}
               defaultButtonText={UserEx.gender}
               selectedRowStyle={{ backgroundColor: colors.primary_dark }}
               defaultValue={UserEx.gender}
@@ -194,6 +194,7 @@ export function ProfilePage() {
             <Divider style={{ margin: 5 }} />
 
             <SelectDropdown
+              disabled={true}
               defaultButtonText={UserEx.relationshipStatus}
               selectedRowStyle={{ backgroundColor: colors.primary_dark }}
               defaultValue={UserEx.relationshipStatus}
@@ -248,7 +249,8 @@ export function ProfilePage() {
         <Button
           mode="text"
           onPress={() => {
-            logOut;
+            logOut();
+
           }}
         >
           <Text>Logg ut</Text>
@@ -256,7 +258,7 @@ export function ProfilePage() {
         <Button
           mode="text"
           onPress={() => {
-            if (sessionToken && session) getTest(session.identity.id);
+            if (sessionToken && session) getTest("d10e1d18-db25-4e47-ab19-efad53248123");
           }}
         >
           <Text>Test</Text>
