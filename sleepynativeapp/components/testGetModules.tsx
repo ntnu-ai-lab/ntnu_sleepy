@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAllModules, getModule } from "../api/modulesApi";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { Module } from "../types/modules";
 
 export function TestGetModules() {
@@ -18,5 +18,14 @@ export function TestGetModules() {
 
   useEffect(() => console.log(module));
 
-  return <View></View>;
+  return (
+    <View>
+      {module?.pages[0].sections.map((section) => {
+        switch (section.type) {
+          case "text":
+            return <Text>{section.heading}</Text>;
+        }
+      })}
+    </View>
+  );
 }
