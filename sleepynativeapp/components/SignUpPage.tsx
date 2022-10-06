@@ -11,7 +11,7 @@ import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-import { DjangoUser, gender, relationshipStatus } from "../types/Types";
+import { User, gender, relationshipStatus } from "../types/Types";
 import { colors } from "../styles/styles";
 //import { Button } from "./material/Button";
 //import { Card } from "./material/Card";
@@ -26,6 +26,8 @@ import {
   TextInput,
   Divider,
 } from "react-native-paper";
+import SelectDropdown from "react-native-select-dropdown";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -33,11 +35,27 @@ export function SignupPage() {
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
-  const [gender, setGender] = useState<gender>();
   const [occupation, setOccupation] = useState<string>("");
-  const [relationshipStatus, setRelationshipStatus] =
-    useState<relationshipStatus>();
+
   const navigation = useNavigation();
+
+  const genders = {
+    male: "Mann",
+    female: "Kvinne",
+    other: "Annet",
+    undefined: "-",
+  };
+  const relationshipStatuses = {
+    married: "Gift",
+    coliving: "Samboer",
+    relationship: "Fast forhold",
+    single: "Singel",
+    undefined: "-",
+  };
+
+  const [gender, setGender] = useState<gender>("undefined");
+  const [relationship, setRelationship] =
+    useState<relationshipStatus>("undefined");
 
   function passwordMatch() {
     if (!password2) return true;
@@ -92,39 +110,44 @@ export function SignupPage() {
   ): Promise<void> =>
     flow
       ? newKratosSdk(project)
-          .submitSelfServiceRegistrationFlow(flow.id, payload)
-          .then(({ data }) => {
-            // ORY Kratos can be configured in such a way that it requires a login after
-            // registration. You could handle that case by navigating to the Login screen
-            // but for simplicity we'll just print an error here:
-            if (!data.session_token || !data.session) {
-              const err = new Error(
-                "It looks like you configured ORY Kratos to not issue a session automatically after registration. This edge-case is currently not supported in this example app. You can find more information on enabling this feature here: https://www.ory.sh/kratos/docs/next/self-service/flows/user-registration#successful-registration"
-              );
-              return Promise.reject(err);
-            }
+        .submitSelfServiceRegistrationFlow(flow.id, payload)
+        .then(({ data }) => {
+          // ORY Kratos can be configured in such a way that it requires a login after
+          // registration. You could handle that case by navigating to the Login screen
+          // but for simplicity we'll just print an error here:
+          if (!data.session_token || !data.session) {
+            const err = new Error(
+              "It looks like you configured ORY Kratos to not issue a session automatically after registration. This edge-case is currently not supported in this example app. You can find more information on enabling this feature here: https://www.ory.sh/kratos/docs/next/self-service/flows/user-registration#successful-registration"
+            );
+            return Promise.reject(err);
+          }
 
-            // Looks like we got a session!
-            return Promise.resolve({
-              session: data.session,
-              session_token: data.session_token,
-            });
-          })
-          // Let's log the user in!
-          .then((s) => {
-            setSession(s);
-            const user: DjangoUser = {
-              name: name,
-            };
-            createUser(user, s.session.identity.id); //@ts-ignore
-            //navigation.navigate("profile");
-          })
-          .catch(
-            handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
-              setConfig,
-              initializeFlow
-            )
+          // Looks like we got a session!
+          return Promise.resolve({
+            session: data.session,
+            session_token: data.session_token,
+          });
+        })
+        // Let's log the user in!
+        .then((s) => {
+          setSession(s);
+          const user: User = {
+            name: name,
+            email: email,
+            dateOfBirth: dateOfBirth,
+            gender: gender,
+            occupation: occupation,
+            relationshipStatus: relationship,
+          };
+          createUser(user, s.session.identity.id); //@ts-ignore
+          navigation.navigate("profile");
+        })
+        .catch(
+          handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
+            setConfig,
+            initializeFlow
           )
+        )
       : Promise.resolve();
 
   return (
@@ -136,11 +159,12 @@ export function SignupPage() {
       </View>
       <Card style={{ alignSelf: "center" }}>
         <Card.Actions style={{ alignSelf: "center", marginBottom: 10 }}>
-          <ScrollView
+          <KeyboardAwareScrollView
+            viewIsInsideTabBar={true}
+            enableAutomaticScroll={true}
+            enableResetScrollToCoords={false}
+            enableOnAndroid={true}
             style={{ width: "90%" }}
-            alwaysBounceVertical={false}
-            automaticallyAdjustKeyboardInsets={true}
-            keyboardDismissMode={"on-drag"}
           >
             <TextInput
               value={name}
@@ -169,26 +193,77 @@ export function SignupPage() {
               error={!passwordMatch()}
               style={{ marginBottom: 10 }}
             />
-            <Select
-              placeholderText="Sivilstatus"
-              options={["married", "coliving", "relationship", "single"]}
-              optionDisplay={(arg: relationshipStatus) => {
-                if (arg === "married") return "Gift";
-                if (arg === "coliving") return "Samboer";
-                if (arg === "relationship") return "Fast forhold";
-                return "Singel";
-              }}
-            />
-            <Select
-              placeholderText="Kjønn"
-              options={["male", "female", "other"]}
-              optionDisplay={(arg: gender) => {
-                if (arg === "male") return "Mann";
-                else if (arg === "female") return "Kvinne";
-                else return "Annet";
-              }}
-              zIndex={90}
-            />
+            <Card.Actions>
+              <Text>Sivilstatus</Text>
+            </Card.Actions>
+            <Card.Content
+            >
+              <SelectDropdown
+                defaultButtonText={"Velg et alternativ"}
+                selectedRowStyle={{ backgroundColor: colors.primary_dark }}
+                //defaultValue={}
+                buttonStyle={{ width: "100%", borderRadius: 10 }}
+                buttonTextStyle={{ textAlign: "center" }}
+                dropdownStyle={{ width: "90%", borderRadius: 10, justifyContent: 'center' }}
+                data={[
+                  relationshipStatuses.married,
+                  relationshipStatuses.coliving,
+                  relationshipStatuses.relationship,
+                  relationshipStatuses.single,
+                  relationshipStatuses.undefined,
+                ]}
+                onSelect={(selectedItem, index) => {
+                  //console.log(selectedItem, index);
+                  setRelationship(selectedItem);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  // text represented after item is selected
+                  // if data array is an array of objects then return selectedItem.property to render after item is selected
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  // text represented for each item in dropdown
+                  // if data array is an array of objects then return item.property to represent item in dropdown
+                  return item;
+                }}
+              />
+            </Card.Content>
+            <Card.Actions>
+              <Text>Kjønn</Text>
+            </Card.Actions>
+            <Card.Content>
+              <SelectDropdown
+                defaultButtonText={"Velg et alternativ"}
+                selectedRowStyle={{ backgroundColor: colors.primary_dark }}
+                defaultValue={"undefined"}
+                buttonStyle={{ width: "100%", borderRadius: 10 }}
+                buttonTextStyle={{ textAlign: "center" }}
+                dropdownStyle={{
+                  width: "90%",
+                  borderRadius: 10,
+                }}
+                data={[
+                  genders.male,
+                  genders.female,
+                  genders.other,
+                  genders.undefined,
+                ]}
+                onSelect={(selectedItem, index) => {
+                  //console.log(selectedItem, index);
+                  setGender(selectedItem);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  // text represented after item is selected
+                  // if data array is an array of objects then return selectedItem.property to render after item is selected
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  // text represented for each item in dropdown
+                  // if data array is an array of objects then return item.property to represent item in dropdown
+                  return item;
+                }}
+              />
+            </Card.Content>
             <Divider style={{ margin: 5 }} />
 
             <TextInput
@@ -203,18 +278,18 @@ export function SignupPage() {
               style={{ marginBottom: 10 }}
               label="Yrke"
             />
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </Card.Actions>
 
         <Button
           style={{ width: "50%", alignSelf: "center" }}
           onPress={() => {
             const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
-              {
-                method: "password",
-                password: password,
-                traits: { email: email },
-              };
+            {
+              method: "password",
+              password: password,
+              traits: { email: email },
+            };
             onSubmit(userInput);
           }}
         >

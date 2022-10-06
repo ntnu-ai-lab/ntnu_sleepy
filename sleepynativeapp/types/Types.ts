@@ -1,4 +1,4 @@
-export type gender = "male" | "female" | "other";
+export type gender = "male" | "female" | "other" | "undefined";
 export type relationshipStatus =
   | "married"
   | "coliving"
@@ -27,7 +27,5 @@ export const UserEx: User = {
   dateOfBirth: "20.02.1999",
   gender: "male",
   occupation: "Advokat",
-  relationshipStatus: "married"
-}
-
-
+  relationshipStatus: "married",
+};

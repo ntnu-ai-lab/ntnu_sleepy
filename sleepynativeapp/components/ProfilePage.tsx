@@ -3,7 +3,7 @@ import React, { useContext, useRef, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { TextField } from "./material/TextField";
 //import { Card } from "./material/Card";
-import { relationshipStatus, UserEx } from "../types/Types";
+import { relationshipStatus, User, UserEx } from "../types/Types";
 import { gender } from "../types/Types";
 import { Select } from "./material/Select";
 import { NavBar } from "./material/NavBar";
@@ -25,6 +25,8 @@ import {
 } from "react-native-paper";
 import { colors } from "../styles/styles";
 import SelectDropdown from "react-native-select-dropdown";
+import { Navigation } from "./Navigation";
+import { useNavigation } from "@react-navigation/native";
 
 export function ProfilePage() {
   const [state, setState] = useState(UserEx);
@@ -32,8 +34,15 @@ export function ProfilePage() {
   const { sessionToken, session, setSession } = useContext(AuthContext);
 
   const [expanded, setExpanded] = useState(true);
+  const navigation = useNavigation();
 
-  const handlePress = () => setExpanded(!expanded);
+  const getLocalUser = async () => {
+    const user_string = await AsyncStorage.getItem("Local_User");
+    return user_string != null ? JSON.parse(user_string) : null;
+  };
+
+  const user = getLocalUser();
+
   const genders = { male: "Mann", female: "Kvinne", other: "Annet" };
   const relationshipStatuses = {
     married: "Gift",
@@ -100,6 +109,10 @@ export function ProfilePage() {
       }
     };
     removeUserFromStorage();
+    setTimeout(() => {
+      //@ts-ignore
+      navigation.navigate("login");
+    }, 100);
   }
 
   return (
@@ -154,9 +167,10 @@ export function ProfilePage() {
             /> */}
 
             <SelectDropdown
-              defaultButtonText={genders[UserEx.gender]}
+              disabled={true}
+              defaultButtonText={UserEx.gender}
               selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-              defaultValue={genders[UserEx.gender]}
+              defaultValue={UserEx.gender}
               buttonStyle={{ width: "100%", borderRadius: 10 }}
               buttonTextStyle={{ textAlign: "left" }}
               dropdownStyle={{ width: "90%", borderRadius: 10 }}
@@ -178,13 +192,12 @@ export function ProfilePage() {
             />
 
             <Divider style={{ margin: 5 }} />
-
+{/*
             <SelectDropdown
-              defaultButtonText={
-                relationshipStatuses[UserEx.relationshipStatus]
-              }
+              disabled={true}
+              defaultButtonText={UserEx.relationshipStatus}
               selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-              defaultValue={relationshipStatuses[UserEx.relationshipStatus]}
+              defaultValue={UserEx.relationshipStatus}
               buttonStyle={{ width: "100%", borderRadius: 10 }}
               buttonTextStyle={{ textAlign: "left" }}
               dropdownStyle={{ width: "90%", borderRadius: 10 }}
@@ -209,6 +222,7 @@ export function ProfilePage() {
                 return item;
               }}
             />
+            */}
             <Divider style={{ margin: 5 }} />
 
             {/* <Select
@@ -233,13 +247,19 @@ export function ProfilePage() {
             />
           </ScrollView>
         </Card.Actions>
-        <Button mode="text" onPress={logOut}>
+        <Button
+          mode="text"
+          onPress={() => {
+            logOut();
+
+          }}
+        >
           <Text>Logg ut</Text>
         </Button>
         <Button
           mode="text"
           onPress={() => {
-            if (sessionToken && session) getTest(session.identity.id);
+            if (sessionToken && session) getTest("d10e1d18-db25-4e47-ab19-efad53248123");
           }}
         >
           <Text>Test</Text>
