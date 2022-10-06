@@ -11,12 +11,10 @@ export function TextSectionComponent(props: { section: TextSection }) {
     content: {
       color: colors.text_white,
       fontSize: 14,
-      padding: 10,
     },
     heading: {
       color: colors.text_white,
       fontSize: 20,
-      padding: 10,
     },
   });
 

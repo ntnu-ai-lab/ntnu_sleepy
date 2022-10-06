@@ -13,9 +13,9 @@ import {
 
 const testTextSection: TextSection = {
   id: "test-section",
-  heading: "Lorem Ipsum",
+  heading: "En Text-section",
   content:
-    "Mauris aliquam mi vel nisl facilisis, a imperdiet purus suscipit. Integer lacinia in ex vitae pharetra. Sed feugiat mi lacus, a sodales dui tempus et. Integer eu est hendrerit, sagittis risus sit amet, faucibus erat. Sed non odio ante. Maecenas vel hendrerit libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec condimentum sem vel ornare sagittis. Cras eget sodales est. Nullam tempor lectus non elit feugiat scelerisque. Nullam dignissim id leo vel bibendum. Donec mollis, arcu nec consectetur viverra, odio lectus posuere felis, ut dignissim eros mauris eget est. Donec eget feugiat justo. Vivamus at augue ipsum. Ut lacinia tempus fringilla. Donec sollicitudin, elit et feugiat tempus, orci erat convallis lorem, sed pretium augue ex eu lacus.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   page: "test-page",
   type: "text",
 };
@@ -63,8 +63,8 @@ const testFormSection: FormSection = {
 
 const testImageSection: ImageSection = {
   id: "test-section",
-  heading: "Test heading",
-  content: "Test content",
+  heading: "En Bilde-section",
+  content: "Sovende mann",
   uri: "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/325353_2200-1200x628.jpg",
   page: "test-page",
   type: "img",
@@ -90,7 +90,12 @@ const user: User = {
 export const testPage: Page = {
   id: "test-page",
   module: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
-  sections: [testTextSection, testImageSection, testVideoSection],
+  sections: [
+    testTextSection,
+    testImageSection,
+    testVideoSection,
+    testFormSection,
+  ],
 };
 
 export const testData: Module = {

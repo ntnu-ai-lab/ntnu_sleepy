@@ -13,7 +13,7 @@ export async function getTest(identiyId: string) {
   const response = await callApi<User>(`users/${identiyId}/`, {
     method: "GET",
   });
-  console.log("Trying to fetch user...")
+  console.log("Trying to fetch user...");
   if (response.data) {
     const user: User = {
       name: response.data.name,
@@ -24,7 +24,6 @@ export async function getTest(identiyId: string) {
       relationshipStatus: response.data.relationshipStatus,
     };
     storeLocalUser(user);
-  console.log("Fetched user: " + user.name)
-
+    console.log("Fetched user: " + user.name);
   }
 }

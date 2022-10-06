@@ -27,9 +27,7 @@ export function Navigation() {
       >
         {isAuthenticated ? (
           <>
-            <Stack.Screen name="login" component={LoginPage} />
             <Stack.Screen name="home" component={TabNavigation} />
-            <Stack.Screen name="signup" component={SignupPage} />
           </>
         ) : (
           <>

@@ -192,7 +192,7 @@ export function ProfilePage() {
             />
 
             <Divider style={{ margin: 5 }} />
-
+{/*
             <SelectDropdown
               disabled={true}
               defaultButtonText={UserEx.relationshipStatus}
@@ -222,6 +222,7 @@ export function ProfilePage() {
                 return item;
               }}
             />
+            */}
             <Divider style={{ margin: 5 }} />
 
             {/* <Select
