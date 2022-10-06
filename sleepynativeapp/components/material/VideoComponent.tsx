@@ -1,8 +1,8 @@
 import * as React from "react";
-import { View, StyleSheet, Button } from "react-native";
-import { Video, AVPlaybackStatus } from "expo-av";
+import { StyleSheet } from "react-native";
+import { Video } from "expo-av";
 
-export default function TestVideo({ uri }: { uri: string }) {
+export default function VideoComponent({ uri }: { uri: string }) {
   const video = React.useRef(null);
   const [status, setStatus] = React.useState({});
   return (

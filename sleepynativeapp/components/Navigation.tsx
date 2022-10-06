@@ -1,14 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../auth/AuthProvider";
-import { GeneralPage } from "./GeneralPage";
-import { HomePage } from "./HomePage";
 import { LoginPage } from "./LoginPage";
 import { TabNavigation } from "./TabNavigation";
-import { ProfilePage } from "./ProfilePage";
 import { SignupPage } from "./SignUpPage";
-import { TestModulePage } from "./TestModulePage";
 
 export function Navigation() {
   const Stack = createNativeStackNavigator();
