@@ -1,19 +1,27 @@
-import React from "react";
-import { ScrollView, View } from "react-native";
-import { testPage } from "../../helpers/testdata";
+import React, { useEffect, useState } from "react";
+import { ScrollView, View, Text } from "react-native";
 import { Page, Section } from "../../types/modules";
 import { FormSectionComponent } from "./FormSectionComponent";
 import { ImageSectionComponent } from "./ImageSectionComponent";
 import { TextSectionComponent } from "./TextSectionComponent";
 import { VideoSectionComponent } from "./VideoSectionComponent";
 import { PageTemplate } from "../PageTemplate";
-import { useRoute } from "@react-navigation/native";
+import { getAllModules, useModule } from "../../api/modulesApi";
+import { testData } from "../../helpers/testdata";
 
 export function ModulePagePage() {
-  const route = useRoute(); 
-  const page: Page = // @ts-ignore
-    route.params?.page !== undefined ? route.params.page : testPage;
+  const [moduleId, setModuleId] = useState<string | undefined>(undefined);
+  const { module, loading, error } = useModule(moduleId);
 
+  useEffect(() => {
+    getAllModules().then((m) => {
+      m && setModuleId(m[0].id);
+    });
+  }, []);
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+  const page: Page = module?.pages[0] || testData.pages[0];
   return (
     <PageTemplate>
       <ScrollView>

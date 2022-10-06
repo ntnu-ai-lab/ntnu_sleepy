@@ -35,15 +35,17 @@ export async function getAllModules() {
   }
 }
 
-export function useModule(id: string) {
+export function useModule(id?: string) {
   const [module, setModule] = useState<Module | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     async function handleGetModules() {
-      const response = await getModule(id);
-      response.module && setModule(response.module);
-      response.error && setError(response.error);
+      if (id) {
+        const response = await getModule(id);
+        response.module && setModule(response.module);
+        response.error && setError(response.error);
+      }
     }
     handleGetModules();
   }, [id]);
