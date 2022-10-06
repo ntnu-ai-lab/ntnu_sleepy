@@ -14,7 +14,7 @@ import { LoginPage } from "./LoginPage";
 import { colors } from "../styles/styles";
 import { TestModulePage2 } from "./TestModulePage2";
 import { QuestionnairePage } from "./QuestionnairePage";
-import { TestModuleComponent } from "./TestModuleComponents";
+import { ModulePagePage } from "./module/ModulePagePage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -63,7 +63,7 @@ export function TabNavigation() {
         />
         <Tab.Screen
           name="Assignment"
-          component={TestModuleComponent}
+          component={ModulePagePage}
           options={{ tabBarLabel: "Assignment" }}
         />
       </Tab.Navigator>

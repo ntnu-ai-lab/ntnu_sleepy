@@ -1,15 +1,18 @@
 import React from "react";
 import { View } from "react-native";
-import { testData, testPage } from "../helpers/testdata";
-import { Module, Page, Section } from "../types/modules";
-import { FormSectionComponent } from "./module/FormSectionComponent";
-import { ImageSectionComponent } from "./module/ImageSectionComponent";
-import { TextSectionComponent } from "./module/TextSectionComponent";
-import { VideoSectionComponent } from "./module/VideoSectionComponent";
-import { PageTemplate } from "./PageTemplate";
+import { testData, testPage } from "../../helpers/testdata";
+import { Module, Page, Section } from "../../types/modules";
+import { FormSectionComponent } from "./FormSectionComponent";
+import { ImageSectionComponent } from "./ImageSectionComponent";
+import { TextSectionComponent } from "./TextSectionComponent";
+import { VideoSectionComponent } from "./VideoSectionComponent";
+import { PageTemplate } from "../PageTemplate";
+import { useRoute } from "@react-navigation/native";
 
-export function TestModuleComponent() {
-  const page: Page = testPage;
+export function ModulePagePage() {
+
+  const route = useRoute() // @ts-ignore
+  const page: Page = route.params?.page !== undefined ? route.params.page : testPage;
 
   return (
     <PageTemplate>
