@@ -16,9 +16,9 @@ export function ImageSectionComponent(props: { section: ImageSection }) {
       fontSize: 20,
     },
     img: {
-      width: 200,
-      height: 200,
+      width: "95%",
       borderRadius: 20,
+      aspectRatio: 16 / 9,
     },
     caption: {
       color: colors.text_secondary,

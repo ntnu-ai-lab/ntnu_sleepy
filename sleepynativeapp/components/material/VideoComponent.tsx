@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
   },
   video: {
     alignSelf: "center",
-    width: 320,
-    height: 200,
-    maxWidth: "100%",
+    width: "95%",
+    maxWidth: "95%",
     borderRadius: 20,
+    aspectRatio: 16 / 9,
   },
 });
