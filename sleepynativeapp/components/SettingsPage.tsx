@@ -3,7 +3,6 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import { Button, Card } from "react-native-paper";
 import { PageTemplate } from "./PageTemplate";
-import { TestGetModules } from "./TestGetModules";
 
 export function SettingsPage() {
   const navigation = useNavigation();
@@ -17,7 +16,6 @@ export function SettingsPage() {
           style={{ width: "50%", maxHeight: "50%", alignSelf: "center" }}
         />
       </Card>
-      <TestGetModules />
     </PageTemplate>
   );
 }
