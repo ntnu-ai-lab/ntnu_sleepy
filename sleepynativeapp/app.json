@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "sleepynativeapp",
+    "owner": "karlinator",
     "slug": "sleepynativeapp",
     "version": "1.0.0",
     "orientation": "portrait",
