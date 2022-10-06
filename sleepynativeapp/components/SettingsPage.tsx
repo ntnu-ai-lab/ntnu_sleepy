@@ -12,7 +12,6 @@ export function SettingsPage() {
     <PageTemplate>
       <View></View>
       <Card>
-
         <Card.Cover
           source={{ uri: "https://somnus.idi.ntnu.no/static/bed.jpg" }}
           style={{ width: "50%", maxHeight: "50%", alignSelf: "center" }}
