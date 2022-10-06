@@ -12,11 +12,9 @@ import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
 import { User, gender, relationshipStatus } from "../types/Types";
-import { colors } from "../styles/styles";
 //import { Button } from "./material/Button";
 //import { Card } from "./material/Card";
 import { Select } from "./material/Select";
-import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
 import {
   Card,
@@ -299,7 +297,6 @@ export function SignupPage() {
         >
           <Text style={{ fontSize: 20 }}>Registrer</Text>
         </Button>
-        <TestGetModules />
       </Card>
     </PageTemplate>
   );
