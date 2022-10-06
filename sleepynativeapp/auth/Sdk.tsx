@@ -31,7 +31,7 @@ export const kratosUrl = (project: string = "Sleepyapp") => {
 };
 
 export const newKratosSdk = (project: string) => {
-  console.log(kratosUrl(project));
+  // console.log(kratosUrl(project))
   return new V0alpha2Api(
     new Configuration({
       basePath: kratosUrl(project),
