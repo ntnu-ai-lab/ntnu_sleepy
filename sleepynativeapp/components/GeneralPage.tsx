@@ -5,7 +5,6 @@ import { PageTemplate } from "./PageTemplate";
 import { useNavigation } from "@react-navigation/native";
 import { NavBar } from "./material/NavBar";
 import { colors } from "../styles/styles";
-import { TestModuleComponent } from "./TestModuleComponents";
 import { Video, AVPlaybackStatus } from "expo-av";
 import { Button } from "react-native-paper";
 import TestVideo from "./TestVideo";
@@ -54,9 +53,6 @@ export function GeneralPage() {
             Ikke bruk skjerm på mobil,tablet eller laptop 2 timer før leggetid
           </Text>
           <Text style={styles.text}>Bruk sengen kun til soving</Text>
-        </Card>
-        <Card>
-          <TestModuleComponent />
         </Card>
       </View>
     </PageTemplate>
