@@ -30,13 +30,47 @@ const testFormSection: FormSection = {
       name: "test-name-input",
       label: "Test Label",
       helptext: "Test helptext",
+      value: "Test value", //????
+      section: "test-section",
+      answers: [
+        {
+          id: "test-answer-list",
+          input: "test-section",
+          answerList: "test-answer-list",
+          value: "Test answer value",
+        },
+      ],
+    },
+    {
+      id: "test-input",
+      type: "text",
+      name: "test-name-input",
+      label: "Test Label",
+      helptext: "Test helptext",
       value: "Test value",
       section: "test-section",
       answers: [
         {
           id: "test-answer-list",
           input: "test-section",
-          answers: "test-answer-list",
+          answerList: "test-answer-list",
+          value: "Test answer value",
+        },
+      ],
+    },
+    {
+      id: "test-input",
+      type: "text",
+      name: "test-name-input",
+      label: "Test Label",
+      helptext: "Test helptext",
+      value: "Test value",
+      section: "test-section",
+      answers: [
+        {
+          id: "test-answer-list",
+          input: "test-section",
+          answerList: "test-answer-list",
           value: "Test answer value",
         },
       ],
@@ -53,7 +87,7 @@ const testFormSection: FormSection = {
         {
           id: "test-answer-list",
           input: "test-section",
-          answers: "test-answer-list",
+          answerList: "test-answer-list",
           value: "Test answer value",
         },
       ],
