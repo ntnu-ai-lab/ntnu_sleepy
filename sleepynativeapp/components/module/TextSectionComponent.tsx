@@ -4,26 +4,30 @@ import { colors } from "../../styles/styles";
 import { TextSection } from "../../types/modules";
 import { Card } from "../material/Card";
 
-export function TextSectionComponent(props: {
-    section: TextSection
-}) {
-    const { section } = props
+export function TextSectionComponent(props: { section: TextSection }) {
+  const { section } = props;
 
-    const styles = StyleSheet.create({
-        content: {
-            color: colors.text_white,
-            fontSize: 14
-        },
-        heading: {
-            color: colors.text_white,
-            fontSize: 20
-        }
-    })
+  const styles = StyleSheet.create({
+    content: {
+      color: colors.text_white,
+      fontSize: 14,
+      padding: 10,
+    },
+    heading: {
+      color: colors.text_white,
+      fontSize: 20,
+      padding: 10,
+    },
+  });
 
-    return (
-        <Card>
-            {section.heading ? <Text style={styles.heading}>{section.heading}</Text> : <View />}
-            <Text style={styles.content}>{section.content}</Text>
-        </Card>
-    )
+  return (
+    <Card>
+      {section.heading ? (
+        <Text style={styles.heading}>{section.heading}</Text>
+      ) : (
+        <View />
+      )}
+      <Text style={styles.content}>{section.content}</Text>
+    </Card>
+  );
 }

@@ -8,6 +8,9 @@ export function ImageSectionComponent(props: { section: ImageSection }) {
   const { section } = props;
 
   const styles = StyleSheet.create({
+    card: {
+      alignItems: "center",
+    },
     heading: {
       color: colors.text_white,
       fontSize: 20,
@@ -15,6 +18,7 @@ export function ImageSectionComponent(props: { section: ImageSection }) {
     img: {
       width: 200,
       height: 200,
+      borderRadius: 20,
     },
     caption: {
       color: colors.text_secondary,
@@ -23,8 +27,12 @@ export function ImageSectionComponent(props: { section: ImageSection }) {
   });
 
   return (
-    <Card>
-      {section.heading ? <Text style={styles.heading}>{section.heading}</Text> : <View />}
+    <Card style={styles.card}>
+      {section.heading ? (
+        <Text style={styles.heading}>{section.heading}</Text>
+      ) : (
+        <View />
+      )}
       <Image style={styles.img} source={{ uri: section.uri }} />
       <Text style={styles.caption}>{section.content}</Text>
     </Card>
