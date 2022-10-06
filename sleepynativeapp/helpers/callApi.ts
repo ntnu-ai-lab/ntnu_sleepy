@@ -9,7 +9,7 @@ const api = manifest?.debuggerHost
 export async function callApi<T>(
   path: string,
   init?: RequestInit
-): Promise<{ response: Response; data?: T }> {
+): Promise<{ response: Response; data?: T; error?: any }> {
   const response = await fetch(`${api}/${path}`, {
     ...init,
     headers: {
@@ -19,11 +19,11 @@ export async function callApi<T>(
       ...init?.headers,
     },
   });
-  if (
-    response.ok &&
-    response.headers.get("Content-Type") === "application/json"
-  ) {
-    return { response, data: await response.json() };
+  if (response.headers.get("Content-Type") === "application/json") {
+    if (response.ok) {
+      return { response, data: await response.json() };
+    }
+    return { response, error: await response.json() };
   }
   return { response };
 }
