@@ -3,12 +3,7 @@ import { Card } from "./material/Card";
 import { View, Text, StyleSheet } from "react-native";
 import { PageTemplate } from "./PageTemplate";
 import { useNavigation } from "@react-navigation/native";
-import { NavBar } from "./material/NavBar";
 import { colors } from "../styles/styles";
-import { Video, AVPlaybackStatus } from "expo-av";
-import { Button } from "react-native-paper";
-import TestVideo from "./TestVideo";
-import { VideoSectionComponent } from "./module/VideoSectionComponent";
 
 //page for general tips for sleeping. Should be available to all users when logged in.
 export function GeneralPage() {

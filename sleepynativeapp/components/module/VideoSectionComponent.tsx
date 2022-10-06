@@ -2,8 +2,8 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { colors } from "../../styles/styles";
 import { VideoSection } from "../../types/modules";
-import TestVideo from "../TestVideo";
 import { Card } from "../material/Card";
+import VideoComponent from "../VideoComponent";
 
 export function VideoSectionComponent(props: { section: VideoSection }) {
   const { section } = props;
@@ -34,7 +34,7 @@ export function VideoSectionComponent(props: { section: VideoSection }) {
       ) : (
         <View />
       )}
-      <TestVideo uri={props.section.uri} />
+      <VideoComponent uri={props.section.uri} />
     </Card>
   );
 }

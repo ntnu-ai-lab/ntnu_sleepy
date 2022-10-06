@@ -4,29 +4,24 @@ import {
   SubmitSelfServiceRegistrationFlowWithPasswordMethodBody,
 } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import React, { useContext, useState } from "react";
+import { View, Text } from "react-native";
 import { createUser } from "../api/userApi";
 import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
 import { User, gender, relationshipStatus } from "../types/Types";
-//import { Button } from "./material/Button";
-//import { Card } from "./material/Card";
-import { Select } from "./material/Select";
 import { PageTemplate } from "./PageTemplate";
 import {
   Card,
-  Title,
-  Paragraph,
   Button,
   TextInput,
   Divider,
 } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { TestGetModules } from "./testGetModules";
+import { colors } from "../styles/styles";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");

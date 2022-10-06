@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { testData, testPage } from "../../helpers/testdata";
-import { Module, Page, Section } from "../../types/modules";
+import { testPage } from "../../helpers/testdata";
+import { Page, Section } from "../../types/modules";
 import { FormSectionComponent } from "./FormSectionComponent";
 import { ImageSectionComponent } from "./ImageSectionComponent";
 import { TextSectionComponent } from "./TextSectionComponent";

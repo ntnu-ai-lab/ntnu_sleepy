@@ -15,17 +15,13 @@ import { AuthContext } from "../auth/AuthProvider";
 import { handleFormSubmitError } from "../auth/form";
 import { ProjectContext } from "../auth/ProjectProvider";
 import { newKratosSdk } from "../auth/Sdk";
-import { TextField } from "./material/TextField";
 import { PageTemplate } from "./PageTemplate";
 import {
   Card,
-  Title,
-  Paragraph,
   Button,
   TextInput,
   Text,
 } from "react-native-paper";
-import { colors } from "../styles/styles";
 
 export function LoginPage() {
   const [email, setEmail] = useState<string>("");

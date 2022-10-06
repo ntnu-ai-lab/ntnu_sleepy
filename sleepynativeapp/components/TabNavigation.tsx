@@ -1,18 +1,9 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Text } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { AuthContext } from "../auth/AuthProvider";
-import { HomePage } from "./HomePage";
-import { TestModulePage } from "./TestModulePage";
-import { GeneralPage } from "./GeneralPage";
 import { ProfilePage } from "./ProfilePage";
 import { SettingsPage } from "./SettingsPage";
-import { LoginPage } from "./LoginPage";
 import { colors } from "../styles/styles";
-import { TestModulePage2 } from "./TestModulePage2";
 import { QuestionnairePage } from "./QuestionnairePage";
 import { ModulePagePage } from "./module/ModulePagePage";
 
