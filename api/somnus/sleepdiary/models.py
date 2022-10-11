@@ -26,3 +26,6 @@ class DiaryEntry(models.Model):
     night_wakes = ArrayField(models.IntegerField(), size=30, blank=True, null=True)
     waketime = models.DateTimeField(blank=True, null=True)
     risetime = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ('date', 'diary')
