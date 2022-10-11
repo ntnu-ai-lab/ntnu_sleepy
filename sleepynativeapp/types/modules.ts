@@ -66,6 +66,7 @@ export interface FormSection extends BaseSection {
   answer_lists?: AnswerList[];
 }
 
+export type Nap = [Date, Date];
 export interface DiaryAnswer {
   answer: string;
   question: string;
@@ -74,9 +75,8 @@ export interface DiaryEntry {
   notes: string;
   sleeprating: number;
   dayrating: number;
+  naps: Nap[];
   bedtime: Date;
-  sleeptime: Date;
-  waketime: Date;
   risetime: Date;
   answers: DiaryAnswer[];
 }
