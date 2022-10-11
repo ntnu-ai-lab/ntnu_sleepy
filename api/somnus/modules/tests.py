@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import Module, Page
+from .models import Module, Page, Part
 
 class ModuleTestCase(TestCase):
     module: Module
@@ -8,7 +8,8 @@ class ModuleTestCase(TestCase):
 
     def setUp(self) -> None:
         self.module = Module.objects.create()
-        self.page = Page.objects.create(module=self.module)
+        self.part = Part.objects.create(module=self.module)
+        self.page = Page.objects.create(part=self.part)
 
     # The next two tests are trivial, and are meant mostly as a demonstration.
 
