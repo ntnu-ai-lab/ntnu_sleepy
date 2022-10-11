@@ -1,5 +1,7 @@
+import datetime
 import uuid
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 from somnus.users.models import User
 
@@ -12,40 +14,15 @@ class SleepDiary(models.Model):
 
 class DiaryEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date = models.DateField(default=datetime.date.today)
     diary = models.ForeignKey(to=SleepDiary, related_name='entry', on_delete=models.CASCADE)
+    day_rating = models.IntegerField()
+    naps = ArrayField(ArrayField(models.DateTimeField(), size=2), size=100, blank=True)
     notes = models.TextField(default='')
-    rating = models.IntegerField(default=0)
-    bedtime = models.DateTimeField()
-    sleeptime = models.DateTimeField()
-    waketime = models.DateTimeField()
-    risetime = models.DateTimeField()
-
-    answers: models.Manager['Answer']
-
-class Question(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    question = models.CharField(max_length=255)
-    ordering = models.PositiveIntegerField(
-        default=0,
-        blank=False,
-        null=False,
-        db_index=True,
-    )
-
-    def __str__(self) -> str:
-        return self.question
-
-    class Meta:
-        ordering = ['ordering']
-
-    answers: models.Manager['Answer']
-
-class Answer(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    question = models.ForeignKey(to=Question, related_name='answers', on_delete=models.CASCADE)
-    entry = models.ForeignKey(to=DiaryEntry, related_name='answers', on_delete=models.CASCADE)
-    answer = models.CharField(max_length=255)
-
-    class Meta:
-        unique_together = ('question', 'entry')
-
+    sleep_quality = models.IntegerField(default=0)
+    bedtime = models.DateTimeField(blank=True, null=True)
+    lights_out = models.DateTimeField(blank=True, null=True)
+    time_to_sleep = models.IntegerField(default=0)
+    night_wakes = ArrayField(models.IntegerField(), size=30, blank=True, null=True)
+    waketime = models.DateTimeField(blank=True, null=True)
+    risetime = models.DateTimeField(blank=True, null=True)

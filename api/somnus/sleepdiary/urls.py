@@ -1,11 +1,13 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework_nested import routers
 from django.urls import path, include
 
-from .views import QuestionViewSet, SleepDiaryViewSet
+from .views import DiaryEntryViewSet, SleepDiaryViewSet
 
-router = DefaultRouter()
+router = routers.DefaultRouter()
 
 router.register('diary', SleepDiaryViewSet, basename='sleepdiary')
-router.register('question', QuestionViewSet, basename='questions')
 
-urlpatterns = [path('', include(router.urls))]
+diary_router = routers.NestedSimpleRouter(router, 'diary', lookup='diary')
+diary_router.register(r'entries', DiaryEntryViewSet, basename='entries')
+
+urlpatterns = [path('', include(router.urls)), path('', include(diary_router.urls))]
