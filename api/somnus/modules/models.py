@@ -8,6 +8,25 @@ from somnus.users.models import User
 class Module(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(default='', max_length=255)
+    parts: models.Manager['Part']
+    ordering = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        db_index=True,
+    )
+
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        ordering = ['ordering']
+
+class Part(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(default='', max_length=255)
+    module = models.ForeignKey(to=Module, related_name='parts', on_delete=models.CASCADE)
+    min_duration = models.IntegerField(default=0, help_text='Minimum time in hours before the user can go to the next part')
     pages: models.Manager['Page']
     ordering = models.PositiveIntegerField(
         default=0,
@@ -25,7 +44,7 @@ class Module(models.Model):
 class Page(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(default='', max_length=255)
-    module = models.ForeignKey(to=Module, related_name='pages', on_delete=models.CASCADE)
+    part = models.ForeignKey(to=Part, related_name='pages', on_delete=models.CASCADE)
     sections: models.Manager['Section']
     ordering = models.PositiveIntegerField(
         default=0,
