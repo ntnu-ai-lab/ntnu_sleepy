@@ -224,7 +224,8 @@ const testAnswer1: DiaryAnswer = {
 
 const testDiaryEntry1: DiaryEntry = {
   notes: "Jeg sov veldig godt i natt",
-  rating: 5,
+  sleeprating: 5,
+  dayrating: 5,
   bedtime: new Date("2022-10-09"),
   sleeptime: new Date("2022-10-09"),
   waketime: new Date("2022-10-09"),
@@ -233,7 +234,8 @@ const testDiaryEntry1: DiaryEntry = {
 };
 const testDiaryEntry2: DiaryEntry = {
   notes: "Jeg sov godt i natt",
-  rating: 4,
+  sleeprating: 4,
+  dayrating: 4,
   bedtime: new Date("2022-10-10"),
   sleeptime: new Date("2022-10-10"),
   waketime: new Date("2022-10-10"),
@@ -242,7 +244,8 @@ const testDiaryEntry2: DiaryEntry = {
 };
 const testDiaryEntry3: DiaryEntry = {
   notes: "Jeg sov ikke godt i natt",
-  rating: 2,
+  sleeprating: 2,
+  dayrating: 2,
   bedtime: new Date("2022-10-11"),
   sleeptime: new Date("2022-10-11"),
   waketime: new Date("2022-10-11"),
