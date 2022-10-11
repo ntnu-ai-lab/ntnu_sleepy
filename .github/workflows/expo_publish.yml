@@ -37,4 +37,5 @@ jobs:
         run: npm ci
 
       - name: 🚀 Publish app
-        run: expo publish --non-interactive --release-channel $(echo $BRANCH_NAME | tr _/ - | | tr '[:upper:]' '[:lower:]')
+        run: expo publish --non-interactive --release-channel $(echo $BRANCH_NAME | tr _/ - | tr '[:upper:]' '[:lower:]')
+
