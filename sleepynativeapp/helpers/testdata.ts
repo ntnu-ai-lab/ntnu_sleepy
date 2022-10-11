@@ -9,6 +9,9 @@ import {
   FormSection,
   ImageSection,
   VideoSection,
+  SleepDiary,
+  DiaryEntry,
+  DiaryAnswer,
 } from "../types/modules";
 
 const testTextSection: TextSection = {
@@ -117,29 +120,32 @@ const testFormSection: FormSection = {
       helptext: "Test helptext",
       value: "Test value",
       section: "test-section",
-      options: [{
-        value: "Skift",
-        lable: "Skift"
-      }, {
-        value: "Deltid",
-        lable: "Deltid"
-      },
-      {
-        value: "8-4",
-        lable: "8-4"
-      },
-      {
-        value: "Skift",
-        lable: "Skift"
-      }, {
-        value: "Deltid",
-        lable: "Deltid"
-      },
-      {
-        value: "8-4",
-        lable: "8-4"
-      }
-    ],
+      options: [
+        {
+          value: "Skift",
+          lable: "Skift",
+        },
+        {
+          value: "Deltid",
+          lable: "Deltid",
+        },
+        {
+          value: "8-4",
+          lable: "8-4",
+        },
+        {
+          value: "Skift",
+          lable: "Skift",
+        },
+        {
+          value: "Deltid",
+          lable: "Deltid",
+        },
+        {
+          value: "8-4",
+          lable: "8-4",
+        },
+      ],
       answers: [
         {
           id: "test-answer-list",
@@ -209,4 +215,41 @@ export const testPage: Page = {
 export const testData: Module = {
   id: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
   pages: [testPage],
+};
+
+const testAnswer1: DiaryAnswer = {
+  answer: "Nei",
+  question: "Drakk du kaffe på kvelden?",
+};
+
+const testDiaryEntry1: DiaryEntry = {
+  notes: "Jeg sov veldig godt i natt",
+  rating: 5,
+  bedtime: new Date("2022-10-09"),
+  sleeptime: new Date("2022-10-09"),
+  waketime: new Date("2022-10-09"),
+  risetime: new Date("2022-10-09"),
+  answers: [testAnswer1],
+};
+const testDiaryEntry2: DiaryEntry = {
+  notes: "Jeg sov godt i natt",
+  rating: 4,
+  bedtime: new Date("2022-10-10"),
+  sleeptime: new Date("2022-10-10"),
+  waketime: new Date("2022-10-10"),
+  risetime: new Date("2022-10-10"),
+  answers: [],
+};
+const testDiaryEntry3: DiaryEntry = {
+  notes: "Jeg sov ikke godt i natt",
+  rating: 2,
+  bedtime: new Date("2022-10-11"),
+  sleeptime: new Date("2022-10-11"),
+  waketime: new Date("2022-10-11"),
+  risetime: new Date("2022-10-11"),
+  answers: [],
+};
+
+export const testDiary: SleepDiary = {
+  diary_entries: [testDiaryEntry1, testDiaryEntry2, testDiaryEntry3],
 };

@@ -6,6 +6,7 @@ import { SettingsPage } from "./SettingsPage";
 import { colors } from "../styles/styles";
 import { QuestionnairePage } from "./QuestionnairePage";
 import { ModulePagePage } from "./module/ModulePagePage";
+import { SleepDiaryPage } from "./SleepDiaryPage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -19,14 +20,16 @@ export function TabNavigation() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = "";
 
-            if (route.name === "Home") {
+            if (route.name === "Hjem") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Settings") {
+            } else if (route.name === "Innstillinger") {
               iconName = focused ? "cog" : "cog-outline";
-            } else if (route.name === "Profile") {
+            } else if (route.name === "Profil") {
               iconName = focused ? "person-circle" : "person-circle-outline";
-            } else if (route.name === "Assignment") {
-              iconName = focused ? "bar-chart" : "bar-chart-outline";
+            } else if (route.name === "Moduler") {
+              iconName = focused ? "barbell" : "barbell-outline";
+            } else if (route.name === "Søvndagbok") {
+              iconName = focused ? "bed" : "bed-outline";
             }
 
             // You can return any component that you like here!
@@ -38,24 +41,30 @@ export function TabNavigation() {
         })}
       >
         <Tab.Screen
-          name="Profile"
-          component={ProfilePage}
-          options={{ tabBarLabel: "Profile" }}
-        />
-        <Tab.Screen
-          name="Home"
+          name="Hjem"
           component={QuestionnairePage}
-          options={{ tabBarLabel: "Home" }}
+          options={{ tabBarLabel: "Hjem" }}
         />
         <Tab.Screen
-          name="Settings"
-          component={SettingsPage}
-          options={{ tabBarLabel: "Settings" }}
+          name="Søvndagbok"
+          component={SleepDiaryPage}
+          options={{ tabBarLabel: "Søvndagbok" }}
         />
         <Tab.Screen
-          name="Assignment"
+          name="Moduler"
           component={ModulePagePage}
-          options={{ tabBarLabel: "Assignment" }}
+          options={{ tabBarLabel: "Moduler" }}
+        />
+        <Tab.Screen
+          name="Innstillinger"
+          component={SettingsPage}
+          options={{ tabBarLabel: "Innstillinger" }}
+        />
+
+        <Tab.Screen
+          name="Profil"
+          component={ProfilePage}
+          options={{ tabBarLabel: "Profil" }}
         />
       </Tab.Navigator>
     </>
