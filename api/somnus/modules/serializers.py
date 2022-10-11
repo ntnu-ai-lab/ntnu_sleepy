@@ -2,7 +2,7 @@ from typing import Any
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
-from .models import Answer, AnswerList, FormSection, ImageSection, Input, Module, Page, Section, TextSection, VideoSection
+from .models import Answer, AnswerList, FormSection, ImageSection, Input, Module, Page, Part, Section, TextSection, VideoSection
 
 class InputSerializer(serializers.ModelSerializer[Input]):
     class Meta:
@@ -51,20 +51,29 @@ class ChildSectionSerializer(serializers.Serializer):
 class PageSerializer(FlexFieldsModelSerializer[Page]): # type: ignore [no-any-unimported]
     class Meta:
         model = Page
-        fields = ['id', 'module', 'sections']
+        fields = ['id', 'title', 'part', 'sections']
 
     expandable_fields = {
         'sections': (ChildSectionSerializer, {'many': True})
+    }
+
+class PartSerializer(FlexFieldsModelSerializer[Part]): # type: ignore[no-any-unimported]
+    class Meta:
+        model = Part
+        fields = ['id', 'title', 'module', 'pages']
+
+    expandable_fields = {
+        'pages': (PageSerializer, {'many': True})
     }
 
 
 class ModuleSerializer(FlexFieldsModelSerializer[Module]): # type: ignore [no-any-unimported]
     class Meta:
         model = Module
-        fields = ['id', 'pages']
+        fields = ['id', 'title', 'parts']
     
     expandable_fields = {
-        'pages': (PageSerializer, {'many': True})
+        'parts': (PartSerializer, {'many': True})
     }
 
 

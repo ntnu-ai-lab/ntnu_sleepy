@@ -3,7 +3,7 @@ from typing import Any, Literal
 from django.core.management.base import BaseCommand
 import random
 
-from ...models import Module, Page, TextSection
+from ...models import Module, Page, Part, TextSection
 
 logger = Logger(__name__)
 
@@ -37,21 +37,31 @@ contents = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sceler
 
 def create_module(i: int) -> Module:
     """Creates a module object combining different elements from the list"""
-    logger.info("Creating address")
+    logger.info("Creating module")
 
     module = Module(
-        title=random.choice(titles)[0],
+        title=random.choice(titles),
         ordering=i
     )
     module.save()
     logger.info("{} address created.".format(module))
     return module
 
-def create_page(module: Module, i: int) -> Page:
+def create_part(module: Module, i: int) -> Part:
+    """Creates a Part object"""
+    part = Part(
+        module=module,
+        title=random.choice(titles),
+        ordering=i,
+    )
+    part.save()
+    return part
+
+def create_page(part: Part, i: int) -> Page:
     """Creates a page object"""
     page = Page(
-        module=module,
-        title=random.choice(titles)[0],
+        part=part,
+        title=random.choice(titles),
         ordering=i,
     )
     page.save()
@@ -84,6 +94,8 @@ def run_seed(self: Any, mode: Literal['clear'] | Literal['refresh'] | None) -> N
     for i in range(4):
         module = create_module(i)
         for j in range(4):
-            page = create_page(module, j)
+            part = create_part(module, j)
             for k in range(4):
-                create_textsection(page, k)
+                page = create_page(part, k)
+                for l in range(4):
+                    create_textsection(page, l)
