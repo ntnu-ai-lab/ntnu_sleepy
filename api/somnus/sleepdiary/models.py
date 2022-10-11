@@ -32,6 +32,9 @@ class Question(models.Model):
         db_index=True,
     )
 
+    def __str__(self) -> str:
+        return self.question
+
     class Meta:
         ordering = ['ordering']
 
