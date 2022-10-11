@@ -119,6 +119,7 @@ function TextFormInput(props: {
         value={newAnswer}
         onChange={setNewAnswer}
         placeholderText={input.value}
+        multiline
       />
       <Text style={styles.caption}>{input.helptext}</Text>
     </View>
