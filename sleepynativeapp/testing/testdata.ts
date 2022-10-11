@@ -226,9 +226,11 @@ const testDiaryEntry1: DiaryEntry = {
   notes: "Jeg sov veldig godt i natt",
   sleeprating: 5,
   dayrating: 5,
+  naps: [
+    [new Date("2022-10-09"), new Date("2022-10-09")],
+    [new Date("2022-10-09"), new Date("2022-10-09")],
+  ],
   bedtime: new Date("2022-10-09"),
-  sleeptime: new Date("2022-10-09"),
-  waketime: new Date("2022-10-09"),
   risetime: new Date("2022-10-09"),
   answers: [testAnswer1],
 };
@@ -236,9 +238,11 @@ const testDiaryEntry2: DiaryEntry = {
   notes: "Jeg sov godt i natt",
   sleeprating: 4,
   dayrating: 4,
+  naps: [
+    [new Date("2022-10-10"), new Date("2022-10-10")],
+    [new Date("2022-10-10"), new Date("2022-10-10")],
+  ],
   bedtime: new Date("2022-10-10"),
-  sleeptime: new Date("2022-10-10"),
-  waketime: new Date("2022-10-10"),
   risetime: new Date("2022-10-10"),
   answers: [],
 };
@@ -246,9 +250,11 @@ const testDiaryEntry3: DiaryEntry = {
   notes: "Jeg sov ikke godt i natt",
   sleeprating: 2,
   dayrating: 2,
+  naps: [
+    [new Date("2022-10-11"), new Date("2022-10-11")],
+    [new Date("2022-10-11"), new Date("2022-10-11")],
+  ],
   bedtime: new Date("2022-10-11"),
-  sleeptime: new Date("2022-10-11"),
-  waketime: new Date("2022-10-11"),
   risetime: new Date("2022-10-11"),
   answers: [],
 };
