@@ -19,7 +19,13 @@ export interface Input {
     helptext: string;
     value: string;
     section: string;
+    options?: FormSelectOption[];
     answers?: Answer[];
+}
+
+export interface FormSelectOption {
+    value: string;
+    lable: string;
 }
 
 export interface Module {

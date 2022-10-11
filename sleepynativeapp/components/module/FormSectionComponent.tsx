@@ -6,7 +6,7 @@ import { sendAnswerList } from "../../api/formApi";
 import { AuthContext } from "../../auth/AuthProvider";
 import { loggedInUser } from "../../state/atoms";
 import { colors } from "../../styles/styles";
-import { Answer, AnswerList, FormSection, Input } from "../../types/modules";
+import { Answer, AnswerList, FormSection, FormSelectOption, Input } from "../../types/modules";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { Select } from "../material/Select";
@@ -47,6 +47,10 @@ export function FormSectionComponent(props: { section: FormSection }) {
     tempAnswers.answers.push(answer);
     setAnswers(tempAnswers);
   }
+
+  useEffect(() => {
+    console.log(answers)
+  },[answers])
 
   return (
     <Card>
@@ -109,7 +113,7 @@ function TextFormInput(props: {
   }, [newAnswer]);
 
   return (
-    <View>
+    <View style={{paddingVertical: 5}}>
       <Text style={styles.subHeading}>{input.label}</Text>
       <TextField
         value={newAnswer}
@@ -137,9 +141,9 @@ function SelectFormInput(props: {
   }, [selected]);
 
   return (
-    <View>
+    <View style={{paddingVertical: 5}}>
       <Text style={styles.subHeading}>{input.label}</Text>
-      <Select options={[]} optionDisplay={(option: string) => option} />
+      <Select options={input.options ? input.options : []} optionDisplay={(option: FormSelectOption) => option.lable} placeholderText={input.label}/>
       <Text style={styles.caption}>{input.helptext}</Text>
     </View>
   );
@@ -163,15 +167,17 @@ function CheckboxFormInput(props: {
   }, [checked]);
 
   return (
-    <View>
-      <Text>{input.label}</Text>
-      <Checkbox
-        status={checked}
-        onPress={() => {
-          if (checked === "checked") setChecked("unchecked");
-          else setChecked("checked");
-        }}
-      />
+    <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5}}>
+      <Text style={styles.subHeading}>{input.label}</Text>
+      <View style={{backgroundColor: colors.primary, borderRadius: 10, width: 38, marginRight: 50, justifyContent: "center", alignItems: "center"}}>
+        <Checkbox
+          status={checked}
+          onPress={() => {
+            if (checked === "checked") setChecked("unchecked");
+            else setChecked("checked");
+          }}
+        />
+      </View>
     </View>
   );
 }
