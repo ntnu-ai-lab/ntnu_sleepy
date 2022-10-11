@@ -43,6 +43,7 @@ export function TextField(props: {
       fontWeight: "400",
       fontSize: 16,
       color: textColor === "white" ? colors.text_white : colors.text_primary,
+      height: "100%"
     },
   });
 
