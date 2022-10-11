@@ -1,14 +1,14 @@
 export interface Answer {
-    id: string;
+    id?: string;
     input: string;
-    answers: string;
-    value: string;
+    answerList?: string;
+    value: string | number | boolean;
 
 }
 export interface AnswerList {
-    id: string;
+    id?: string;
     section: string;
-    user : string;
+    user: string;
     answers: Answer[];
 }
 export interface Input {
@@ -19,7 +19,13 @@ export interface Input {
     helptext: string;
     value: string;
     section: string;
+    options?: FormSelectOption[];
     answers?: Answer[];
+}
+
+export interface FormSelectOption {
+    value: string;
+    lable: string;
 }
 
 export interface Module {

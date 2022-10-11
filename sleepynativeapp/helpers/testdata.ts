@@ -30,13 +30,121 @@ const testFormSection: FormSection = {
       name: "test-name-input",
       label: "Test Label",
       helptext: "Test helptext",
+      value: "Test value", //????
+      section: "test-section",
+      answers: [
+        {
+          id: "test-answer-list",
+          input: "test-section",
+          answerList: "test-answer-list",
+          value: "Test answer value",
+        },
+      ],
+    },
+    {
+      id: "test-input",
+      type: "text",
+      name: "test-name-input",
+      label: "Test Label",
+      helptext: "Test helptext",
       value: "Test value",
       section: "test-section",
       answers: [
         {
           id: "test-answer-list",
           input: "test-section",
-          answers: "test-answer-list",
+          answerList: "test-answer-list",
+          value: "Test answer value",
+        },
+      ],
+    },
+    {
+      id: "test-input",
+      type: "text",
+      name: "test-name-input",
+      label: "Test Label",
+      helptext: "Test helptext",
+      value: "Test value",
+      section: "test-section",
+      answers: [
+        {
+          id: "test-answer-list",
+          input: "test-section",
+          answerList: "test-answer-list",
+          value: "Test answer value",
+        },
+      ],
+    },
+    {
+      id: "test-Check-input",
+      type: "checkbox",
+      name: "test-check-input",
+      label: "Er du Gravid?",
+      helptext: "Test helptext",
+      value: "Test value",
+      section: "test-section",
+      answers: [
+        {
+          id: "test-answer-list",
+          input: "test-section",
+          answerList: "test-answer-list",
+          value: "Test answer value",
+        },
+      ],
+    },
+    {
+      id: "test-Check-input",
+      type: "checkbox",
+      name: "test-check-input",
+      label: "Er du i fast jobb?",
+      helptext: "Test helptext",
+      value: "Test value",
+      section: "test-section",
+      answers: [
+        {
+          id: "test-answer-list",
+          input: "test-section",
+          answerList: "test-answer-list",
+          value: "Test answer value",
+        },
+      ],
+    },
+    {
+      id: "test-Check-input",
+      type: "select",
+      name: "test-check-input",
+      label: "Jobbform",
+      helptext: "Test helptext",
+      value: "Test value",
+      section: "test-section",
+      options: [{
+        value: "Skift",
+        lable: "Skift"
+      }, {
+        value: "Deltid",
+        lable: "Deltid"
+      },
+      {
+        value: "8-4",
+        lable: "8-4"
+      },
+      {
+        value: "Skift",
+        lable: "Skift"
+      }, {
+        value: "Deltid",
+        lable: "Deltid"
+      },
+      {
+        value: "8-4",
+        lable: "8-4"
+      }
+    ],
+      answers: [
+        {
+          id: "test-answer-list",
+          input: "test-section",
+          answerList: "test-answer-list",
           value: "Test answer value",
         },
       ],
@@ -53,7 +161,7 @@ const testFormSection: FormSection = {
         {
           id: "test-answer-list",
           input: "test-section",
-          answers: "test-answer-list",
+          answerList: "test-answer-list",
           value: "Test answer value",
         },
       ],

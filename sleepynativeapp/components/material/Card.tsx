@@ -13,7 +13,7 @@ export function Card(props: {
       backgroundColor: colors.secondary,
       borderRadius: 20,
       margin: 10,
-      padding: 10,
+      padding: 12,
     },
   });
 

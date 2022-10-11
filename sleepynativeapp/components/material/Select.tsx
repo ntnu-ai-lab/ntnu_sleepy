@@ -48,14 +48,15 @@ export function Select(props: {
   const styles = StyleSheet.create({
     wrapperDiv: {
       height: 56,
-      borderRadius: 10,
+      borderRadius: 20,
       width: "100%",
       maxWidth: "100%",
       justifyContent: "space-between",
       paddingHorizontal: 15,
       marginVertical: 5,
-      borderColor: "rgba(0, 0, 0, 0.24)",
-      borderWidth: 1,
+      //borderColor: "#FFF",
+      //borderWidth: 1,
+      backgroundColor: colors.primary,
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
@@ -68,17 +69,18 @@ export function Select(props: {
     },
     dropdown: {
       display: targeted ? "flex" : "none",
-      position: "absolute",
-      top: displayLayout.y + displayLayout.height,
-      left: displayLayout.x,
+      //position: "absolute",
+      //top: displayLayout.y + displayLayout.height,
+      //left: displayLayout.x,
       width: displayLayout.width,
-      backgroundColor: "#FFF",
+      backgroundColor: colors.primary,
       zIndex: 15000,
       borderRadius: 10,
       overflow: "hidden",
       borderColor: "rgba(0, 0, 0, 0.24)",
       borderWidth: 1,
       paddingTop: 5,
+      maxHeight: 210,
     },
     defaultOptionStyle: {
       width: "100%",
@@ -102,7 +104,7 @@ export function Select(props: {
           <Text style={styles.textStyle}>
             {selected ? optionDisplay(selected) : placeholderText}
           </Text>
-          <IconButton icon="arrow-down-drop-circle-outline" />
+          <SvgXml xml={angleXml}/>
 
         </View>
       </TouchableOpacity>

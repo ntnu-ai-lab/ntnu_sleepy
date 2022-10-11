@@ -10,6 +10,8 @@ import { getAllModules, useModule } from "../../api/modulesApi";
 import { testData } from "../../helpers/testdata";
 
 export function ModulePagePage() {
+
+  /*
   const [moduleId, setModuleId] = useState<string | undefined>(undefined);
   const { module, loading, error } = useModule(moduleId);
 
@@ -21,7 +23,9 @@ export function ModulePagePage() {
   if (loading) {
     return <Text>Loading...</Text>;
   }
-  const page: Page = module?.pages[0] || testData.pages[0];
+ */
+  // module?.pages[0] ||
+  const page: Page = testData.pages[0];
   return (
     <PageTemplate>
       <ScrollView>
