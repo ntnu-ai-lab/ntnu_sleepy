@@ -110,10 +110,10 @@ export function Select(props: {
       </TouchableOpacity>
 
       <ScrollView style={styles.dropdown} scrollToOverflowEnabled={true}>
-        {options.map((option: any) => {
+        {options.map((option: any, n) => {
           return (
             <TouchableOpacity
-              key={optionDisplay(option)}
+              key={optionDisplay(option) + n}
               {...props}
               style={[styles.defaultOptionStyle]}
               onPress={() => {

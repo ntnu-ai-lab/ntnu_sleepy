@@ -10,7 +10,8 @@ export function TextField(props: {
   style?: any;
   textColor?: "white" | "black";
   password?: boolean;
-  error?: boolean
+  error?: boolean;
+  multiline?: boolean;
 }) {
   const {
     onChange,
@@ -21,20 +22,22 @@ export function TextField(props: {
     textColor,
     password,
     error,
+    multiline,
   } = props;
 
   const styles = StyleSheet.create({
     wrapper: {
-      justifyContent: "center",
+      justifyContent: multiline ? "flex-start" : "center",
       backgroundColor: colors.primary,
       borderWidth: error ? 2 : 0,
       borderColor: error ? colors.error : "",
-      height: 56,
+      height: multiline ? 112 : 56,
       width: "100%",
       maxWidth: "100%",
       borderRadius: 20,
       marginVertical: 5,
       paddingHorizontal: 10,
+      paddingVertical: multiline ? 5 : 0
     },
     text: {
       fontWeight: "400",
@@ -53,6 +56,8 @@ export function TextField(props: {
         placeholder={placeholderText}
         placeholderTextColor={colors.text_secondary}
         secureTextEntry={password}
+        multiline={multiline}
+        // numberOfLines={multiline ? 4 : 1}
       />
     </View>
   );
