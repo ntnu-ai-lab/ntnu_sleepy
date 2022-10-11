@@ -18,6 +18,8 @@ class DiaryEntry(models.Model):
     diary = models.ForeignKey(to=SleepDiary, related_name='entry', on_delete=models.CASCADE)
     day_rating = models.IntegerField()
     naps = ArrayField(ArrayField(models.DateTimeField(), size=2), size=100, blank=True)
+    sleep_aides = models.BooleanField(blank=True, null=True)
+    sleep_aides_detail = models.CharField(max_length=225, blank=True, null=True)
     notes = models.TextField(default='')
     sleep_quality = models.IntegerField(default=0)
     bedtime = models.DateTimeField(blank=True, null=True)
