@@ -72,7 +72,8 @@ export interface DiaryAnswer {
 }
 export interface DiaryEntry {
   notes: string;
-  rating: number;
+  sleeprating: number;
+  dayrating: number;
   bedtime: Date;
   sleeptime: Date;
   waketime: Date;
