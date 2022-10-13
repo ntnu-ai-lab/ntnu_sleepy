@@ -21,4 +21,5 @@ urlpatterns = [
     path('somnus-auth/', include('rest_framework.urls')),
     path('users/', include('somnus.users.urls')),
     path('modules/', include('somnus.modules.urls')),
+    path('sleepdiary/', include('somnus.sleepdiary.urls')),
 ]
