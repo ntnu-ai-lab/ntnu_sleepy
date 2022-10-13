@@ -60,8 +60,7 @@ class Page(models.Model):
         ordering = ['ordering']
 
 class Section(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-    rules = models.CharField(max_length=255, default='true')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     heading = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
     page = models.ForeignKey(to=Page, related_name='sections', on_delete=models.CASCADE)
@@ -132,3 +131,28 @@ class Answer(models.Model):
     input = models.ForeignKey(to=Input, related_name='answer', on_delete=models.CASCADE)
     answer_list = models.ForeignKey(to=AnswerList, related_name='answers', on_delete=models.CASCADE)
     value = models.CharField(max_length=255)
+
+class RuleGroup(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    section = models.ForeignKey(to=Section, related_name='rules', default=None, null=True, blank=True, on_delete=models.CASCADE)
+    input = models.ForeignKey(to=Input, related_name='rules', default=None, null=True, blank=True, on_delete=models.CASCADE)
+
+    rules: models.Manager['Rule']
+
+class Rule(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    class Comparator(models.TextChoices):
+        eq = '==', 'Equals'
+        neq = '!=', 'Not equals'
+        gt = '>', 'Greater than'
+        lt = '<', 'Less than'
+        geq = '>=', 'Greater or equals'
+        leq = '<=', 'Less or equals'
+    input = models.ForeignKey(to=Input, related_name='dependents', on_delete=models.CASCADE)
+    comparator = models.CharField(max_length=2, choices=Comparator.choices)
+    value = models.CharField(max_length=255)
+    should_be = models.BooleanField(default=True, verbose_name='Should be True')
+
+    rule_group = models.ForeignKey(to=RuleGroup, related_name='rules', on_delete=models.CASCADE)
+
+
