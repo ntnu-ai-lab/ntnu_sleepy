@@ -1,4 +1,4 @@
-import { User } from "../types/Types";
+import { User, UserEx } from "../types/Types";
 import {
   Module,
   Page,
@@ -11,7 +11,6 @@ import {
   VideoSection,
   SleepDiary,
   DiaryEntry,
-  DiaryAnswer,
 } from "../types/modules";
 
 const testTextSection: TextSection = {
@@ -217,14 +216,9 @@ export const testData: Module = {
   pages: [testPage],
 };
 
-const testAnswer1: DiaryAnswer = {
-  answer: "Nei",
-  question: "Drakk du kaffe på kvelden?",
-};
-
 const testDiaryEntry1: DiaryEntry = {
   notes: "Jeg sov veldig godt i natt",
-  sleeprating: 5,
+  sleep_quality: 5,
   dayrating: 5,
   naps: [
     [new Date("2022-10-09"), new Date("2022-10-09")],
@@ -232,33 +226,53 @@ const testDiaryEntry1: DiaryEntry = {
   ],
   bedtime: new Date("2022-10-09"),
   risetime: new Date("2022-10-09"),
-  answers: [testAnswer1],
+  date: new Date("2022-10-09"),
+  sleep_aides: false,
+  sleep_aides_detail: "",
+  lights_out: new Date("2022-10-09"),
+  time_to_sleep: 10,
+  night_wakes: [10, 15],
+  waketime: new Date("2022-10-09"),
 };
 const testDiaryEntry2: DiaryEntry = {
-  notes: "Jeg sov godt i natt",
-  sleeprating: 4,
-  dayrating: 4,
+  notes: "Jeg sov veldig godt i natt",
+  sleep_quality: 5,
+  dayrating: 5,
   naps: [
     [new Date("2022-10-10"), new Date("2022-10-10")],
     [new Date("2022-10-10"), new Date("2022-10-10")],
   ],
   bedtime: new Date("2022-10-10"),
   risetime: new Date("2022-10-10"),
-  answers: [],
+  date: new Date("2022-10-10"),
+  sleep_aides: false,
+  sleep_aides_detail: "",
+  lights_out: new Date("2022-10-10"),
+  time_to_sleep: 10,
+  night_wakes: [10, 15],
+  waketime: new Date("2022-10-10"),
 };
 const testDiaryEntry3: DiaryEntry = {
-  notes: "Jeg sov ikke godt i natt",
-  sleeprating: 2,
-  dayrating: 2,
+  notes: "Jeg sov veldig godt i natt",
+  sleep_quality: 5,
+  dayrating: 5,
   naps: [
     [new Date("2022-10-11"), new Date("2022-10-11")],
     [new Date("2022-10-11"), new Date("2022-10-11")],
   ],
   bedtime: new Date("2022-10-11"),
   risetime: new Date("2022-10-11"),
-  answers: [],
+  date: new Date("2022-10-11"),
+  sleep_aides: false,
+  sleep_aides_detail: "",
+  lights_out: new Date("2022-10-11"),
+  time_to_sleep: 10,
+  night_wakes: [10, 15],
+  waketime: new Date("2022-10-11"),
 };
 
 export const testDiary: SleepDiary = {
   diary_entries: [testDiaryEntry1, testDiaryEntry2, testDiaryEntry3],
+  user: UserEx,
+  started_date: new Date("2022-10-09"),
 };

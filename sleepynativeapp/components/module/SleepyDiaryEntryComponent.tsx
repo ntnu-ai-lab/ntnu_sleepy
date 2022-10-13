@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Title, Text } from "react-native-paper";
 import { colors } from "../../styles/styles";
-import { DiaryAnswer, DiaryEntry } from "../../types/modules";
+import { DiaryEntry } from "../../types/modules";
 import { Card } from "../material/Card";
 import { TextField } from "../material/TextField";
 
@@ -60,7 +60,7 @@ export default function SleepyDiaryEntryComponent(props: {
               </Text>
               <TextField
                 style={{ minWidth: "80%", alignItems: "center" }}
-                value={søvnvurdering[props.sleepDiaryEntry.sleeprating - 1]}
+                value={søvnvurdering[props.sleepDiaryEntry.sleep_quality - 1]}
                 editable={false}
               />
               <Text
@@ -76,33 +76,6 @@ export default function SleepyDiaryEntryComponent(props: {
                 value={dagvurdering[props.sleepDiaryEntry.dayrating - 1]}
                 editable={false}
               />
-              {props.sleepDiaryEntry.answers.map((a: DiaryAnswer, index) => {
-                return (
-                  <View key={index}>
-                    <Card
-                      style={{
-                        alignItems: "center",
-                        alignSelf: "center",
-                        width: "100%",
-                      }}
-                    >
-                      <Title
-                        style={{
-                          alignItems: "center",
-                          color: colors.primary,
-                        }}
-                      >
-                        {a.question}
-                      </Title>
-                      <TextField
-                        style={{ alignItems: "center", minWidth: "80%" }}
-                        value={a.answer}
-                        editable={false}
-                      />
-                    </Card>
-                  </View>
-                );
-              })}
             </View>
           ) : (
             <View />

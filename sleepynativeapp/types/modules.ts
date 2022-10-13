@@ -1,3 +1,5 @@
+import { User } from "./Types";
+
 export interface Answer {
   id?: string;
   input: string;
@@ -67,20 +69,25 @@ export interface FormSection extends BaseSection {
 }
 
 export type Nap = [Date, Date];
-export interface DiaryAnswer {
-  answer: string;
-  question: string;
-}
+
 export interface DiaryEntry {
-  notes: string;
-  sleeprating: number;
+  date: Date;
   dayrating: number;
   naps: Nap[];
+  sleep_aides: boolean;
+  sleep_aides_detail: string;
+  notes: string;
+  sleep_quality: number;
   bedtime: Date;
+  lights_out: Date;
+  time_to_sleep: number;
+  night_wakes: number[];
+  waketime: Date;
   risetime: Date;
-  answers: DiaryAnswer[];
 }
 export interface SleepDiary {
+  user: User;
+  started_date: Date;
   diary_entries: DiaryEntry[];
 }
 

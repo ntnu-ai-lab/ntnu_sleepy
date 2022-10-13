@@ -9,10 +9,11 @@ import { PageTemplate } from "./PageTemplate";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { Select } from "./material/Select";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { DiaryAnswer, DiaryEntry, SleepDiary } from "../types/modules";
+import { DiaryEntry, SleepDiary } from "../types/modules";
 import { testDiary } from "../helpers/testdata";
 import { Button } from "./material/Button";
 import SleepyDiaryEntryComponent from "./module/SleepyDiaryEntryComponent";
+import SleepDiaryComponent from "./module/SleepDiaryComponent";
 
 export function SleepDiaryPage() {
   const navigation = useNavigation();
@@ -60,61 +61,7 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {createNewDiary ? (
-          <Card
-            style={{
-              alignItems: "center",
-              alignSelf: "center",
-              width: "70%",
-            }}
-          >
-            <TextField
-              placeholderText="Notater: "
-              multiline={true}
-              value={newDiary}
-              editable={true}
-              onChange={setNewDiary}
-            />
-            <Select
-              placeholderText="Hvor dyp var søvnen din i natt?"
-              options={søvnvurdering}
-              optionDisplay={(options: string) => options}
-            />
-            {
-              <Select
-                placeholderText="Hvordan har du fungert på dagtid?"
-                options={dagvurdering}
-                optionDisplay={(options: string) => options}
-              />
-            }
-            {
-              <Select
-                placeholderText="Drakk du alkohol, eller brukte du sovemedisiner for å sove i går?"
-                options={["Ja", "Nei"]}
-                optionDisplay={(options: string) => options}
-                onChange={(answer) => {
-                  setSovemedisiner(answer === "Ja");
-                }}
-              />
-            }
-            {sovemedisiner ? (
-              <>
-                <Text style={{ color: colors.primary }}>
-                  Noter medikament og dose, samt eventuelt alkoholinntak
-                </Text>
-                <TextField
-                  style={{ width: "85%" }}
-                  value={medikament}
-                  onChange={setMedikament}
-                />
-              </>
-            ) : (
-              <></>
-            )}
-          </Card>
-        ) : (
-          <></>
-        )}
+        {createNewDiary ? <SleepDiaryComponent /> : <></>}
       </KeyboardAwareScrollView>
     </PageTemplate>
   );
