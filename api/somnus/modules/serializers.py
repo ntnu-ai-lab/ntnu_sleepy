@@ -9,6 +9,9 @@ class InputSerializer(serializers.ModelSerializer[Input]):
         model = Input
         fields = ['type', 'name', 'label', 'helptext', 'value', 'answers', 'section']
 
+    def to_representation(self, instance: Input) -> Any:
+        return super().to_representation(instance) if instance.evaluate_rules(self.context['request'].user) else None
+
 class SectionSerializer(serializers.ModelSerializer[Section]):
     class Meta:
         model = Section
@@ -46,7 +49,7 @@ class ChildSectionSerializer(serializers.Serializer):
     }
     def to_representation(self, instance: Section) -> Any:
         section = Section.objects.get_subclass(id=instance.id) if type(instance) == Section else instance
-        return self.serializers[type(section)](section).data
+        return self.serializers[type(section)](section).data if section.evaluate_rules(self.context['request'].user) else None
 
 class PageSerializer(FlexFieldsModelSerializer[Page]): # type: ignore [no-any-unimported]
     class Meta:
