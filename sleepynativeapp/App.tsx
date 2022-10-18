@@ -6,21 +6,11 @@ import { RecoilRoot } from "recoil";
 import { StorageController } from "./devicestorage/StorageController";
 import { Provider as PaperProvider } from "react-native-paper";
 import { Navigation } from "./components/Navigation";
+import { MainAppContainer } from "./components/matomo/MainAppContainer";
 import MatomoTracker, {
   MatomoProvider,
   useMatomo,
 } from "matomo-tracker-react-native";
-import { View } from "react-native";
-
-const MainAppContainer = () => {
-  const { trackAppStart } = useMatomo();
-
-  useEffect(() => {
-    trackAppStart;
-  }, []);
-
-  return <View>Main App</View>;
-};
 
 export default function App() {
   const instance = new MatomoTracker({
