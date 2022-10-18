@@ -6,7 +6,8 @@ export async function createUser(user: User, identiyId: string) {
   await callApi<User>(`users/${identiyId}/`, {
     method: "PATCH",
     body: JSON.stringify(user),
-  });
+  }).then(r => console.log(r));
+  
 }
 
 export async function getTest(identiyId: string) {
@@ -18,6 +19,7 @@ export async function getTest(identiyId: string) {
     const user: User = {
       name: response.data.name,
       email: response.data.email,
+      username: response.data.email,
       dateOfBirth: response.data.dateOfBirth,
       gender: response.data.gender,
       occupation: response.data.occupation,

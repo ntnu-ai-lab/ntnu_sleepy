@@ -123,13 +123,14 @@ export function SignupPage() {
             const user: User = {
               name: name,
               email: email,
+              username: email,
               dateOfBirth: dateOfBirth,
               gender: gender,
               occupation: occupation,
               relationshipStatus: relationship,
             };
             createUser(user, s.session.identity.id); //@ts-ignore
-            navigation.navigate("profile");
+            navigation.navigate("home");
           })
           .catch(
             handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
