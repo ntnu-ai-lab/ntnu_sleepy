@@ -8,11 +8,11 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.auth.base_user import BaseUserManager as BaseUserManager
 from django.contrib.auth.models import UserManager
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import PermissionDenied
 
 
 if TYPE_CHECKING:
     from somnus.modules.models import Answer # Otherwise we get circular imports
+    from somnus.sleepdiary.models import SleepDiary
 
 class Gender(models.TextChoices):
         MALE = ("male")
@@ -82,6 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     occupation = models.CharField(max_length=255, blank=True)
     relationshipstatus = models.CharField(max_length=20, choices=Relationshipstatus.choices, default=Relationshipstatus.UNDEFINED)
     answers: models.Manager['Answer']
+    diary: models.Manager['SleepDiary']
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"

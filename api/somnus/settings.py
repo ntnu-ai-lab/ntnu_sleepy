@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'django_ory_auth',
     'somnus.users',
     'somnus.modules',
+    'somnus.sleepdiary',
     'adminsortable2',
 ]
 
