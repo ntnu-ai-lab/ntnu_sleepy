@@ -55,14 +55,18 @@ export default function SleepyDiaryEntryComponent() {
     endCorrects: [],
   });
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
-  const søvnvurdering = ["Veldig dyp", "Dyp", "Middels", "Lett", "Veldig dyp"];
+  const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
   const dagvurdering = [
-    "Veldig bra",
-    "Bra",
-    "Middels",
-    "Dårlig",
     "Veldig dårlig",
+    "Dårlig",
+    "Middels",
+    "Bra",
+    "Veldig bra",
   ];
+
+  function saveDiary(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <Card
@@ -73,6 +77,16 @@ export default function SleepyDiaryEntryComponent() {
       }}
     >
       <Text
+        style={{
+          fontSize: 20,
+          alignItems: "center",
+          color: colors.primary,
+          marginTop: 30,
+        }}
+      >
+        Fyll inn spørsmål 1 og 2 før sengetid:
+      </Text>
+      <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
         Hvordan har du fungert på dagtid?
@@ -82,6 +96,9 @@ export default function SleepyDiaryEntryComponent() {
         placeholderText="Hvordan har du fungert på dagtid?"
         options={dagvurdering}
         optionDisplay={(options: string) => options}
+        onChange={(e) => {
+          setDayRating(dagvurdering.indexOf(e) + 1);
+        }}
       />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
@@ -247,6 +264,17 @@ export default function SleepyDiaryEntryComponent() {
       ) : (
         <></>
       )}
+
+      <Text
+        style={{
+          fontSize: 20,
+          alignItems: "center",
+          color: colors.primary,
+          marginTop: 30,
+        }}
+      >
+        Fyll inn resten om morgenen:
+      </Text>
 
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 30 }}
@@ -548,9 +576,12 @@ export default function SleepyDiaryEntryComponent() {
         Hvor dyp var søvnen din i natt?
       </Text>
       <Select
-        placeholderText="Hvor dyp var søvnen din i natt?"
+        placeholderText="Hvordan var siste natts søvn totalt sett?"
         options={søvnvurdering}
         optionDisplay={(options: string) => options}
+        onChange={(e) => {
+          setSleepQuality(søvnvurdering.indexOf(e) + 1);
+        }}
       />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
@@ -562,7 +593,22 @@ export default function SleepyDiaryEntryComponent() {
         value={notes}
         editable={true}
         onChange={setNotes}
+        style={{ marginBottom: 30 }}
       />
+      <Button
+        style={{ width: "50%", marginBottom: 30 }}
+        variant="outlined"
+        onClick={() => saveDiary()}
+      >
+        <Text
+          style={{
+            color: colors.primary,
+            textAlign: "center",
+          }}
+        >
+          Lagre dagbok
+        </Text>
+      </Button>
     </Card>
   );
 }
