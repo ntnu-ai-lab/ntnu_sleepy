@@ -7,62 +7,24 @@ import { Card } from "../material/Card";
 import { Divider, Text, Title } from "react-native-paper";
 import { Select } from "../material/Select";
 import { TextField } from "../material/TextField";
+import { DateField } from "../material/DateField";
 
 export default function SleepDiaryComponentNight() {
   const [date, setDate] = useState<Date>(new Date());
-  const [dayRating, setDayRating] = useState<number>();
   const [sleepAides, setSleepAides] = useState<boolean>(false);
   const [sleepAidesDetails, setSleepAidesDetails] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
   const [sleepQuality, setSleepQuality] = useState<number>();
 
-  const [bedtime, setBedtime] = useState<{
-    date?: Date;
-    string: string;
-    correct: boolean;
-  }>({ string: "", correct: true });
-  const [lightsOut, setLightsOut] = useState<{
-    date?: Date;
-    string: string;
-    correct: boolean;
-  }>({ string: "", correct: true });
-  const [waketime, setWaketime] = useState<{
-    date?: Date;
-    string: string;
-    correct: boolean;
-  }>({ string: "", correct: true });
-  const [risetime, setRisetime] = useState<{
-    date?: Date;
-    string: string;
-    correct: boolean;
-  }>({ string: "", correct: true });
+  const [bedtime, setBedtime] = useState<Date>();
+  const [lightsOut, setLightsOut] = useState<Date>();
+  const [waketime, setWaketime] = useState<Date>();
+  const [risetime, setRisetime] = useState<Date>();
   const [timeToSleep, setTimeToSleep] = useState<number>(0);
   const [numberOfNightWakes, setNumberOfNightWakes] = useState<number>();
   const [nightWakes, setNightWakes] = useState<number[]>([]);
-  const [hasNapped, setHasNapped] = useState<string>("Nei");
-  const [numberOfNaps, setNumberOfNaps] = useState<number>(0);
-  const [naps, setNaps] = useState<{
-    naps: Nap[];
-    startStrings: string[];
-    endStrings: string[];
-    startCorrects: boolean[];
-    endCorrects: boolean[];
-  }>({
-    naps: [],
-    startStrings: [],
-    endStrings: [],
-    startCorrects: [],
-    endCorrects: [],
-  });
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
   const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
-  const dagvurdering = [
-    "Veldig dårlig",
-    "Dårlig",
-    "Middels",
-    "Bra",
-    "Veldig bra",
-  ];
 
   function saveDiary(): void {
     throw new Error("Function not implemented.");
@@ -105,7 +67,7 @@ export default function SleepDiaryComponentNight() {
             Noter medikament og dose, samt eventuelt alkoholinntak
           </Text>
           <TextField
-            style={{ width: "85%" }}
+            style={{ width: "100%" }}
             value={sleepAidesDetails}
             onChange={setSleepAidesDetails}
           />
@@ -124,47 +86,8 @@ export default function SleepDiaryComponentNight() {
       >
         Når gikk du til sengs?
       </Text>
-      <TextField
-        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
-        error={!bedtime.correct}
-        placeholderText={"HH:MM"}
-        onChange={(e) => {
-          setBedtime((time) => {
-            const timeRegex: RegExp =
-              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
-            if (timeRegex.test(e)) {
-              time.date = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate(),
-                parseInt(e.slice(0, 2)),
-                parseInt(e.slice(3))
-              );
-            }
-            return time;
-          });
-          setBedtime((time) => {
-            time.string = e;
-            return time;
-          });
-          setBedtime((time) => {
-            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
-              time.correct = true;
-              setRefreshScreen(!refreshScreen);
-              return time;
-            } else {
-              const timeRegex: RegExp = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-              time.correct = timeRegex.test(e);
-              setRefreshScreen(!refreshScreen);
-              return time;
-            }
-          });
-        }}
-        value={bedtime.string}
-      />
-
+      <DateField onChange={setBedtime} />
       <Text
         style={{
           alignItems: "center",
@@ -175,47 +98,7 @@ export default function SleepDiaryComponentNight() {
       >
         Når skrudde du av lyset?
       </Text>
-      <TextField
-        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
-        error={!lightsOut.correct}
-        placeholderText={"HH:MM"}
-        onChange={(e) => {
-          setLightsOut((time) => {
-            const timeRegex: RegExp =
-              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-            if (timeRegex.test(e)) {
-              time.date = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate(),
-                parseInt(e.slice(0, 2)),
-                parseInt(e.slice(3))
-              );
-            }
-            return time;
-          });
-          setLightsOut((time) => {
-            time.string = e;
-            return time;
-          });
-          setLightsOut((time) => {
-            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
-              time.correct = true;
-              setRefreshScreen(!refreshScreen);
-              return time;
-            } else {
-              const timeRegex: RegExp =
-                /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-              time.correct = timeRegex.test(e);
-              setRefreshScreen(!refreshScreen);
-              return time;
-            }
-          });
-        }}
-        value={lightsOut.string}
-      />
+      <DateField onChange={setLightsOut} />
 
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
@@ -291,95 +174,14 @@ export default function SleepDiaryComponentNight() {
         oppvåkningstidspunkt.
       </Text>
 
-      <TextField
-        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
-        error={!waketime.correct}
-        placeholderText={"HH:MM"}
-        onChange={(e) => {
-          setWaketime((time) => {
-            const timeRegex: RegExp =
-              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-            if (timeRegex.test(e)) {
-              time.date = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate(),
-                parseInt(e.slice(0, 2)),
-                parseInt(e.slice(3))
-              );
-            }
-            return time;
-          });
-          setWaketime((time) => {
-            time.string = e;
-            return time;
-          });
-          setWaketime((time) => {
-            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
-              time.correct = true;
-              setRefreshScreen(!refreshScreen);
-              return time;
-            } else {
-              const timeRegex: RegExp =
-                /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-              time.correct = timeRegex.test(e);
-              setRefreshScreen(!refreshScreen);
-              return time;
-            }
-          });
-        }}
-        value={waketime.string}
-      />
+      <DateField onChange={setWaketime} />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
         Når stod du opp?
       </Text>
 
-      <TextField
-        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
-        error={!risetime.correct}
-        placeholderText={"HH:MM"}
-        onChange={(e) => {
-          setRisetime((time) => {
-            const timeRegex: RegExp =
-              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-            if (timeRegex.test(e)) {
-              time.date = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate(),
-                parseInt(e.slice(0, 2)),
-                parseInt(e.slice(3))
-              );
-            }
-            return time;
-          });
-          setRisetime((time) => {
-            time.string = e;
-            return time;
-          });
-          setRisetime((time) => {
-            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
-              time.correct = true;
-              setRefreshScreen(!refreshScreen);
-              return time;
-            } else {
-              const timeRegex: RegExp =
-                /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-              time.correct = timeRegex.test(e);
-              setRefreshScreen(!refreshScreen);
-              return time;
-            }
-          });
-        }}
-        value={risetime.string}
-      />
-
+      <DateField onChange={setRisetime} />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
