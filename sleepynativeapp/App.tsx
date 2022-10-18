@@ -18,21 +18,19 @@ export default function App() {
     siteId: 9,
   });
   return (
-    <>
-      <MatomoProvider instance={instance}>
-        <MainAppContainer />
-      </MatomoProvider>
-      <ProjectProvider>
-        <AuthProvider>
-          <PaperProvider>
-            <RecoilRoot>
-              <StorageController>
-                <Navigation />
-              </StorageController>
-            </RecoilRoot>
-          </PaperProvider>
-        </AuthProvider>
-      </ProjectProvider>
-    </>
+    <ProjectProvider>
+      <AuthProvider>
+        <PaperProvider>
+          <RecoilRoot>
+            <StorageController>
+              <MatomoProvider instance={instance}>
+                <MainAppContainer />
+              </MatomoProvider>
+              <Navigation />
+            </StorageController>
+          </RecoilRoot>
+        </PaperProvider>
+      </AuthProvider>
+    </ProjectProvider>
   );
 }
