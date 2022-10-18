@@ -1,7 +1,7 @@
 from rest_framework_nested import routers
 from django.urls import path, include
 
-from .views import AnswerViewSet, AnswerListViewSet, InputViewSet, ModuleViewSet, PageViewSet, SectionViewSet
+from .views import AnswerViewSet, AnswerListViewSet, InputViewSet, ModuleViewSet, PageViewSet, PartViewSet, SectionViewSet
 
 router = routers.SimpleRouter()
 router.register(r'pages', PageViewSet)
@@ -12,9 +12,12 @@ router.register(r'answers', AnswerViewSet, basename='answers')
 router.register('', ModuleViewSet)
 
 modules_router = routers.NestedSimpleRouter(router, '', lookup='module')
-modules_router.register(r'pages', PageViewSet)
+modules_router.register(r'parts', PartViewSet)
 
-pages_router = routers.NestedSimpleRouter(modules_router, r'pages', lookup='page')
+parts_router = routers.NestedSimpleRouter(modules_router, r'parts', lookup='part')
+parts_router.register(r'pages', PageViewSet)
+
+pages_router = routers.NestedSimpleRouter(parts_router, r'pages', lookup='page')
 pages_router.register(r'sections', SectionViewSet)
 
 sections_router = routers.NestedSimpleRouter(pages_router, r'sections', lookup='section')
@@ -30,6 +33,7 @@ answer_lists_router.register(r'answers', AnswerViewSet, basename='answers')
 urlpatterns = [
     path('', include(router.urls)),
     path('', include(modules_router.urls)),
+    path('', include(parts_router.urls)),
     path('', include(pages_router.urls)),
     path('', include(sections_router.urls)),
     path('', include(inputs_router.urls)),
