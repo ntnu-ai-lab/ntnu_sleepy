@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
-import { colors } from "../styles/styles";
+import { colors } from "../../styles/styles";
 
 export function PageTemplate(props: {
   children: ReactNode[] | ReactNode;

@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { colors } from "../../styles/styles";
-import { TextSection } from "../../types/modules";
-import { Card } from "../material/Card";
+import { colors } from "../../../styles/styles";
+import { TextSection } from "../../../types/modules";
+import { Card } from "../../material/Card";
 
 export function TextSectionComponent(props: { section: TextSection }) {
   const { section } = props;

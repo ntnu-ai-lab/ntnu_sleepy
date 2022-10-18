@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { storeCachedModules } from "../devicestorage/StorageController";
-import { callApi } from "../helpers/callApi";
+import { storeCachedModules } from "../state/StorageController";
+import { callApi } from "./callApi";
 import { Module } from "../types/modules";
 
 //gets specific module based on id

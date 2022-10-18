@@ -6,17 +6,17 @@ import {
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
 import { View, Text } from "react-native";
-import { createUser } from "../api/userApi";
-import { AuthContext } from "../auth/AuthProvider";
-import { handleFormSubmitError } from "../auth/form";
-import { ProjectContext } from "../auth/ProjectProvider";
-import { newKratosSdk } from "../auth/Sdk";
-import { User, gender, relationshipStatus } from "../types/Types";
-import { PageTemplate } from "./PageTemplate";
+import { createUser } from "../../api/userApi";
+import { AuthContext } from "../../auth/AuthProvider";
+import { handleFormSubmitError } from "../../auth/form";
+import { ProjectContext } from "../../auth/ProjectProvider";
+import { newKratosSdk } from "../../auth/Sdk";
+import { User, gender, relationshipStatus } from "../../types/Types";
+import { PageTemplate } from "../material/PageTemplate";
 import { Card, Button, TextInput, Divider } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { colors } from "../styles/styles";
+import { colors } from "../../styles/styles";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");

@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { Button, Card } from "react-native-paper";
-import { PageTemplate } from "./PageTemplate";
+import { PageTemplate } from "../material/PageTemplate";
 
 export function SettingsPage() {
   const navigation = useNavigation();

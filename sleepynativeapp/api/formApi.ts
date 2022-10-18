@@ -1,4 +1,4 @@
-import { callApi } from "../helpers/callApi";
+import { callApi } from "./callApi";
 import { AnswerList } from "../types/modules";
 
 export async function sendAnswerList(answerlist: AnswerList) {

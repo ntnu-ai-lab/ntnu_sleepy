@@ -1,5 +1,5 @@
-import { storeLocalUser } from "../devicestorage/StorageController";
-import { callApi } from "../helpers/callApi";
+import { storeLocalUser } from "../state/StorageController";
+import { callApi } from "./callApi";
 import { User } from "../types/Types";
 
 export async function createUser(user: User, identiyId: string) {
