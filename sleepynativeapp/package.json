@@ -31,6 +31,7 @@
     "react-dom": "18.1.0",
     "react-test-renderer": "18.1.0",
     "react-native": "0.70.3",
+    "matomo-tracker-react-native": "^0.3.0",
     "react-native-flash-message": "^0.3.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-paper": "^4.12.4",

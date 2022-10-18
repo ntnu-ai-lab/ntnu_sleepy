@@ -50,7 +50,6 @@ CSRF_TRUSTED_ORIGINS = ['https://somnus.idi.ntnu.no']
 
 AUTH_USER_MODEL = 'users.User'
 
-
 # Application definition
 
 INSTALLED_APPS = [
