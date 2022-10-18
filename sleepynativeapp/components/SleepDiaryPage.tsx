@@ -42,16 +42,32 @@ export function SleepDiaryPage() {
           style={{ alignItems: "center", alignSelf: "center", width: "70%" }}
         >
           <Button
-            style={{ backgroundColor: colors.primary, width: "50%" }}
+            style={{ width: "50%" }}
             onClick={() => setShowAllDiaries(!showAllDiaries)}
+            variant="outlined"
           >
-            <Text>Vis alle søvndagbøker</Text>
+            <Text
+              style={{
+                color: colors.primary,
+                textAlign: "center",
+              }}
+            >
+              Vis alle søvndagbøker
+            </Text>
           </Button>
           <Button
-            style={{ backgroundColor: colors.primary, width: "50%" }}
+            style={{ width: "50%" }}
             onClick={() => setCreateNewDiary(!createNewDiary)}
+            variant="outlined"
           >
-            <Text>Logg en ny dag</Text>
+            <Text
+              style={{
+                color: colors.primary,
+                textAlign: "center",
+              }}
+            >
+              Logg en ny dag
+            </Text>
           </Button>
         </Card>
         {showAllDiaries ? (
