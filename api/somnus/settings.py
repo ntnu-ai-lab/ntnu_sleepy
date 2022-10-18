@@ -50,6 +50,8 @@ CSRF_TRUSTED_ORIGINS = ['https://somnus.idi.ntnu.no']
 
 AUTH_USER_MODEL = 'users.User'
 
+MATOMO_SITE_ID = '9'
+
 
 # Application definition
 
@@ -67,6 +69,7 @@ INSTALLED_APPS = [
     'somnus.modules',
     'somnus.sleepdiary',
     'adminsortable2',
+    'matomo',
 ]
 
 MIDDLEWARE = [
