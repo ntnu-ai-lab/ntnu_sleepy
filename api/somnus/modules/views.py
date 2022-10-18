@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from django.db import models
 
-from .models import Answer, AnswerList, Input, Module, Page, Section
-from .serializers import AnswerSerializer, AnswerListSerializer, ChildSectionSerializer, InputSerializer, ModuleSerializer, PageSerializer
+from .models import Answer, AnswerList, Input, Module, Page, Part, Section
+from .serializers import AnswerSerializer, AnswerListSerializer, ChildSectionSerializer, InputSerializer, ModuleSerializer, PageSerializer, PartSerializer
 
 class ModuleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Module.objects.all()
@@ -11,6 +11,10 @@ class ModuleViewSet(viewsets.ReadOnlyModelViewSet):
 class PageViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
+
+class PartViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Part.objects.all()
+    serializer_class = PartSerializer
 
 class SectionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Section.objects.select_subclasses()
