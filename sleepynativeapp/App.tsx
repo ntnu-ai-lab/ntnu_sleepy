@@ -3,9 +3,9 @@ import ProjectProvider from "./auth/ProjectProvider";
 import React, { useEffect } from "react";
 import AuthProvider from "./auth/AuthProvider";
 import { RecoilRoot } from "recoil";
-import { StorageController } from "./devicestorage/StorageController";
+import { StorageController } from "./state/StorageController";
 import { Provider as PaperProvider } from "react-native-paper";
-import { Navigation } from "./components/Navigation";
+import { Navigation } from "./components/navigation/Navigation";
 import { MainAppContainer } from "./components/matomo/MainAppContainer";
 import MatomoTracker, {
   MatomoProvider,

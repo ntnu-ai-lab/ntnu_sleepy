@@ -2,21 +2,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { useRecoilValue } from "recoil";
-import { sendAnswerList } from "../../api/formApi";
-import { AuthContext } from "../../auth/AuthProvider";
-import { loggedInUser } from "../../state/atoms";
-import { colors } from "../../styles/styles";
+import { sendAnswerList } from "../../../api/formApi";
+import { AuthContext } from "../../../auth/AuthProvider";
+import { loggedInUser } from "../../../state/atoms";
+import { colors } from "../../../styles/styles";
 import {
   Answer,
   AnswerList,
   FormSection,
   FormSelectOption,
   Input,
-} from "../../types/modules";
-import { Button } from "../material/Button";
-import { Card } from "../material/Card";
-import { Select } from "../material/Select";
-import { TextField } from "../material/TextField";
+} from "../../../types/modules";
+import { Button } from "../../material/Button";
+import { Card } from "../../material/Card";
+import { Select } from "../../material/Select";
+import { TextField } from "../../material/TextField";
 
 const styles = StyleSheet.create({
   caption: {

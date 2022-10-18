@@ -1,9 +1,9 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { colors } from "../../styles/styles";
-import { VideoSection } from "../../types/modules";
-import { Card } from "../material/Card";
-import VideoComponent from "../material/VideoComponent";
+import { colors } from "../../../styles/styles";
+import { VideoSection } from "../../../types/modules";
+import { Card } from "../../material/Card";
+import VideoComponent from "../../material/VideoComponent";
 
 export function VideoSectionComponent(props: { section: VideoSection }) {
   const { section } = props;

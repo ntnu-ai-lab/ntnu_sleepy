@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ScrollView, Text } from "react-native";
-import { NavBar } from "./material/NavBar";
-import { PageTemplate } from "./PageTemplate";
+import { NavBar } from "../material/NavBar";
+import { PageTemplate } from "../material/PageTemplate";
 import {
   Card,
   Title,
@@ -10,11 +10,11 @@ import {
   TextInput,
   ProgressBar,
 } from "react-native-paper";
-import { TextField } from "./material/TextField";
-import { colors } from "../styles/styles";
+import { TextField } from "../material/TextField";
+import { colors } from "../../styles/styles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SelectDropdown from "react-native-select-dropdown";
-import { relationshipStatus } from "../types/Types";
+import { relationshipStatus } from "../../types/Types";
 
 export function QuestionnairePage() {
   const relationshipStatuses = {

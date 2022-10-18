@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { ProfilePage } from "./ProfilePage";
-import { SettingsPage } from "./SettingsPage";
-import { colors } from "../styles/styles";
-import { QuestionnairePage } from "./QuestionnairePage";
-import { ModulePagePage } from "./module/ModulePagePage";
-import { testData } from "../helpers/testdata";
+import { ProfilePage } from "../pages/ProfilePage";
+import { SettingsPage } from "../pages/SettingsPage";
+import { colors } from "../../styles/styles";
+import { QuestionnairePage } from "../pages/QuestionnairePage";
+import { ModulePagePage } from "../module/ModulePagePage";
+import { testData } from "../../testing/testdata";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();

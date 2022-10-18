@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect } from "react";
 import { User } from "../types/Types";
 import { Module } from "../types/modules";
 import { useRecoilState } from "recoil";
-import { cachedModules, loggedInUser } from "../state/atoms";
+import { cachedModules, loggedInUser } from "./atoms";
 
 export async function storeLocalUser(user: User) {
   const userAsString = JSON.stringify(user);

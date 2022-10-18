@@ -10,12 +10,12 @@ import {
 } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { View, Dimensions } from "react-native";
-import { SessionContext } from "../auth/Auth";
-import { AuthContext } from "../auth/AuthProvider";
-import { handleFormSubmitError } from "../auth/form";
-import { ProjectContext } from "../auth/ProjectProvider";
-import { newKratosSdk } from "../auth/Sdk";
-import { PageTemplate } from "./PageTemplate";
+import { SessionContext } from "../../auth/Auth";
+import { AuthContext } from "../../auth/AuthProvider";
+import { handleFormSubmitError } from "../../auth/form";
+import { ProjectContext } from "../../auth/ProjectProvider";
+import { newKratosSdk } from "../../auth/Sdk";
+import { PageTemplate } from "../material/PageTemplate";
 import {
   Card,
   Button,

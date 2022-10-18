@@ -1,4 +1,4 @@
-import { HomePage } from '../components/HomePage';
+import { HomePage } from '../components/pages/HomePage';
 import renderer from 'react-test-renderer';
 
 describe("Test HomePage: ", () => {
