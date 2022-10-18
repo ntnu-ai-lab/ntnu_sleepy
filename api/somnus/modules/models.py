@@ -1,3 +1,5 @@
+import operator
+from typing import Callable
 import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
@@ -74,6 +76,11 @@ class Section(models.Model):
     objects = InheritanceManager()
     type = 'none'
 
+    rules: models.Manager['RuleGroup']
+
+    def evaluate_rules(self, user: User) -> bool:
+        return any([group.evaluate(user) for group in self.rules.all()]) if self.rules.all() else True
+
     def __str__(self) -> str:
         return self.heading
 
@@ -113,6 +120,10 @@ class Input(models.Model):
         db_index=True,
     )
     answers: models.Manager['Answer']
+    rules : models.Manager['RuleGroup']
+
+    def evaluate_rules(self, user: User) -> bool:
+        return any([group.evaluate(user) for group in self.rules.all()]) if self.rules.all() else True
 
     def __str__(self) -> str:
         return self.name
@@ -128,7 +139,7 @@ class AnswerList(models.Model):
 
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    input = models.ForeignKey(to=Input, related_name='answer', on_delete=models.CASCADE)
+    input = models.ForeignKey(to=Input, related_name='answers', on_delete=models.CASCADE)
     answer_list = models.ForeignKey(to=AnswerList, related_name='answers', on_delete=models.CASCADE)
     value = models.CharField(max_length=255)
 
@@ -139,15 +150,21 @@ class RuleGroup(models.Model):
 
     rules: models.Manager['Rule']
 
+    def evaluate(self, user: User) -> bool:
+        try:
+            return all([rule.evaluate(user) for rule in self.rules.all()])
+        except Answer.DoesNotExist:
+            return True
+
 class Rule(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class Comparator(models.TextChoices):
-        eq = '==', 'Equals'
-        neq = '!=', 'Not equals'
-        gt = '>', 'Greater than'
-        lt = '<', 'Less than'
-        geq = '>=', 'Greater or equals'
-        leq = '<=', 'Less or equals'
+        eq = 'eq', 'Equals'
+        ne = 'ne', 'Not equals'
+        gt = 'gt', 'Greater than'
+        lt = 'lt', 'Less than'
+        ge = 'ge', 'Greater or equals'
+        le = 'le', 'Less or equals'
     input = models.ForeignKey(to=Input, related_name='dependents', on_delete=models.CASCADE)
     comparator = models.CharField(max_length=2, choices=Comparator.choices)
     value = models.CharField(max_length=255)
@@ -155,4 +172,7 @@ class Rule(models.Model):
 
     rule_group = models.ForeignKey(to=RuleGroup, related_name='rules', on_delete=models.CASCADE)
 
+    def evaluate(self, user: User) -> bool:
+        comparator: Callable[[str, str], bool] = getattr(operator, self.comparator) 
+        return comparator(self.input.answers.get(answer_list__user=user).value, self.value)
 
