@@ -6,6 +6,7 @@ import { SettingsPage } from "./SettingsPage";
 import { colors } from "../styles/styles";
 import { QuestionnairePage } from "./QuestionnairePage";
 import { ModulePagePage } from "./module/ModulePagePage";
+import { testData } from "../helpers/testdata";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -54,7 +55,7 @@ export function TabNavigation() {
         />
         <Tab.Screen
           name="Assignment"
-          component={ModulePagePage}
+          children={() => <ModulePagePage page={testData.pages[0]}/>}
           options={{ tabBarLabel: "Assignment" }}
         />
       </Tab.Navigator>
