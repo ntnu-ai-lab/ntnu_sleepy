@@ -1,5 +1,5 @@
 import operator
-from typing import Callable
+from typing import Any, Callable
 import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
@@ -150,10 +150,12 @@ class RuleGroup(models.Model):
 
     rules: models.Manager['Rule']
 
-    def evaluate(self, user: User) -> bool:
+    def evaluate(self, user: User, **kwargs: Any) -> bool:
         try:
             return all([rule.evaluate(user) for rule in self.rules.all()])
         except Answer.DoesNotExist:
+            if not kwargs.get('catch', True):
+                raise Answer.DoesNotExist
             return True
 
 class Rule(models.Model):
