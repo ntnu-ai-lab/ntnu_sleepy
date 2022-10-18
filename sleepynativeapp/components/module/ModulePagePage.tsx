@@ -9,7 +9,9 @@ import { PageTemplate } from "../PageTemplate";
 import { getAllModules, useModule } from "../../api/modulesApi";
 import { testData } from "../../helpers/testdata";
 
-export function ModulePagePage() {
+export function ModulePagePage(props: {
+  page: Page;
+}) {
 
   /*
   const [moduleId, setModuleId] = useState<string | undefined>(undefined);
@@ -25,7 +27,8 @@ export function ModulePagePage() {
   }
  */
   // module?.pages[0] ||
-  const page: Page = testData.pages[0];
+  const {page} = props
+  
   return (
     <PageTemplate>
       <ScrollView>

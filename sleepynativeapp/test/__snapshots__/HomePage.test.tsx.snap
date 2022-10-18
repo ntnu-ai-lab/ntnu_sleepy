@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test HomePage:  Renders correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#A5C9CA",
+        "height": "100%",
+        "paddingTop": 0,
+        "width": "100%",
+      },
+      undefined,
+    ]
+  }
+>
+  <View>
+    <Text>
+      This is the homepage
+    </Text>
+  </View>
+</View>
+`;
