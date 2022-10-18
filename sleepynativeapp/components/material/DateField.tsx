@@ -13,12 +13,12 @@ export function DateField({
   initialState = { string: "", correct: true },
   onChange,
 }: {
-  initialState: DateFieldState;
+  initialState?: DateFieldState;
   onChange: (date: Date) => void;
 }) {
   const [state, setState] = useState<DateFieldState>(initialState);
 
-  const [date] = useState(new Date()); // We don't want this to change every time the component renders.
+  const [date] = useState(new Date()); //TODO Change to props
 
   return (
     <TextField
