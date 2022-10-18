@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getAllModules, getModule } from "../api/modulesApi";
+import { getAllModules, getModule } from "../../api/modulesApi";
 import { View, Text } from "react-native";
-import { Module } from "../types/modules";
+import { Module } from "../../types/modules";
 
 export function TestGetModules() {
   const [module, setModule] = useState<Module | undefined>(undefined);

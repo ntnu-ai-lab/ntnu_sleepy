@@ -1,9 +1,9 @@
 import React from "react";
-import { Card } from "./material/Card";
+import { Card } from "../material/Card";
 import { View, Text, StyleSheet } from "react-native";
-import { PageTemplate } from "./PageTemplate";
+import { PageTemplate } from "../material/PageTemplate";
 import { useNavigation } from "@react-navigation/native";
-import { colors } from "../styles/styles";
+import { colors } from "../../styles/styles";
 
 //page for general tips for sleeping. Should be available to all users when logged in.
 export function GeneralPage() {

@@ -50,7 +50,6 @@ CSRF_TRUSTED_ORIGINS = ['https://somnus.idi.ntnu.no']
 
 AUTH_USER_MODEL = 'users.User'
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -168,3 +167,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000

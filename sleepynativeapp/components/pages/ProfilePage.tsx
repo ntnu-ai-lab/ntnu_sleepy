@@ -1,12 +1,12 @@
-import { PageTemplate } from "./PageTemplate";
+import { PageTemplate } from "../material/PageTemplate";
 import React, { useContext, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
-import { relationshipStatus, User, UserEx } from "../types/Types";
-import { gender } from "../types/Types";
-import { AuthContext } from "../auth/AuthProvider";
-import { getTest } from "../api/userApi";
+import { relationshipStatus, User, UserEx } from "../../types/Types";
+import { gender } from "../../types/Types";
+import { AuthContext } from "../../auth/AuthProvider";
+import { getTest } from "../../api/userApi";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loggedInUser } from "../state/atoms";
+import { loggedInUser } from "../../state/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Card,
@@ -14,7 +14,7 @@ import {
   TextInput,
   Divider,
 } from "react-native-paper";
-import { colors } from "../styles/styles";
+import { colors } from "../../styles/styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { useNavigation } from "@react-navigation/native";
 

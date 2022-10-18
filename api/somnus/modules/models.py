@@ -1,3 +1,5 @@
+import operator
+from typing import Any, Callable
 import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
@@ -60,8 +62,7 @@ class Page(models.Model):
         ordering = ['ordering']
 
 class Section(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-    rules = models.CharField(max_length=255, default='true')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     heading = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
     page = models.ForeignKey(to=Page, related_name='sections', on_delete=models.CASCADE)
@@ -74,6 +75,11 @@ class Section(models.Model):
 
     objects = InheritanceManager()
     type = 'none'
+
+    rules: models.Manager['RuleGroup']
+
+    def evaluate_rules(self, user: User) -> bool:
+        return any([group.evaluate(user) for group in self.rules.all()]) if self.rules.all() else True
 
     def __str__(self) -> str:
         return self.heading
@@ -114,6 +120,10 @@ class Input(models.Model):
         db_index=True,
     )
     answers: models.Manager['Answer']
+    rules : models.Manager['RuleGroup']
+
+    def evaluate_rules(self, user: User) -> bool:
+        return any([group.evaluate(user) for group in self.rules.all()]) if self.rules.all() else True
 
     def __str__(self) -> str:
         return self.name
@@ -129,6 +139,42 @@ class AnswerList(models.Model):
 
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    input = models.ForeignKey(to=Input, related_name='answer', on_delete=models.CASCADE)
+    input = models.ForeignKey(to=Input, related_name='answers', on_delete=models.CASCADE)
     answer_list = models.ForeignKey(to=AnswerList, related_name='answers', on_delete=models.CASCADE)
     value = models.CharField(max_length=255)
+
+class RuleGroup(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    section = models.ForeignKey(to=Section, related_name='rules', default=None, null=True, blank=True, on_delete=models.CASCADE)
+    input = models.ForeignKey(to=Input, related_name='rules', default=None, null=True, blank=True, on_delete=models.CASCADE)
+
+    rules: models.Manager['Rule']
+
+    def evaluate(self, user: User, **kwargs: Any) -> bool:
+        try:
+            return all([rule.evaluate(user) for rule in self.rules.all()])
+        except Answer.DoesNotExist:
+            if not kwargs.get('catch', True):
+                raise Answer.DoesNotExist
+            return True
+
+class Rule(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    class Comparator(models.TextChoices):
+        eq = 'eq', 'Equals'
+        ne = 'ne', 'Not equals'
+        gt = 'gt', 'Greater than'
+        lt = 'lt', 'Less than'
+        ge = 'ge', 'Greater or equals'
+        le = 'le', 'Less or equals'
+    input = models.ForeignKey(to=Input, related_name='dependents', on_delete=models.CASCADE)
+    comparator = models.CharField(max_length=2, choices=Comparator.choices)
+    value = models.CharField(max_length=255)
+    should_be = models.BooleanField(default=True, verbose_name='Should be True')
+
+    rule_group = models.ForeignKey(to=RuleGroup, related_name='rules', on_delete=models.CASCADE)
+
+    def evaluate(self, user: User) -> bool:
+        comparator: Callable[[str, str], bool] = getattr(operator, self.comparator) 
+        return comparator(self.input.answers.get(answer_list__user=user).value, self.value)
+

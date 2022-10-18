@@ -1,17 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useState } from "react";
+import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { ProfilePage } from "./ProfilePage";
-import { SettingsPage } from "./SettingsPage";
-import { colors } from "../styles/styles";
-import { QuestionnairePage } from "./QuestionnairePage";
-import { ModulePagePage } from "./module/ModulePagePage";
-import { SleepDiaryPage } from "./SleepDiaryPage";
+import { SettingsPage } from "../pages/SettingsPage";
+import { colors } from "../../styles/styles";
+import { QuestionnairePage } from "../pages/QuestionnairePage";
+import { ModulePagePage } from "../module/ModulePagePage";
+import { testData } from "../../testing/testdata";
+import { SleepDiaryPage } from "../SleepDiaryPage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
-
-  const [count, setCount] = useState<number>(0);
 
   return (
     <>
@@ -51,20 +49,15 @@ export function TabNavigation() {
           options={{ tabBarLabel: "Søvndagbok" }}
         />
         <Tab.Screen
-          name="Moduler"
-          component={ModulePagePage}
-          options={{ tabBarLabel: "Moduler" }}
-        />
-        <Tab.Screen
           name="Innstillinger"
           component={SettingsPage}
           options={{ tabBarLabel: "Innstillinger" }}
         />
 
         <Tab.Screen
-          name="Profil"
-          component={ProfilePage}
-          options={{ tabBarLabel: "Profil" }}
+          name="Assignment"
+          children={() => <ModulePagePage page={testData.pages[0]} />}
+          options={{ tabBarLabel: "Assignment" }}
         />
       </Tab.Navigator>
     </>

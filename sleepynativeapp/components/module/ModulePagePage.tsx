@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, View, Text } from "react-native";
 import { Page, Section } from "../../types/modules";
-import { FormSectionComponent } from "./FormSectionComponent";
-import { ImageSectionComponent } from "./ImageSectionComponent";
-import { TextSectionComponent } from "./TextSectionComponent";
-import { VideoSectionComponent } from "./VideoSectionComponent";
-import { PageTemplate } from "../PageTemplate";
+import { FormSectionComponent } from "./section/FormSectionComponent";
+import { ImageSectionComponent } from "./section/ImageSectionComponent";
+import { TextSectionComponent } from "./section/TextSectionComponent";
+import { VideoSectionComponent } from "./section/VideoSectionComponent";
+import { PageTemplate } from "../material/PageTemplate";
 import { getAllModules, useModule } from "../../api/modulesApi";
-import { testData } from "../../helpers/testdata";
+import { testData } from "../../testing/testdata";
 
-export function ModulePagePage() {
+export function ModulePagePage(props: {
+  page: Page;
+}) {
 
   /*
   const [moduleId, setModuleId] = useState<string | undefined>(undefined);
@@ -25,7 +27,8 @@ export function ModulePagePage() {
   }
  */
   // module?.pages[0] ||
-  const page: Page = testData.pages[0];
+  const {page} = props
+  
   return (
     <PageTemplate>
       <ScrollView>
