@@ -11,25 +11,50 @@ import { Nap } from "../../types/modules";
 export default function SleepyDiaryEntryComponent() {
   const [date, setDate] = useState<Date>(new Date());
   const [dayRating, setDayRating] = useState<number>();
-  const [naps, setNaps] = useState<Nap[]>([]);
-  const [napStrings1, setNapStrings1] = useState<string[]>([]);
-  const [napStrings2, setNapStrings2] = useState<string[]>([]);
   const [sleepAides, setSleepAides] = useState<boolean>(false);
   const [sleepAidesDetails, setSleepAidesDetails] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
   const [sleepQuality, setSleepQuality] = useState<number>();
-  const [bedtime, setBedtime] = useState<Date>();
-  const [lightsOut, setLightsOut] = useState<Date>();
-  const [timeToSleep, setTimeToSleep] = useState<number>();
-  const nightWakes: number[] = [];
-  const [waketime, setwaketime] = useState<Date>();
-  const [risetime, setRisetime] = useState<Date>();
+
+  const [bedtime, setBedtime] = useState<{
+    date?: Date;
+    string: string;
+    correct: boolean;
+  }>({ string: "", correct: true });
+  const [lightsOut, setLightsOut] = useState<{
+    date?: Date;
+    string: string;
+    correct: boolean;
+  }>({ string: "", correct: true });
+  const [waketime, setWaketime] = useState<{
+    date?: Date;
+    string: string;
+    correct: boolean;
+  }>({ string: "", correct: true });
+  const [risetime, setRisetime] = useState<{
+    date?: Date;
+    string: string;
+    correct: boolean;
+  }>({ string: "", correct: true });
+  const [timeToSleep, setTimeToSleep] = useState<number>(0);
+  const [numberOfNightWakes, setNumberOfNightWakes] = useState<number>();
+  const [nightWakes, setNightWakes] = useState<number[]>([]);
   const [hasNapped, setHasNapped] = useState<string>("Nei");
   const [numberOfNaps, setNumberOfNaps] = useState<number>(0);
-  const [napStringCorrect1, setNapStringCorrect1] = useState<boolean[]>([]);
-  const [napStringCorrect2, setNapStringCorrect2] = useState<boolean[]>([]);
+  const [naps, setNaps] = useState<{
+    naps: Nap[];
+    startStrings: string[];
+    endStrings: string[];
+    startCorrects: boolean[];
+    endCorrects: boolean[];
+  }>({
+    naps: [],
+    startStrings: [],
+    endStrings: [],
+    startCorrects: [],
+    endCorrects: [],
+  });
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
-
   const søvnvurdering = ["Veldig dyp", "Dyp", "Middels", "Lett", "Veldig dyp"];
   const dagvurdering = [
     "Veldig bra",
@@ -47,20 +72,22 @@ export default function SleepyDiaryEntryComponent() {
         width: "70%",
       }}
     >
-      <TextField
-        placeholderText="Notater: "
-        multiline={true}
-        value={notes}
-        editable={true}
-        onChange={setNotes}
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Hvordan har du fungert på dagtid?
+      </Text>
+
+      <Select
+        placeholderText="Hvordan har du fungert på dagtid?"
+        options={dagvurdering}
+        optionDisplay={(options: string) => options}
       />
-      {
-        <Select
-          placeholderText="Hvordan har du fungert på dagtid?"
-          options={dagvurdering}
-          optionDisplay={(options: string) => options}
-        />
-      }
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Har du tatt en eller flere blunder iløpet av dagen?
+      </Text>
       {
         <Select
           placeholderText="Har du tatt en eller flere blunder iløpet av dagen?"
@@ -70,17 +97,21 @@ export default function SleepyDiaryEntryComponent() {
         />
       }
       {numberOfNaps > 0 && hasNapped === "Ja" ? (
+        <Text
+          style={{
+            color: colors.primary,
+            minWidth: "100%",
+            textAlign: "center",
+          }}
+        >
+          Noter ned tidspunkt for alle blundene
+        </Text>
+      ) : (
+        <></>
+      )}
+      {numberOfNaps > 0 && hasNapped === "Ja" ? (
         [...Array(numberOfNaps || 0).keys()].map((n) => (
-          <Card style={{ maxWidth: "100%" }}>
-            <Title
-              style={{
-                color: colors.primary,
-                minWidth: "100%",
-                textAlign: "center",
-              }}
-            >
-              Noter ned tidspunkt for alle blundene
-            </Title>
+          <Card style={{ maxWidth: "100%", padding: 5, margin: 0 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -90,7 +121,7 @@ export default function SleepyDiaryEntryComponent() {
             >
               <TextField
                 style={{ maxWidth: "30%", margin: 30 }}
-                error={!napStringCorrect1[n]}
+                error={!naps.startCorrects[n]}
                 placeholderText={"HH:MM"}
                 onChange={(e) => {
                   setNaps((nap) => {
@@ -98,10 +129,10 @@ export default function SleepyDiaryEntryComponent() {
                       /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
                     if (timeRegex.test(e)) {
-                      if (!naps[n]) {
-                        naps[n] = [new Date(), new Date()];
+                      if (!naps.naps[n]) {
+                        naps.naps[n] = [new Date(), new Date()];
                       }
-                      naps[n][0] = new Date(
+                      naps.naps[n][0] = new Date(
                         date.getFullYear(),
                         date.getMonth(),
                         date.getDate(),
@@ -111,24 +142,30 @@ export default function SleepyDiaryEntryComponent() {
                     }
                     return nap;
                   });
-                  setNapStrings1((nap) => {
-                    nap[n] = e;
+                  setNaps((nap) => {
+                    nap.startStrings[n] = e;
                     return nap;
                   });
-                  setNapStringCorrect1((nap) => {
-                    const timeRegex: RegExp =
-                      /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+                  setNaps((nap) => {
+                    if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
+                      naps.startCorrects[n] = true;
+                      setRefreshScreen(!refreshScreen);
+                      return nap;
+                    } else {
+                      const timeRegex: RegExp =
+                        /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
-                    nap[n] = timeRegex.test(e);
-                    setRefreshScreen(!refreshScreen);
-                    return nap;
+                      naps.startCorrects[n] = timeRegex.test(e);
+                      setRefreshScreen(!refreshScreen);
+                      return nap;
+                    }
                   });
                 }}
-                value={napStrings1[n]}
+                value={naps.startStrings[n]}
               />
               <TextField
                 style={{ maxWidth: "30%", margin: 30 }}
-                error={!napStringCorrect2[n]}
+                error={!naps.endCorrects[n]}
                 placeholderText={"HH:MM"}
                 onChange={(e) => {
                   setNaps((nap) => {
@@ -136,10 +173,10 @@ export default function SleepyDiaryEntryComponent() {
                       /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
                     if (timeRegex.test(e)) {
-                      if (!naps[n]) {
-                        naps[n] = [new Date(), new Date()];
+                      if (!naps.naps[n]) {
+                        naps.naps[n] = [new Date(), new Date()];
                       }
-                      naps[n][1] = new Date(
+                      naps.naps[n][0] = new Date(
                         date.getFullYear(),
                         date.getMonth(),
                         date.getDate(),
@@ -149,20 +186,26 @@ export default function SleepyDiaryEntryComponent() {
                     }
                     return nap;
                   });
-                  setNapStrings2((nap) => {
-                    nap[n] = e;
+                  setNaps((nap) => {
+                    nap.endStrings[n] = e;
                     return nap;
                   });
-                  setNapStringCorrect2((nap) => {
-                    const timeRegex: RegExp =
-                      /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+                  setNaps((nap) => {
+                    if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
+                      naps.endCorrects[n] = true;
+                      setRefreshScreen(!refreshScreen);
+                      return nap;
+                    } else {
+                      const timeRegex: RegExp =
+                        /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
-                    nap[n] = timeRegex.test(e);
-                    setRefreshScreen(!refreshScreen);
-                    return nap;
+                      naps.endCorrects[n] = timeRegex.test(e);
+                      setRefreshScreen(!refreshScreen);
+                      return nap;
+                    }
                   });
                 }}
-                value={napStrings2[n]}
+                value={naps.endStrings[n]}
               />
             </View>
           </Card>
@@ -205,22 +248,19 @@ export default function SleepyDiaryEntryComponent() {
         <></>
       )}
 
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 30 }}
+      >
+        Drakk du alkohol, eller brukte du sovemedisiner for å sove i går?
+      </Text>
       <Select
-        placeholderText="Hvor dyp var søvnen din i natt?"
-        options={søvnvurdering}
+        placeholderText="Drakk du alkohol, eller brukte du sovemedisiner for å sove i går?"
+        options={["Ja", "Nei"]}
         optionDisplay={(options: string) => options}
+        onChange={(answer) => {
+          setSleepAides(answer === "Ja");
+        }}
       />
-
-      {
-        <Select
-          placeholderText="Drakk du alkohol, eller brukte du sovemedisiner for å sove i går?"
-          options={["Ja", "Nei"]}
-          optionDisplay={(options: string) => options}
-          onChange={(answer) => {
-            setSleepAides(answer === "Ja");
-          }}
-        />
-      }
       {sleepAides ? (
         <>
           <Text style={{ color: colors.primary }}>
@@ -235,6 +275,294 @@ export default function SleepyDiaryEntryComponent() {
       ) : (
         <></>
       )}
+
+      <Text
+        style={{
+          alignItems: "center",
+          alignSelf: "center",
+          color: colors.primary,
+          marginTop: 10,
+        }}
+      >
+        Når gikk du til sengs?
+      </Text>
+      <TextField
+        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
+        error={!bedtime.correct}
+        placeholderText={"HH:MM"}
+        onChange={(e) => {
+          setBedtime((time) => {
+            const timeRegex: RegExp =
+              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+            if (timeRegex.test(e)) {
+              time.date = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                parseInt(e.slice(0, 2)),
+                parseInt(e.slice(3))
+              );
+            }
+            return time;
+          });
+          setBedtime((time) => {
+            time.string = e;
+            return time;
+          });
+          setBedtime((time) => {
+            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
+              time.correct = true;
+              setRefreshScreen(!refreshScreen);
+              return time;
+            } else {
+              const timeRegex: RegExp = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+              time.correct = timeRegex.test(e);
+              setRefreshScreen(!refreshScreen);
+              return time;
+            }
+          });
+        }}
+        value={bedtime.string}
+      />
+
+      <Text
+        style={{
+          alignItems: "center",
+          alignSelf: "center",
+          color: colors.primary,
+          marginTop: 10,
+        }}
+      >
+        Når skrudde du av lyset?
+      </Text>
+      <TextField
+        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
+        error={!lightsOut.correct}
+        placeholderText={"HH:MM"}
+        onChange={(e) => {
+          setLightsOut((time) => {
+            const timeRegex: RegExp =
+              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+            if (timeRegex.test(e)) {
+              time.date = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                parseInt(e.slice(0, 2)),
+                parseInt(e.slice(3))
+              );
+            }
+            return time;
+          });
+          setLightsOut((time) => {
+            time.string = e;
+            return time;
+          });
+          setLightsOut((time) => {
+            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
+              time.correct = true;
+              setRefreshScreen(!refreshScreen);
+              return time;
+            } else {
+              const timeRegex: RegExp =
+                /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+              time.correct = timeRegex.test(e);
+              setRefreshScreen(!refreshScreen);
+              return time;
+            }
+          });
+        }}
+        value={lightsOut.string}
+      />
+
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Hvor mange minutter tok det fra lyset var skrudd av til du sovnet?
+      </Text>
+      <TextField
+        style={{ maxWidth: "20%" }}
+        keyboardType="numeric"
+        value={timeToSleep ? timeToSleep.toString() : ""}
+        onChange={(e) => setTimeToSleep(parseInt(e))}
+      />
+
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Hvor mange ganger våknet du iløpet av natten?
+      </Text>
+      <TextField
+        style={{ maxWidth: "20%", alignText: "center", alignItems: "center" }}
+        keyboardType="numeric"
+        placeholderText="          "
+        value={numberOfNightWakes ? numberOfNightWakes.toString() : ""}
+        onChange={(e) => setNumberOfNightWakes(parseInt(e))}
+      />
+      {numberOfNightWakes &&
+      numberOfNightWakes > 0 &&
+      numberOfNightWakes <= 30 ? (
+        <Text
+          style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+        >
+          Noter ned antall minutter for hver gang du våknet
+        </Text>
+      ) : (
+        <>{}</>
+      )}
+      {numberOfNightWakes &&
+      numberOfNightWakes > 0 &&
+      numberOfNightWakes <= 30 ? (
+        [...Array(numberOfNightWakes || 0).keys()].map((n) => (
+          <Card style={{ maxWidth: "100%", padding: 5, margin: 0 }}>
+            <TextField
+              style={{
+                minWidth: "20%",
+                alignText: "center",
+                alignItems: "center",
+              }}
+              placeholderText="          "
+              keyboardType="numeric"
+              value={
+                nightWakes[n]?.toString() === "NaN"
+                  ? ""
+                  : nightWakes[n]?.toString()
+              }
+              onChange={(e) => {
+                setNightWakes((wake) => {
+                  nightWakes[n] = parseInt(e);
+                  setRefreshScreen(!refreshScreen);
+                  return wake;
+                });
+              }}
+            />
+          </Card>
+        ))
+      ) : (
+        <></>
+      )}
+
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Når våknet du på morgenen uten å få sove igjen? Noter ned ditt endelige
+        oppvåkningstidspunkt.
+      </Text>
+
+      <TextField
+        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
+        error={!waketime.correct}
+        placeholderText={"HH:MM"}
+        onChange={(e) => {
+          setWaketime((time) => {
+            const timeRegex: RegExp =
+              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+            if (timeRegex.test(e)) {
+              time.date = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                parseInt(e.slice(0, 2)),
+                parseInt(e.slice(3))
+              );
+            }
+            return time;
+          });
+          setWaketime((time) => {
+            time.string = e;
+            return time;
+          });
+          setWaketime((time) => {
+            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
+              time.correct = true;
+              setRefreshScreen(!refreshScreen);
+              return time;
+            } else {
+              const timeRegex: RegExp =
+                /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+              time.correct = timeRegex.test(e);
+              setRefreshScreen(!refreshScreen);
+              return time;
+            }
+          });
+        }}
+        value={waketime.string}
+      />
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Når stod du opp?
+      </Text>
+
+      <TextField
+        style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
+        error={!risetime.correct}
+        placeholderText={"HH:MM"}
+        onChange={(e) => {
+          setRisetime((time) => {
+            const timeRegex: RegExp =
+              /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+            if (timeRegex.test(e)) {
+              time.date = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                parseInt(e.slice(0, 2)),
+                parseInt(e.slice(3))
+              );
+            }
+            return time;
+          });
+          setRisetime((time) => {
+            time.string = e;
+            return time;
+          });
+          setRisetime((time) => {
+            if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
+              time.correct = true;
+              setRefreshScreen(!refreshScreen);
+              return time;
+            } else {
+              const timeRegex: RegExp =
+                /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+              time.correct = timeRegex.test(e);
+              setRefreshScreen(!refreshScreen);
+              return time;
+            }
+          });
+        }}
+        value={risetime.string}
+      />
+
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Hvor dyp var søvnen din i natt?
+      </Text>
+      <Select
+        placeholderText="Hvor dyp var søvnen din i natt?"
+        options={søvnvurdering}
+        optionDisplay={(options: string) => options}
+      />
+      <Text
+        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+      >
+        Notater
+      </Text>
+      <TextField
+        multiline={true}
+        value={notes}
+        editable={true}
+        onChange={setNotes}
+      />
     </Card>
   );
 }
