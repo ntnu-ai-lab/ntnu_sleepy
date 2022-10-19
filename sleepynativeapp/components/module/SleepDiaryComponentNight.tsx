@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { colors } from "../../styles/styles";
-import { Nap } from "../../types/modules";
+import { Nap, SleepDiary } from "../../types/modules";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { Divider, Text, Title } from "react-native-paper";
 import { Select } from "../material/Select";
 import { TextField } from "../material/TextField";
 import { DateField } from "../material/DateField";
+import { testDiary } from "../../testing/testdata";
+import { sendSleepDiary } from "../../api/diaryApi";
+import { getAuthenticatedSession } from "../../auth/Auth";
 
 export default function SleepDiaryComponentNight() {
   const [date, setDate] = useState<Date>(new Date());
@@ -27,7 +30,10 @@ export default function SleepDiaryComponentNight() {
   const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
 
   function saveDiary(): void {
-    throw new Error("Function not implemented.");
+    const testSleepDiary = testDiary;
+    sendSleepDiary(testSleepDiary);
+    const promise = getAuthenticatedSession();
+    promise.then((val) => console.log(val));
   }
 
   return (
