@@ -17,6 +17,7 @@ import {
 import { colors } from "../../styles/styles";
 import SelectDropdown from "react-native-select-dropdown";
 import { useNavigation } from "@react-navigation/native";
+import { Alert } from "../material/Alert";
 
 export function ProfilePage() {
   const [state, setState] = useState(UserEx);
@@ -44,6 +45,7 @@ export function ProfilePage() {
   const [relationship, setRelationship] = useState<string>(
     UserEx.relationshipStatus
   );
+  const [openAlert, setOpenAlert] = useState(false)
 
   const onEmailChange = (arg: string) =>
     setState((prev) => ({
@@ -249,7 +251,11 @@ export function ProfilePage() {
           mode="text"
           onPress={() => {
             if (sessionToken && session)
-              getTest("d10e1d18-db25-4e47-ab19-efad53248123");
+              getTest("d10e1d18-db25-4e47-ab19-efad53248123").then(r => {
+                if (r === 0) {
+                  setOpenAlert(true)
+                }
+              });
           }}
         >
           <Text>Test</Text>
@@ -257,6 +263,7 @@ export function ProfilePage() {
       </Card>
 
       <View style={{ height: 80, width: "100%" }} />
+      <Alert type={"alert"} content={"Klarte ikke å hente test, dette kan skyldes mange på internett, eller mangel på kompetanse fra vår side"} open={openAlert} setOpen={setOpenAlert}/>
     </PageTemplate>
   );
 }

@@ -15,6 +15,7 @@ export async function getTest(identiyId: string) {
     method: "GET",
   });
   console.log("Trying to fetch user...");
+  if (!response.response.ok) return 0
   if (response.data) {
     const user: User = {
       name: response.data.name,
