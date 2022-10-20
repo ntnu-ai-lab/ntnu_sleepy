@@ -29,5 +29,9 @@ class DiaryEntry(models.Model):
     waketime = models.DateTimeField(blank=True, null=True)
     risetime = models.DateTimeField(blank=True, null=True)
 
+    @property
+    def finished(self) -> bool:
+        return self.bedtime is not None
+
     class Meta:
         unique_together = ('date', 'diary')
