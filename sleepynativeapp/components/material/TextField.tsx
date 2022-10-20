@@ -1,9 +1,19 @@
 import React from "react";
-import { TextInput, View, StyleSheet, KeyboardTypeOptions } from "react-native";
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  KeyboardTypeOptions,
+  NativeSyntheticEvent,
+  TextInputEndEditingEventData,
+} from "react-native";
 import { colors } from "../../styles/styles";
 
 export function TextField(props: {
   onChange?: (arg: string) => void;
+  onEndEditing?: (
+    arg: NativeSyntheticEvent<TextInputEndEditingEventData>
+  ) => void;
   value: string;
   placeholderText?: string;
   editable?: boolean;
@@ -16,6 +26,7 @@ export function TextField(props: {
 }) {
   const {
     onChange,
+    onEndEditing,
     value,
     placeholderText,
     style,
@@ -52,6 +63,7 @@ export function TextField(props: {
   return (
     <View style={[styles.wrapper, style]}>
       <TextInput
+        onEndEditing={onEndEditing}
         style={styles.text}
         value={value}
         onChangeText={onChange}

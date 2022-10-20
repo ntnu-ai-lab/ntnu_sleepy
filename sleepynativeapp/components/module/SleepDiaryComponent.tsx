@@ -4,6 +4,9 @@ import SleepDiaryComponentDay from "./SleepDiaryComponentDay";
 import SleepDiaryComponentNight from "./SleepDiaryComponentNight";
 
 export default function SleepyDiaryEntryComponent() {
+  const [dayDone, setDayDone] = useState<boolean>(true); //TODO få state fra backend
+  const [nightDone, setNightDone] = useState<boolean>(false); //TODO få state fra backend
+
   return (
     <Card
       style={{
@@ -12,8 +15,8 @@ export default function SleepyDiaryEntryComponent() {
         width: "70%",
       }}
     >
-      <SleepDiaryComponentDay />
-      <SleepDiaryComponentNight />
+      {dayDone ? <></> : <SleepDiaryComponentDay />}
+      {nightDone ? <></> : <SleepDiaryComponentNight />}
     </Card>
   );
 }

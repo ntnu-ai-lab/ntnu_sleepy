@@ -28,6 +28,8 @@ export function TabNavigation() {
               iconName = focused ? "barbell" : "barbell-outline";
             } else if (route.name === "Søvndagbok") {
               iconName = focused ? "bed" : "bed-outline";
+            } else if (route.name === "Assignment") {
+              iconName = focused ? "bar-chart" : "bar-chart-outline";
             }
 
             // You can return any component that you like here!
@@ -49,15 +51,20 @@ export function TabNavigation() {
           options={{ tabBarLabel: "Søvndagbok" }}
         />
         <Tab.Screen
+          name="Moduler"
+          component={() => <ModulePagePage page={testData.pages[0]} />}
+          options={{ tabBarLabel: "Moduler" }}
+        />
+        <Tab.Screen
           name="Innstillinger"
           component={SettingsPage}
           options={{ tabBarLabel: "Innstillinger" }}
         />
 
         <Tab.Screen
-          name="Assignment"
-          children={() => <ModulePagePage page={testData.pages[0]} />}
-          options={{ tabBarLabel: "Assignment" }}
+          name="Profil"
+          component={ProfilePage}
+          options={{ tabBarLabel: "Profil" }}
         />
       </Tab.Navigator>
     </>
