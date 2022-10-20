@@ -16,7 +16,7 @@ class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
         return super().create(validated_data)
 
 class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
-    owner = serializers.UUIDField(required=False)
+    owner = serializers.UUIDField(required=False, allow_null=True)
     class Meta:
         model = DiaryEntry
         fields = '__all__'
