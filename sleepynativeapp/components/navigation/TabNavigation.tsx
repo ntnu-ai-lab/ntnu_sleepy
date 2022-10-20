@@ -7,6 +7,7 @@ import { QuestionnairePage } from "../pages/QuestionnairePage";
 import { ModulePagePage } from "../module/ModulePagePage";
 import { testData } from "../../testing/testdata";
 import { SleepDiaryPage } from "../SleepDiaryPage";
+import { ProfilePage } from "../pages/ProfilePage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();

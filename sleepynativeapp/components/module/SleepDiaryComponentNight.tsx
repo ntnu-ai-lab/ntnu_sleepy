@@ -10,7 +10,11 @@ import { TextField } from "../material/TextField";
 import { DateField } from "../material/DateField";
 import { testDiary } from "../../testing/testdata";
 import { getAuthenticatedSession } from "../../auth/Auth";
-import { getDiary, listDiaryEntries } from "../../api/sleepDiaryApi";
+import {
+  finishDiaryEntry,
+  getDiary,
+  listDiaryEntries,
+} from "../../api/sleepDiaryApi";
 
 export default function SleepDiaryComponentNight() {
   const [date, setDate] = useState<Date>(new Date()); // TODO hent date fra frontend
@@ -29,31 +33,45 @@ export default function SleepDiaryComponentNight() {
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
   const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
 
-  async function checkSleepDiary(): Promise<DiaryEntry | undefined> {
+  const [diaryEntry, setDiaryEntry] = useState<DiaryEntry>();
+  const [diaryID, setDiaryID] = useState<string>("");
+
+  async function checkSleepDiary(): Promise<void> {
     {
-      const diary = await getDiary();
+      const diary = await getDiary().catch((e) => console.error(e));
       console.log(diary);
-      if (diary !== undefined) {
-        const diaryEntries = await listDiaryEntries(diary.id);
-        console.log(diaryEntries);
-        console.log(date.toLocaleDateString());
-        const sleepDiary: SleepDiary = {
-          id: diary.id,
-          user: diary.user,
-          started_date: diary.started_date,
-          diary_entries: diaryEntries ?? [],
-        };
-        const diaryEntry = sleepDiary.diary_entries.find(
-          (entry) =>
-            entry?.date.toLocaleDateString() === date.toLocaleDateString()
-        );
-        if (diaryEntry) {
-          console.log(diaryEntry);
-          return diaryEntry;
-        } else {
-          console.log("Fetch failed");
-        }
+      if (diary) {
+        setDiaryID(diary.id);
       }
+
+      if (diary !== undefined) {
+        await listDiaryEntries(diary.id)
+          .then((entry) => {
+            if (entry) {
+              const sleepDiary: SleepDiary = {
+                id: diary.id,
+                user: diary.user,
+                started_date: diary.started_date,
+                diary_entries: entry,
+              };
+              if (sleepDiary.diary_entries) {
+                console.log(sleepDiary.diary_entries);
+                sleepDiary.diary_entries.map((entry) => {
+                  console.log("ENTRY DATE " + entry.date);
+                  const temp = new Date(entry.date);
+                  console.log("TEMP: " + temp.toLocaleDateString());
+                  console.log("DATE: " + date.toLocaleDateString());
+                  if (temp.toLocaleDateString() == date.toLocaleDateString()) {
+                    console.log("MATCH");
+                    setDiaryEntry(entry);
+                  }
+                });
+              }
+            }
+          })
+          .catch((e) => console.error(e));
+      }
+      console.log(diaryEntry);
     }
   }
 
@@ -61,17 +79,37 @@ export default function SleepDiaryComponentNight() {
     checkSleepDiary();
   }, []);
 
-  /* async function postEntry() {
-      const diaryEntry: Omit<DiaryEntry, "day_rating" | "naps"> = {
-        date: date,
+  async function postEntry() {
+    if (
+      diaryEntry &&
+      bedtime &&
+      lightsOut &&
+      timeToSleep &&
+      waketime &&
+      risetime
+    ) {
+      const finalEntry: Omit<DiaryEntry, "day_rating" | "naps"> = {
+        id: diaryEntry.id,
+        date: diaryEntry.date,
+        //day_rating: diaryEntry.day_rating,
+        //naps: diaryEntry.naps,
+        sleep_aides: sleepAides,
+        sleep_aides_detail: sleepAidesDetails,
+        notes: notes,
+        sleep_quality: sleepQuality ?? 0,
+        bedtime: bedtime,
+        lights_out: lightsOut,
+        time_to_sleep: timeToSleep,
+        night_wakes: nightWakes,
+        waketime: waketime,
+        risetime: risetime,
       };
-      console.log(sleepDiaryID, diaryEntry);
-      const error = await createDiaryEntry(sleepDiaryID, diaryEntry);
-      console.log(error);
-    } else {
-      console.log("DiaryEntry not valid");
+
+      const result = await finishDiaryEntry(diaryID, diaryEntry).then((res) =>
+        console.log(res)
+      );
     }
-  } */
+  }
 
   return (
     <Card
@@ -242,7 +280,7 @@ export default function SleepDiaryComponentNight() {
       <Button
         style={{ width: "70%", marginBottom: 30 }}
         variant="outlined"
-        //onClick={() => saveDiary()}
+        onClick={() => postEntry()}
       >
         <Text
           style={{

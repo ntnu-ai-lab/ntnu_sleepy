@@ -29,12 +29,15 @@ export async function createDiaryEntry(
 
 export async function finishDiaryEntry(
   diary: SleepDiary["id"],
-  entry: Omit<DiaryEntry, "dayrating" | "naps">
+  entry: Omit<DiaryEntry, "day_rating" | "naps">
 ): Promise<DiaryEntry | undefined> {
   return (
-    await callApi<DiaryEntry>(`sleepdiary/diary/${diary}/entries/${entry.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(entry),
-    })
+    await callApi<DiaryEntry>(
+      `sleepdiary/diary/${diary}/entries/${entry.id}/`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(entry),
+      }
+    )
   ).data;
 }
