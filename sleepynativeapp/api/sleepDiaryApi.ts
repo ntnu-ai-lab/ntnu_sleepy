@@ -8,6 +8,13 @@ export async function getDiary(): Promise<SleepDiary | undefined> {
   return (await callApi<SleepDiary[]>("/sleepdiary/diary/")).data?.[0];
 }
 
+export async function listDiaryEntries(
+  diary: SleepDiary["id"]
+): Promise<DiaryEntry[] | undefined> {
+  return (await callApi<DiaryEntry[]>(`sleepdiary/diary/${diary}/entries/`))
+    .data;
+}
+
 export async function createDiaryEntry(
   diary: SleepDiary["id"],
   entry: Pick<DiaryEntry, "day_rating" | "naps">
