@@ -81,7 +81,7 @@ export default function SleepDiaryComponentNight() {
         Når gikk du til sengs?
       </Text>
 
-      <DateField onChange={setBedtime} />
+      <DateField onChange={(date) => date && setBedtime(date)} />
       <Text
         style={{
           alignItems: "center",
@@ -92,7 +92,7 @@ export default function SleepDiaryComponentNight() {
       >
         Når skrudde du av lyset?
       </Text>
-      <DateField onChange={setLightsOut} />
+      <DateField onChange={(date) => date && setLightsOut(date)} />
 
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
@@ -168,14 +168,14 @@ export default function SleepDiaryComponentNight() {
         oppvåkningstidspunkt.
       </Text>
 
-      <DateField onChange={setWaketime} />
+      <DateField onChange={(date) => date && setWaketime(date)} />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
         Når stod du opp?
       </Text>
 
-      <DateField onChange={setRisetime} />
+      <DateField onChange={(date) => date && setRisetime(date)} />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >

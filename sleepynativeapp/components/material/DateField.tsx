@@ -16,7 +16,7 @@ export function DateField({
 }: {
   initialState?: DateFieldState;
   onChange: (date: Date | false) => void;
-  baseDate: Date;
+  baseDate?: Date;
 }) {
   const [state, setState] = useState<DateFieldState>(initialState);
   const [hasLostFocus, setHastLostFocus] = useState(false);
