@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { Module } from "../types/modules";
+import { Module, SleepDiary } from "../types/modules";
 import { User } from "../types/Types";
 
 export const loggedInUser = atom<User>({
@@ -9,5 +9,10 @@ export const loggedInUser = atom<User>({
 
 export const cachedModules = atom<Module[]>({
   key: "cachedModules",
+  default: undefined,
+});
+
+export const cachedSleepDiary = atom<SleepDiary>({
+  key: "cachedSleepDiary",
   default: undefined,
 });

@@ -23,6 +23,7 @@ export function Button(props: {
       alignItems: "center",
       justifyContent: "center",
       marginVertical: 5,
+      opacity: disabled ? 0.5 : 1,
     },
   });
 

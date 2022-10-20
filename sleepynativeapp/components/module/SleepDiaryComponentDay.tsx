@@ -11,9 +11,9 @@ import { DateField } from "../material/DateField";
 
 export default function SleepDiaryComponentDay() {
   const [date, setDate] = useState<Date>(new Date());
-  const [dayRating, setDayRating] = useState<number>();
+  const [dayRating, setDayRating] = useState<number>(0);
 
-  const [hasNapped, setHasNapped] = useState<string>("Nei");
+  const [hasNapped, setHasNapped] = useState<string>("");
   const [numberOfNaps, setNumberOfNaps] = useState<number>(0);
   const [naps, setNaps] = useState<[Date | false, Date | false][]>([
     [false, false],
@@ -36,16 +36,6 @@ export default function SleepDiaryComponentDay() {
         alignSelf: "center",
       }}
     >
-      <Text
-        style={{
-          fontSize: 20,
-          alignItems: "center",
-          color: colors.primary,
-          marginTop: 30,
-        }}
-      >
-        Fyll inn spørsmål 1 og 2 før sengetid:
-      </Text>
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
@@ -158,6 +148,27 @@ export default function SleepDiaryComponentDay() {
       ) : (
         <></>
       )}
+
+      <Button
+        style={{ width: "50%" }}
+        //onClick={() => postSleepDiaryEntry()} //TODO add this function
+        variant="outlined"
+        disabled={
+          dayRating === 0 ||
+          hasNapped === undefined ||
+          (hasNapped === "Ja" && !allNapsAreValid)
+        }
+        onClick={() => console.log(dayRating, hasNapped)}
+      >
+        <Text
+          style={{
+            color: colors.primary,
+            textAlign: "center",
+          }}
+        >
+          Lagre dagbok
+        </Text>
+      </Button>
     </Card>
   );
 }

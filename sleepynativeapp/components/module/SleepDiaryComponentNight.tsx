@@ -9,7 +9,6 @@ import { Select } from "../material/Select";
 import { TextField } from "../material/TextField";
 import { DateField } from "../material/DateField";
 import { testDiary } from "../../testing/testdata";
-import { sendSleepDiary } from "../../api/diaryApi";
 import { getAuthenticatedSession } from "../../auth/Auth";
 
 export default function SleepDiaryComponentNight() {
@@ -31,7 +30,7 @@ export default function SleepDiaryComponentNight() {
 
   function saveDiary(): void {
     const testSleepDiary = testDiary;
-    sendSleepDiary(testSleepDiary);
+    //sendSleepDiary(testSleepDiary);
     const promise = getAuthenticatedSession();
     promise.then((val) => console.log(val));
   }
@@ -43,17 +42,6 @@ export default function SleepDiaryComponentNight() {
         alignSelf: "center",
       }}
     >
-      <Text
-        style={{
-          fontSize: 20,
-          alignItems: "center",
-          color: colors.primary,
-          marginTop: 30,
-        }}
-      >
-        Fyll inn resten om morgenen:
-      </Text>
-
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 30 }}
       >
