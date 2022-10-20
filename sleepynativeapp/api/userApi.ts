@@ -6,7 +6,7 @@ export async function createUser(user: User, identiyId: string) {
   await callApi<User>(`users/${identiyId}/`, {
     method: "PATCH",
     body: JSON.stringify(user),
-  }).then(r => console.log(r));
+  });
   
 }
 
