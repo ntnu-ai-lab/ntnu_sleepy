@@ -6,42 +6,43 @@ const timeRegex: RegExp = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 interface DateFieldState {
   string: string;
   date?: Date;
-  correct: boolean;
+  valid: boolean;
 }
 
 export function DateField({
-  initialState = { string: "", correct: true },
+  initialState = { string: "", valid: true },
   onChange,
+  baseDate = new Date(),
 }: {
   initialState?: DateFieldState;
-  onChange: (date: Date) => void;
+  onChange: (date: Date | false) => void;
+  baseDate: Date;
 }) {
   const [state, setState] = useState<DateFieldState>(initialState);
-
-  const [date] = useState(new Date()); //TODO Change to props
+  const [hasLostFocus, setHastLostFocus] = useState(false);
 
   return (
     <TextField
+      onEndEditing={() => setHastLostFocus(true)}
       style={{ minWidth: 150, maxWidth: "30%", alignItems: "center" }}
-      error={!state.correct}
+      error={hasLostFocus && !state.valid}
       placeholderText={"HH:MM"}
       onChange={(e) => {
         setState((time) => {
           time.string = e;
-          if (e.length < 4 || (e.length < 5 && e.includes(":"))) {
-            time.correct = true;
-          } else {
-            time.correct = timeRegex.test(e);
-          }
-          if (timeRegex.test(e)) {
+          time.valid = timeRegex.test(e);
+          console.log(time.valid);
+          if (time.valid) {
             time.date = new Date(
-              date.getFullYear(),
-              date.getMonth(),
-              date.getDate(),
+              baseDate.getFullYear(),
+              baseDate.getMonth(),
+              baseDate.getDate(),
               parseInt(e.slice(0, 2)),
               parseInt(e.slice(3))
             );
             onChange(time.date);
+          } else {
+            onChange(false);
           }
           return { ...time };
         });
