@@ -71,8 +71,9 @@ export interface FormSection extends BaseSection {
 export type Nap = [Date, Date];
 
 export interface DiaryEntry {
+  id: string;
   date: Date;
-  dayrating: number;
+  day_rating: number;
   naps: Nap[];
   sleep_aides: boolean;
   sleep_aides_detail: string;
@@ -86,6 +87,7 @@ export interface DiaryEntry {
   risetime: Date;
 }
 export interface SleepDiary {
+  id: string;
   user: User;
   started_date: Date;
   diary_entries: DiaryEntry[];
