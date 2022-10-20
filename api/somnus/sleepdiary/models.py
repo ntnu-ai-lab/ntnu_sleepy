@@ -35,3 +35,4 @@ class DiaryEntry(models.Model):
 
     class Meta:
         unique_together = ('date', 'diary')
+        ordering = ['-date']
