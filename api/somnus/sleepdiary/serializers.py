@@ -16,11 +16,9 @@ class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
         return super().create(validated_data)
 
 class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
-    owner = serializers.UUIDField(required=False, allow_null=True)
     class Meta:
         model = DiaryEntry
         fields = '__all__'
-        optional_fields = ['diary']
 
     def create(self, validated_data: Any) -> DiaryEntry:
         validated_data['diary'] = SleepDiary.objects.get(id=self.context['view'].kwargs['diary_pk'])
