@@ -15,7 +15,7 @@ export function ProgressBar (props: { percentage: number })  {
             alignSelf: "center",
         },
         innerView: {
-            width: `${percentage}%`,
+            width: percentage === 0 ? `${8}%` :`${percentage}%`,
             height: "100%",
             backgroundColor: colors.secondary_dark,
             borderRadius: 15,
