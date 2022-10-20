@@ -24,9 +24,10 @@ export default function App() {
           <RecoilRoot>
             <StorageController>
               <MatomoProvider instance={instance}>
-                <MainAppContainer />
+                <MainAppContainer>
+                  <Navigation />
+                </MainAppContainer>
               </MatomoProvider>
-              <Navigation />
             </StorageController>
           </RecoilRoot>
         </PaperProvider>

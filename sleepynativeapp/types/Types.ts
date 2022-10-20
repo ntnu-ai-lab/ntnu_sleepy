@@ -7,6 +7,7 @@ export type relationshipStatus =
   | "undefined";
 
 export interface User {
+  username: string; 
   email: string;
   name: string;
   password?: string;
@@ -21,6 +22,7 @@ export interface DjangoUser {
 
 //temporary user before connecting to database
 export const UserEx: User = {
+  username: "test@test.com",
   email: "test@test.com",
   name: "testname",
   password: "*******",
