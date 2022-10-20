@@ -2,7 +2,7 @@ import { DiaryEntry, SleepDiary } from "../types/modules";
 import { callApi } from "./callApi";
 
 export const createDiary = async () =>
-  callApi("/sleepdiary/diary/", { method: "POST" });
+  (await callApi<SleepDiary>("/sleepdiary/diary/", { method: "POST" })).data;
 
 export async function getDiary(): Promise<SleepDiary | undefined> {
   return (await callApi<SleepDiary[]>("/sleepdiary/diary/")).data?.[0];
