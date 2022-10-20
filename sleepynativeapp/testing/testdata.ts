@@ -191,14 +191,14 @@ const testVideoSection: VideoSection = {
   page: "test-page",
 };
 
-const user: User = {
+/* const user: User = {
   email: "user@example.com",
   name: "User Name",
   dateOfBirth: "21072000",
   gender: "male",
   occupation: "Lawyer",
   relationshipStatus: "married",
-};
+}; */
 
 export const testPage: Page = {
   id: "test-page",
@@ -219,7 +219,7 @@ export const testData: Module = {
 const testDiaryEntry1: DiaryEntry = {
   notes: "Jeg sov veldig godt i natt",
   sleep_quality: 5,
-  dayrating: 5,
+  day_rating: 5,
   naps: [
     [new Date("2022-10-09"), new Date("2022-10-09")],
     [new Date("2022-10-09"), new Date("2022-10-09")],
@@ -233,11 +233,12 @@ const testDiaryEntry1: DiaryEntry = {
   time_to_sleep: 10,
   night_wakes: [10, 15],
   waketime: new Date("2022-10-09"),
+  id: "",
 };
 const testDiaryEntry2: DiaryEntry = {
   notes: "Jeg sov veldig godt i natt",
   sleep_quality: 5,
-  dayrating: 5,
+  day_rating: 5,
   naps: [
     [new Date("2022-10-10"), new Date("2022-10-10")],
     [new Date("2022-10-10"), new Date("2022-10-10")],
@@ -251,11 +252,12 @@ const testDiaryEntry2: DiaryEntry = {
   time_to_sleep: 10,
   night_wakes: [10, 15],
   waketime: new Date("2022-10-10"),
+  id: "",
 };
 const testDiaryEntry3: DiaryEntry = {
   notes: "Jeg sov veldig godt i natt",
   sleep_quality: 5,
-  dayrating: 5,
+  day_rating: 5,
   naps: [
     [new Date("2022-10-11"), new Date("2022-10-11")],
     [new Date("2022-10-11"), new Date("2022-10-11")],
@@ -269,10 +271,12 @@ const testDiaryEntry3: DiaryEntry = {
   time_to_sleep: 10,
   night_wakes: [10, 15],
   waketime: new Date("2022-10-11"),
+  id: "",
 };
 
 export const testDiary: SleepDiary = {
   diary_entries: [testDiaryEntry1, testDiaryEntry2, testDiaryEntry3],
   user: UserEx,
   started_date: new Date("2022-10-09"),
+  id: "",
 };

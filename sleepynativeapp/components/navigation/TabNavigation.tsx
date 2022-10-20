@@ -31,6 +31,8 @@ export function TabNavigation() {
               iconName = focused ? "barbell" : "barbell-outline";
             } else if (route.name === "Søvndagbok") {
               iconName = focused ? "bed" : "bed-outline";
+            } else if (route.name === "Assignment") {
+              iconName = focused ? "bar-chart" : "bar-chart-outline";
             }
 
             // You can return any component that you like here!

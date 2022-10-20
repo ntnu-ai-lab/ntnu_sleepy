@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { colors } from "../../styles/styles";
-import { Nap, SleepDiary } from "../../types/modules";
+import { DiaryEntry, Nap, SleepDiary } from "../../types/modules";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { Divider, Text, Title } from "react-native-paper";
@@ -10,9 +10,10 @@ import { TextField } from "../material/TextField";
 import { DateField } from "../material/DateField";
 import { testDiary } from "../../testing/testdata";
 import { getAuthenticatedSession } from "../../auth/Auth";
+import { getDiary, listDiaryEntries } from "../../api/sleepDiaryApi";
 
 export default function SleepDiaryComponentNight() {
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date()); // TODO hent date fra frontend
   const [sleepAides, setSleepAides] = useState<boolean>(false);
   const [sleepAidesDetails, setSleepAidesDetails] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
@@ -28,12 +29,49 @@ export default function SleepDiaryComponentNight() {
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
   const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
 
-  function saveDiary(): void {
-    const testSleepDiary = testDiary;
-    //sendSleepDiary(testSleepDiary);
-    const promise = getAuthenticatedSession();
-    promise.then((val) => console.log(val));
+  async function checkSleepDiary(): Promise<DiaryEntry | undefined> {
+    {
+      const diary = await getDiary();
+      console.log(diary);
+      if (diary !== undefined) {
+        const diaryEntries = await listDiaryEntries(diary.id);
+        console.log(diaryEntries);
+        console.log(date.toLocaleDateString());
+        const sleepDiary: SleepDiary = {
+          id: diary.id,
+          user: diary.user,
+          started_date: diary.started_date,
+          diary_entries: diaryEntries ?? [],
+        };
+        const diaryEntry = sleepDiary.diary_entries.find(
+          (entry) =>
+            entry?.date.toLocaleDateString() === date.toLocaleDateString()
+        );
+        if (diaryEntry) {
+          console.log(diaryEntry);
+          return diaryEntry;
+        } else {
+          console.log("Fetch failed");
+        }
+      }
+    }
   }
+
+  useEffect(() => {
+    checkSleepDiary();
+  }, []);
+
+  /* async function postEntry() {
+      const diaryEntry: Omit<DiaryEntry, "day_rating" | "naps"> = {
+        date: date,
+      };
+      console.log(sleepDiaryID, diaryEntry);
+      const error = await createDiaryEntry(sleepDiaryID, diaryEntry);
+      console.log(error);
+    } else {
+      console.log("DiaryEntry not valid");
+    }
+  } */
 
   return (
     <Card
@@ -204,7 +242,7 @@ export default function SleepDiaryComponentNight() {
       <Button
         style={{ width: "70%", marginBottom: 30 }}
         variant="outlined"
-        onClick={() => saveDiary()}
+        //onClick={() => saveDiary()}
       >
         <Text
           style={{

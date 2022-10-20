@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { colors } from "../../styles/styles";
 import { Button } from "../material/Button";
@@ -6,9 +6,16 @@ import { Card } from "../material/Card";
 import { Text } from "react-native-paper";
 import { Select } from "../material/Select";
 import { DateField } from "../material/DateField";
+import { DiaryEntry, SleepDiary } from "../../types/modules";
+import {
+  createDiaryEntry,
+  getDiary,
+  listDiaryEntries,
+} from "../../api/sleepDiaryApi";
+import { parseSync } from "@babel/core";
 
 export default function SleepDiaryComponentDay() {
-  const [date] = useState<Date>(new Date());
+  const [date] = useState<Date>(new Date()); //TODO hent date fra frontend
   const [dayRating, setDayRating] = useState<number>(0);
 
   const [hasNapped, setHasNapped] = useState<string>("");
@@ -22,6 +29,40 @@ export default function SleepDiaryComponentDay() {
   ];
 
   const allNapsAreValid = naps.every((nap) => nap.every((date) => date));
+
+  async function checkSleepDiary(): Promise<void> {
+    {
+      const diary = await getDiary();
+      //console.log(diary);
+      if (diary !== undefined) {
+        setSleepDiaryID(diary.id);
+      }
+    }
+  }
+
+  useEffect(() => {
+    checkSleepDiary();
+  }, []);
+
+  const [sleepDiaryID, setSleepDiaryID] = useState<string>();
+
+  async function postEntry() {
+    if (allNapsAreValid && sleepDiaryID) {
+      const diaryEntry: Pick<DiaryEntry, "day_rating" | "naps"> = {
+        date: date,
+        day_rating: dayRating,
+        //@ts-ignore
+        naps: naps,
+        diary: sleepDiaryID,
+      };
+
+      console.log(sleepDiaryID, diaryEntry);
+      const error = await createDiaryEntry(sleepDiaryID, diaryEntry);
+      console.log(error);
+    } else {
+      console.log("DiaryEntry not valid");
+    }
+  }
 
   return (
     <Card
@@ -152,7 +193,7 @@ export default function SleepDiaryComponentDay() {
           hasNapped === undefined ||
           (hasNapped === "Ja" && !allNapsAreValid)
         }
-        onClick={() => console.log(dayRating, hasNapped)}
+        onClick={() => postEntry()}
       >
         <Text
           style={{
