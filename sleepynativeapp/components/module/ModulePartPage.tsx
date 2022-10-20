@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
-import { Part } from "../../types/modules";
 import { PageTemplate } from "../material/PageTemplate";
 import { ProgressBar } from "../material/ProgressBar";
 import { ModulePagePage } from "./ModulePagePage";
-import { IconButton } from "../material/IconButton";
 import { useRoute } from "@react-navigation/native";
 
 export function ModulePartPage() {
@@ -15,7 +13,6 @@ export function ModulePartPage() {
   
 
   function navigatePage(arg1: number) {
-    console.log(currentPage, numberOfPages)
     if (currentPage === 0 && arg1 === -1) return
     if (currentPage === (numberOfPages - 1) && arg1 === 1) return 
     setCurrentPage(currentPage + arg1)
