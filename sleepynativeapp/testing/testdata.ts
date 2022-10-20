@@ -2,13 +2,11 @@ import { User } from "../types/Types";
 import {
   Module,
   Page,
-  Section,
-  Answer,
-  AnswerList,
   TextSection,
   FormSection,
   ImageSection,
   VideoSection,
+  Part,
 } from "../types/modules";
 
 const testTextSection: TextSection = {
@@ -188,6 +186,7 @@ const testVideoSection: VideoSection = {
 
 const user: User = {
   email: "user@example.com",
+  username: "user@example.com",
   name: "User Name",
   dateOfBirth: "21072000",
   gender: "male",
@@ -197,7 +196,7 @@ const user: User = {
 
 export const testPage: Page = {
   id: "test-page",
-  module: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
+  part: "test-part",
   sections: [
     testTextSection,
     testImageSection,
@@ -205,8 +204,24 @@ export const testPage: Page = {
     testFormSection,
   ],
 };
+export const testPage2: Page = {
+  id: "test-page2",
+  part: "test-part",
+  sections: [
+    testFormSection,
+    testTextSection,
+    testImageSection,
+    testVideoSection
+  ]
+}
+
+export const testPart: Part = {
+  id: "test-part",
+  module: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
+  pages: [testPage, testPage2, testPage]
+}
 
 export const testData: Module = {
   id: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
-  pages: [testPage],
+  parts: [testPart, testPart, testPart],
 };

@@ -30,12 +30,18 @@ export interface FormSelectOption {
 
 export interface Module {
     id: string;
-    pages: Page[];
+    parts: Part[];
+}
+
+export interface Part {
+    id: string;
+    module: string;
+    pages: Page[]
 }
 
 export interface Page {
     id: string;
-    module: string;
+    part: string;
     sections: Section[];
 }
 
