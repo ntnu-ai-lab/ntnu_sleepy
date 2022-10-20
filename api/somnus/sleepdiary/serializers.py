@@ -16,13 +16,15 @@ class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
         return super().create(validated_data)
 
 class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
+    diary = serializers.CharField(required=False)
     class Meta:
         model = DiaryEntry
         fields = '__all__'
 
     def create(self, validated_data: Any) -> DiaryEntry:
-        print(self.context['view'].kwargs)
-        diary = SleepDiary.objects.get(id=self.context['view'].kwargs['diary_pk'])
-        print(diary)
-        validated_data['diary'] = diary
+        validated_data['diary'] = SleepDiary.objects.get(id=self.context['view'].kwargs['diary_pk'])
         return super().create(validated_data)
+    
+    def update(self, instance: DiaryEntry, validated_data: Any) -> DiaryEntry:
+        validated_data['diary'] = SleepDiary.objects.get(id=self.context['view'].kwargs['diary_pk'])
+        return super().update(instance, validated_data)
