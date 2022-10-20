@@ -6,8 +6,6 @@ import { ImageSectionComponent } from "./section/ImageSectionComponent";
 import { TextSectionComponent } from "./section/TextSectionComponent";
 import { VideoSectionComponent } from "./section/VideoSectionComponent";
 import { PageTemplate } from "../material/PageTemplate";
-import { getAllModules, useModule } from "../../api/modulesApi";
-import { testData } from "../../testing/testdata";
 import { IconButton } from "../material/IconButton";
 import ArrowForward from "../../assets/arrowForward.svg";
 import ArrowBack from "../../assets/arrowBack.svg";
@@ -17,11 +15,12 @@ export function ModulePagePage(props: {
   navigatePage: (arg1: number) => void;
 }) {
   const { page, navigatePage } = props;
-  const scrollRef = useRef(null)
+  const scrollRef = useRef(null);
 
-  useEffect(() => { //@ts-ignore
-    scrollRef.current?.scrollTo({x: 0, y: 0, animated: false })
-  }, [page])
+  useEffect(() => {
+    //@ts-ignore
+    scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+  }, [page]);
 
   return (
     <PageTemplate>

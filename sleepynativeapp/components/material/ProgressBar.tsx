@@ -8,7 +8,7 @@ export function ProgressBar (props: { percentage: number })  {
 
     const styles = StyleSheet.create({
         outerView: {
-            width: "90%",
+            width: "100%",
             height: 30,
             backgroundColor: colors.secondary,
             borderRadius: 15,

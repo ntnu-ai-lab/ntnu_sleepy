@@ -5,11 +5,14 @@ import { PageTemplate } from "../material/PageTemplate";
 import { ProgressBar } from "../material/ProgressBar";
 import { ModulePagePage } from "./ModulePagePage";
 import { IconButton } from "../material/IconButton";
+import { useRoute } from "@react-navigation/native";
 
-export function ModulePartPage(props: { part: Part }) {
-  const { part } = props;
+export function ModulePartPage() {
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const route = useRoute(); // @ts-ignore
+  const part = route.params.part
   const numberOfPages = part.pages.length;
+  
 
   function navigatePage(arg1: number) {
     console.log(currentPage, numberOfPages)
@@ -24,7 +27,7 @@ export function ModulePartPage(props: { part: Part }) {
         <Text style={{ fontSize: 18, paddingBottom: 5 }}>
           Velkommen til denne delen!
         </Text>
-        <ProgressBar percentage={((currentPage + 1) / numberOfPages) * 100} />
+        <ProgressBar percentage={(currentPage / (numberOfPages - 1) ) * 100} />
       </View>
       <View>
         <ModulePagePage page={part.pages[currentPage]} navigatePage={navigatePage}/>
