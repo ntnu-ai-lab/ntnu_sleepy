@@ -53,7 +53,6 @@ export default function SleepDiaryComponentDay() {
         day_rating: dayRating,
         //@ts-ignore
         naps: naps,
-        diary: sleepDiaryID,
       };
 
       console.log(sleepDiaryID, diaryEntry);
