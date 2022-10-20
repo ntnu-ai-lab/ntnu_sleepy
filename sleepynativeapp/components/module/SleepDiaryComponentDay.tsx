@@ -1,24 +1,18 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { colors } from "../../styles/styles";
-import { Nap } from "../../types/modules";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
-import { Divider, Text, Title } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { Select } from "../material/Select";
-import { TextField } from "../material/TextField";
 import { DateField } from "../material/DateField";
 
 export default function SleepDiaryComponentDay() {
-  const [date, setDate] = useState<Date>(new Date());
+  const [date] = useState<Date>(new Date());
   const [dayRating, setDayRating] = useState<number>(0);
 
   const [hasNapped, setHasNapped] = useState<string>("");
-  const [numberOfNaps, setNumberOfNaps] = useState<number>(0);
-  const [naps, setNaps] = useState<[Date | false, Date | false][]>([
-    [false, false],
-  ]);
-  const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
+  const [naps, setNaps] = useState<[Date | false, Date | false][]>([]);
   const dagvurdering = [
     "Veldig dårlig",
     "Dårlig",
@@ -62,7 +56,7 @@ export default function SleepDiaryComponentDay() {
           onChange={setHasNapped}
         />
       }
-      {numberOfNaps > 0 && hasNapped === "Ja" ? (
+      {naps.length > 0 && hasNapped === "Ja" ? (
         <Text
           style={{
             color: colors.primary,
