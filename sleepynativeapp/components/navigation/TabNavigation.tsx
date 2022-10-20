@@ -7,6 +7,8 @@ import { colors } from "../../styles/styles";
 import { QuestionnairePage } from "../pages/QuestionnairePage";
 import { ModulePagePage } from "../module/ModulePagePage";
 import { testData } from "../../testing/testdata";
+import { ModulePartPage } from "../module/ModulePartPage";
+import { ModulePage } from "../module/ModulePage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -55,7 +57,7 @@ export function TabNavigation() {
         />
         <Tab.Screen
           name="Assignment"
-          children={() => <ModulePagePage page={testData.pages[0]}/>}
+          children={() => <ModulePage module={testData}/>}
           options={{ tabBarLabel: "Assignment" }}
         />
       </Tab.Navigator>
