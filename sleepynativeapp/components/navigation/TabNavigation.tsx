@@ -53,7 +53,7 @@ export function TabNavigation() {
         />
         <Tab.Screen
           name="Moduler"
-          component={() => <ModulePagePage page={testData.pages[0]} />}
+          children={() => <ModulePagePage page={testData.pages[0]} />}
           options={{ tabBarLabel: "Moduler" }}
         />
         <Tab.Screen
