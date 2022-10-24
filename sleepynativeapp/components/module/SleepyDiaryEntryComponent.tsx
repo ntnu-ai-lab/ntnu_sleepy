@@ -38,7 +38,7 @@ export default function SleepyDiaryEntryComponent(props: {
                 textAlign: "center",
               }}
             >
-              {props.sleepDiaryEntry.risetime.toLocaleDateString()}
+              {props.sleepDiaryEntry.date.toString()}
             </Title>
           </TouchableOpacity>
 
@@ -73,7 +73,7 @@ export default function SleepyDiaryEntryComponent(props: {
               </Text>
               <TextField
                 style={{ minWidth: "80%", alignItems: "center" }}
-                value={dagvurdering[props.sleepDiaryEntry.dayrating - 1]}
+                value={dagvurdering[props.sleepDiaryEntry.day_rating - 1]}
                 editable={false}
               />
             </View>

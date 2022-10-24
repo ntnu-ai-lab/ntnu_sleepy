@@ -88,11 +88,11 @@ export default function SleepDiaryComponentNight() {
       waketime &&
       risetime
     ) {
-      const finalEntry: Omit<DiaryEntry, "day_rating" | "naps"> = {
+      const finalEntry: DiaryEntry = {
         id: diaryEntry.id,
         date: diaryEntry.date,
-        //day_rating: diaryEntry.day_rating,
-        //naps: diaryEntry.naps,
+        day_rating: diaryEntry.day_rating,
+        naps: diaryEntry.naps,
         sleep_aides: sleepAides,
         sleep_aides_detail: sleepAidesDetails,
         notes: notes,
@@ -104,9 +104,17 @@ export default function SleepDiaryComponentNight() {
         waketime: waketime,
         risetime: risetime,
       };
+      console.log(
+        "Final entry: " +
+          finalEntry.id +
+          " " +
+          finalEntry.date +
+          " " +
+          finalEntry.sleep_quality
+      );
 
-      const result = await finishDiaryEntry(diaryID, diaryEntry).then((res) =>
-        console.log(res)
+      const result = await finishDiaryEntry(diaryID, finalEntry).then((res) =>
+        console.log("FINISH RESULTS: " + res)
       );
     }
   }

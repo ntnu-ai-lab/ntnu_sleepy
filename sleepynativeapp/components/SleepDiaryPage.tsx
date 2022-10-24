@@ -27,17 +27,22 @@ export function SleepDiaryPage() {
       const diary = await getDiary();
       //console.log(diary);
       if (diary === undefined) {
+        console.log("No sleepdiary found..");
         return undefined;
       } else {
+        console.log("Sleepdiary found!");
         const diaryEntries = await listDiaryEntries(diary.id);
-        const sleepDiary: SleepDiary = {
+        console.log(diaryEntries);
+        const tempDiary: SleepDiary = {
           id: diary.id,
           user: diary.user,
           started_date: diary.started_date,
           diary_entries: diaryEntries ?? [],
         };
-        setSleepDiary(sleepDiary);
+        console.log(tempDiary);
+        setSleepDiary(tempDiary);
         setHasSleepDiary(true);
+        console.log("Sleepdiary: " + tempDiary?.diary_entries[0].date);
       }
     }
   }
@@ -46,7 +51,7 @@ export function SleepDiaryPage() {
     const result = await createDiary();
     if (result) {
       const diaryEntries = await listDiaryEntries(result.id);
-      //console.log(result);
+      console.log(result);
       //console.log(diaryEntries);
       const sleepDiary: SleepDiary = {
         id: result.id,
@@ -54,10 +59,10 @@ export function SleepDiaryPage() {
         started_date: result.started_date,
         diary_entries: diaryEntries ?? [],
       };
-      setStoredSleepDiary(sleepDiary);
+      //setStoredSleepDiary(sleepDiary);
       //console.log(storedSleepDiary);
-      setSleepDiary(sleepDiary);
-      setHasSleepDiary(true);
+      //setSleepDiary(sleepDiary);
+      //setHasSleepDiary(true);
       return sleepDiary;
     }
   }

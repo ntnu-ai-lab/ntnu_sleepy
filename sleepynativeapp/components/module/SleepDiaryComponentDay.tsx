@@ -49,7 +49,8 @@ export default function SleepDiaryComponentDay() {
   async function postEntry() {
     if (allNapsAreValid && sleepDiaryID) {
       const diaryEntry: Pick<DiaryEntry, "day_rating" | "naps"> = {
-        date: date,
+        date:
+          "" + date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay(),
         day_rating: dayRating,
         //@ts-ignore
         naps: naps,
