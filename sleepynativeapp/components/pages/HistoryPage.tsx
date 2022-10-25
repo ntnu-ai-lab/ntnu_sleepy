@@ -2,15 +2,16 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
-import { getAllModules } from "../../../api/modulesApi";
-import { Module } from "../../../types/modules";
-import { Button } from "../../material/Button";
-import { Card } from "../../material/Card";
-import { PageTemplate } from "../../material/PageTemplate";
-import { ModulePartPage } from "../../module/ModulePartPage";
+import { getAllModules } from "../../api/modulesApi";
+import { Module } from "../../types/modules";
+import { Button } from "../material/Button";
+import { Card } from "../material/Card";
+import { PageTemplate } from "../material/PageTemplate";
+import { ModulePartPage } from "../module/ModulePartPage";
 
 export function HistoryPage() {
-  //finne en måte å hente ut hvor langt man har kommer i modulene
+  //hente ut hvor langt man har kommer i modulene
+  //gjøre det samme for sleep diary: hente liste med entries og displaye alt som ligger inne til å når den trykkes på.
   const [modules, setModules] = useState<Module[]>();
   const navigation = useNavigation();
 

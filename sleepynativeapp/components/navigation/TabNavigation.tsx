@@ -9,7 +9,7 @@ import { SleepDiaryPage } from "../pages/SleepDiaryPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import { ModulePartPage } from "../module/ModulePartPage";
 import { ModulePage } from "../module/ModulePage";
-import { HistoryNavigation } from "../pages/history/HistoryPage";
+import { HistoryNavigation } from "../pages/HistoryPage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
