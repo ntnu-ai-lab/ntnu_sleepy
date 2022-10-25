@@ -52,7 +52,7 @@ export function ModulePageOverview(props: { module: Module }) {
         </View>
         <Card>
           <Text style={{color: colors.text_white, fontSize: 20, alignSelf: "center"}}>Del {currentPart}</Text>{/*@ts-ignore */}
-          <Button variant="contained" onClick={() => {navigation.navigate("home", {screen: "Assignment", params: { screen: "part", params: {part: module.parts[0]}}})}}><Text>Start Del</Text></Button>
+          <Button variant="contained" onClick={() => {navigation.navigate("home", {screen: "Home", params: { screen: "part", params: {part: module.parts[0]}}})}}><Text>Start Del</Text></Button>
         </Card>
       </PageTemplate>
     );
