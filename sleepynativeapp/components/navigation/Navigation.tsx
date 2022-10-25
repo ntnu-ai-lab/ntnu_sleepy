@@ -5,6 +5,7 @@ import { AuthContext } from "../../auth/AuthProvider";
 import { LoginPage } from "../pages/LoginPage";
 import { TabNavigation } from "./TabNavigation";
 import { SignupPage } from "../pages/SignUpPage";
+import { ConsentForm } from "../pages/ConsentForm";
 
 export function Navigation() {
   const Stack = createNativeStackNavigator();
@@ -24,11 +25,13 @@ export function Navigation() {
         {isAuthenticated ? (
           <>
             <Stack.Screen name="home" component={TabNavigation} />
+            <Stack.Screen name="consent" component={ConsentForm} />
           </>
         ) : (
           <>
             <Stack.Screen name="login" component={LoginPage} />
             <Stack.Screen name="signup" component={SignupPage} />
+            <Stack.Screen name="consent" component={ConsentForm} />
           </>
         )}
       </Stack.Navigator>

@@ -5,7 +5,7 @@ import {
 } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableWithoutFeedback } from "react-native";
 import { createUser } from "../../api/userApi";
 import { AuthContext } from "../../auth/AuthProvider";
 import { handleFormSubmitError } from "../../auth/form";
@@ -13,7 +13,7 @@ import { ProjectContext } from "../../auth/ProjectProvider";
 import { newKratosSdk } from "../../auth/Sdk";
 import { User, gender, relationshipStatus } from "../../types/Types";
 import { PageTemplate } from "../material/PageTemplate";
-import { Card, Button, TextInput, Divider } from "react-native-paper";
+import { Card, Button, TextInput, Divider, Checkbox } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { colors } from "../../styles/styles";
@@ -25,6 +25,7 @@ export function SignupPage() {
   const [password2, setPassword2] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [occupation, setOccupation] = useState<string>("");
+  const [checked, setChecked] = useState<"checked" | "unchecked">("unchecked");
 
   const navigation = useNavigation();
 
@@ -271,6 +272,34 @@ export function SignupPage() {
               style={{ marginBottom: 10 }}
               label="Yrke"
             />
+            <View style={{ flexDirection: "row" }}>
+              <View style={{width: "80%"}}>
+                <Text>
+                Jeg samtykker til å delta i prosjektet og til at mine personopplysninger brukes slik det er beskrevet i {/*@ts-ignore */}
+                  <TouchableWithoutFeedback onPress={() => {navigation.navigate("consent")}}>
+                    <Text style={{color: "#3366CC"}}>samtykkeskjemaet.</Text>
+                  </TouchableWithoutFeedback>
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.primary,
+                  borderRadius: 10,
+                  width: 38,
+                  height: 38,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  status={checked}
+                  onPress={() => {
+                    if (checked === "checked") setChecked("unchecked");
+                    else setChecked("checked");
+                  }}
+                />
+              </View>
+            </View>
           </KeyboardAwareScrollView>
         </Card.Actions>
 
