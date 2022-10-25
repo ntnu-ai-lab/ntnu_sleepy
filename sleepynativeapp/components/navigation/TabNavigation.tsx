@@ -6,8 +6,10 @@ import { colors } from "../../styles/styles";
 import { QuestionnairePage } from "../pages/QuestionnairePage";
 import { ModulePagePage } from "../module/ModulePagePage";
 import { testData } from "../../testing/testdata";
-import { SleepDiaryPage } from "../SleepDiaryPage";
+import { SleepDiaryPage } from "../pages/SleepDiaryPage";
 import { ProfilePage } from "../pages/ProfilePage";
+import { ModulePartPage } from "../module/ModulePartPage";
+import { ModulePage } from "../module/ModulePage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -53,19 +55,13 @@ export function TabNavigation() {
         />
         <Tab.Screen
           name="Moduler"
-          children={() => <ModulePagePage page={testData.pages[0]} />}
+          children={() => <ModulePage module={testData} />}
           options={{ tabBarLabel: "Moduler" }}
         />
         <Tab.Screen
           name="Innstillinger"
           component={SettingsPage}
           options={{ tabBarLabel: "Innstillinger" }}
-        />
-
-        <Tab.Screen
-          name="Profil"
-          component={ProfilePage}
-          options={{ tabBarLabel: "Profil" }}
         />
       </Tab.Navigator>
     </>

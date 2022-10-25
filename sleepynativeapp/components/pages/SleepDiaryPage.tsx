@@ -2,21 +2,25 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import { Divider, Text, Title } from "react-native-paper";
-import { colors } from "../styles/styles";
-import { Card } from "./material/Card";
-import { TextField } from "./material/TextField";
-import { PageTemplate } from "./material/PageTemplate";
+import { colors } from "../../styles/styles";
+import { Card } from "../material/Card";
+import { TextField } from "../material/TextField";
+import { PageTemplate } from "../material/PageTemplate";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
-import { Select } from "./material/Select";
+import { Select } from "../material/Select";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { DiaryEntry, SleepDiary } from "../types/modules";
-import { testDiary } from "../testing/testdata";
-import { Button } from "./material/Button";
-import SleepyDiaryEntryComponent from "./module/SleepyDiaryEntryComponent";
-import SleepDiaryComponent from "./module/SleepDiaryComponent";
-import { createDiary, getDiary, listDiaryEntries } from "../api/sleepDiaryApi";
+import { DiaryEntry, SleepDiary } from "../../types/modules";
+import { testDiary } from "../../testing/testdata";
+import { Button } from "../material/Button";
+import SleepyDiaryEntryComponent from "../module/SleepyDiaryEntryComponent";
+import SleepDiaryComponent from "../module/SleepDiaryComponent";
+import {
+  createDiary,
+  getDiary,
+  listDiaryEntries,
+} from "../../api/sleepDiaryApi";
 import { useRecoilState } from "recoil";
-import { cachedSleepDiary } from "../state/atoms";
+import { cachedSleepDiary } from "../../state/atoms";
 
 export function SleepDiaryPage() {
   const [createNewDiary, setCreateNewDiary] = useState<boolean>(false);
