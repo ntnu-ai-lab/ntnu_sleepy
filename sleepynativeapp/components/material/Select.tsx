@@ -5,20 +5,12 @@ import {
   LayoutRectangle,
   ScrollView,
   TouchableOpacity,
-  Touchable,
+  Text
 } from "react-native";
-//import { IconButton } from "./IconButton";
-import { SvgXml } from "react-native-svg";
 import { colors } from "../../styles/styles";
-import {
-  Card,
-  Title,
-  Paragraph,
-  Button,
-  TextInput,
-  Text,
-  IconButton,
-} from "react-native-paper";
+import AngleDown from "../../assets/angleDown.svg"
+import AngleUp from "../../assets/angleUp.svg"
+
 
 export function Select(props: {
   placeholderText?: string;
@@ -47,11 +39,6 @@ export function Select(props: {
     setTargeted(!targeted);
   }
 
-  const angleXml = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.5303 9.53033L12.5303 15.5303C12.2374 15.8232 11.7626 15.8232 11.4697 15.5303L5.46968 9.53033L6.53033 8.46967L12 13.9393L17.4697 8.46967L18.5303 9.53033Z" fill="black"/>
-  </svg>
-  `;
-
   const styles = StyleSheet.create({
     wrapperDiv: {
       height: 56,
@@ -61,8 +48,6 @@ export function Select(props: {
       justifyContent: "space-between",
       paddingHorizontal: 15,
       marginVertical: 5,
-      //borderColor: "#FFF",
-      //borderWidth: 1,
       backgroundColor: colors.primary,
       display: "flex",
       flexDirection: "row",
@@ -76,9 +61,6 @@ export function Select(props: {
     },
     dropdown: {
       display: targeted ? "flex" : "none",
-      //position: "absolute",
-      //top: displayLayout.y + displayLayout.height,
-      //left: displayLayout.x,
       width: displayLayout.width,
       backgroundColor: colors.primary,
       zIndex: 15000,
@@ -111,7 +93,7 @@ export function Select(props: {
           <Text style={styles.textStyle}>
             {selected ? optionDisplay(selected) : placeholderText}
           </Text>
-          <SvgXml xml={angleXml} />
+          {targeted ? <AngleUp /> : <AngleDown />}
         </View>
       </TouchableOpacity>
       {options.length < 5 ? (

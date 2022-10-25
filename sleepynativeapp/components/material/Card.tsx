@@ -14,6 +14,7 @@ export function Card(props: {
       borderRadius: 20,
       margin: 10,
       padding: 12,
+      overflow: "hidden",
     },
   });
 

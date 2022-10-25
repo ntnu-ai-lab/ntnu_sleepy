@@ -9,19 +9,17 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, Text } from "react-native";
 import { SessionContext } from "../../auth/Auth";
 import { AuthContext } from "../../auth/AuthProvider";
 import { handleFormSubmitError } from "../../auth/form";
 import { ProjectContext } from "../../auth/ProjectProvider";
 import { newKratosSdk } from "../../auth/Sdk";
+import { colors } from "../../styles/styles";
+import { Button } from "../material/Button";
+import { Card } from "../material/Card";
 import { PageTemplate } from "../material/PageTemplate";
-import {
-  Card,
-  Button,
-  TextInput,
-  Text,
-} from "react-native-paper";
+import { TextField } from "../material/TextField";
 
 export function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -91,20 +89,21 @@ export function LoginPage() {
         }}
       >
         <Card style={{ padding: 20, borderRadius: 10 }}>
-          <TextInput
+          <TextField
             value={email}
-            onChangeText={setEmail}
+            onChange={setEmail}
             style={{ marginBottom: 10 }}
-            label={"Epost"}
+            placeholderText={"Epost"}
           />
-          <TextInput
+          <TextField
             value={password}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-            label={"Passord"}
+            onChange={setPassword}
+            password={true}
+            placeholderText={"Passord"}
           />
           <Button
-            onPress={() => {
+          variant="contained"
+            onClick={() => {
               const userInput: SubmitSelfServiceLoginFlowWithPasswordMethodBody =
                 {
                   identifier: email,
@@ -114,19 +113,20 @@ export function LoginPage() {
               onSubmit(userInput);
             }}
           >
-            <Text>Logg inn</Text>
+            <Text style={{fontSize: 18}}>Logg inn</Text>
           </Button>
 
           <Button
-            onPress={() => {
+            variant="outlined"
+            onClick={() => {
               //@ts-ignore'
               navigation.navigate("signup");
             }}
           >
-            <Text>Opprett ny bruker</Text>
+            <Text style={{color: colors.text_white}}>Opprett ny bruker</Text>
           </Button>
 
-          <Button mode="text">Glemt passord?</Button>
+          <Button><Text style={{color: ""}}>Glemt passord?</Text></Button>
         </Card>
       </View>
     </PageTemplate>
