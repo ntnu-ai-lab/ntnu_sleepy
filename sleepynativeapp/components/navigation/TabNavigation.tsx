@@ -1,19 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useState } from "react";
+import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { ProfilePage } from "../pages/ProfilePage";
 import { SettingsPage } from "../pages/SettingsPage";
 import { colors } from "../../styles/styles";
 import { QuestionnairePage } from "../pages/QuestionnairePage";
 import { ModulePagePage } from "../module/ModulePagePage";
 import { testData } from "../../testing/testdata";
+import { SleepDiaryPage } from "../pages/SleepDiaryPage";
+import { ProfilePage } from "../pages/ProfilePage";
 import { ModulePartPage } from "../module/ModulePartPage";
 import { ModulePage } from "../module/ModulePage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
-
-  const [count, setCount] = useState<number>(0);
 
   return (
     <>
@@ -22,12 +21,16 @@ export function TabNavigation() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = "";
 
-            if (route.name === "Home") {
+            if (route.name === "Hjem") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Settings") {
+            } else if (route.name === "Innstillinger") {
               iconName = focused ? "cog" : "cog-outline";
-            } else if (route.name === "Profile") {
+            } else if (route.name === "Profil") {
               iconName = focused ? "person-circle" : "person-circle-outline";
+            } else if (route.name === "Moduler") {
+              iconName = focused ? "barbell" : "barbell-outline";
+            } else if (route.name === "Søvndagbok") {
+              iconName = focused ? "bed" : "bed-outline";
             } else if (route.name === "Assignment") {
               iconName = focused ? "bar-chart" : "bar-chart-outline";
             }
@@ -41,24 +44,24 @@ export function TabNavigation() {
         })}
       >
         <Tab.Screen
-          name="Profile"
-          component={ProfilePage}
-          options={{ tabBarLabel: "Profile" }}
-        />
-        <Tab.Screen
-          name="Home"
+          name="Hjem"
           component={QuestionnairePage}
-          options={{ tabBarLabel: "Home" }}
+          options={{ tabBarLabel: "Hjem" }}
         />
         <Tab.Screen
-          name="Settings"
+          name="Søvndagbok"
+          component={SleepDiaryPage}
+          options={{ tabBarLabel: "Søvndagbok" }}
+        />
+        <Tab.Screen
+          name="Moduler"
+          children={() => <ModulePage module={testData} />}
+          options={{ tabBarLabel: "Moduler" }}
+        />
+        <Tab.Screen
+          name="Innstillinger"
           component={SettingsPage}
-          options={{ tabBarLabel: "Settings" }}
-        />
-        <Tab.Screen
-          name="Assignment"
-          children={() => <ModulePage module={testData}/>}
-          options={{ tabBarLabel: "Assignment" }}
+          options={{ tabBarLabel: "Innstillinger" }}
         />
       </Tab.Navigator>
     </>

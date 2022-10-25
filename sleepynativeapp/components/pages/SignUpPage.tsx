@@ -28,6 +28,7 @@ export function SignupPage() {
   const [password2, setPassword2] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [occupation, setOccupation] = useState<string>("");
+  const [checked, setChecked] = useState<"checked" | "unchecked">("unchecked");
 
   const navigation = useNavigation();
 

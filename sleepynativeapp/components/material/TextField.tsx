@@ -1,9 +1,19 @@
 import React from "react";
-import { TextInput, View, StyleSheet } from "react-native";
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  KeyboardTypeOptions,
+  NativeSyntheticEvent,
+  TextInputEndEditingEventData,
+} from "react-native";
 import { colors } from "../../styles/styles";
 
 export function TextField(props: {
   onChange?: (arg: string) => void;
+  onEndEditing?: (
+    arg: NativeSyntheticEvent<TextInputEndEditingEventData>
+  ) => void;
   value: string;
   placeholderText?: string;
   editable?: boolean;
@@ -12,9 +22,11 @@ export function TextField(props: {
   password?: boolean;
   error?: boolean;
   multiline?: boolean;
+  keyboardType?: KeyboardTypeOptions;
 }) {
   const {
     onChange,
+    onEndEditing,
     value,
     placeholderText,
     style,
@@ -23,6 +35,7 @@ export function TextField(props: {
     password,
     error,
     multiline,
+    keyboardType,
   } = props;
 
   const styles = StyleSheet.create({
@@ -37,19 +50,20 @@ export function TextField(props: {
       borderRadius: 20,
       marginVertical: 5,
       paddingHorizontal: 10,
-      paddingVertical: multiline ? 5 : 0
+      paddingVertical: multiline ? 5 : 0,
     },
     text: {
       fontWeight: "400",
       fontSize: 16,
       color: textColor === "white" ? colors.text_white : colors.text_primary,
-      height: "100%"
+      height: "100%",
     },
   });
 
   return (
     <View style={[styles.wrapper, style]}>
       <TextInput
+        onEndEditing={onEndEditing}
         style={styles.text}
         value={value}
         onChangeText={onChange}
@@ -58,6 +72,7 @@ export function TextField(props: {
         placeholderTextColor={colors.text_secondary}
         secureTextEntry={password}
         multiline={multiline}
+        keyboardType={keyboardType}
         // numberOfLines={multiline ? 4 : 1}
       />
     </View>
