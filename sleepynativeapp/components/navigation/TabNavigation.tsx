@@ -33,6 +33,10 @@ export function TabNavigation() {
               iconName = focused ? "bed" : "bed-outline";
             } else if (route.name === "Assignment") {
               iconName = focused ? "bar-chart" : "bar-chart-outline";
+            } else if (route.name === "History") {
+              iconName = focused
+                ? "checkmark-circle"
+                : "checkmark-circle-outline";
             }
 
             // You can return any component that you like here!

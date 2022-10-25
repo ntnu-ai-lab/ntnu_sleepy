@@ -2,7 +2,6 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
-import CardContent from "react-native-paper/lib/typescript/components/Card/CardContent";
 import { getAllModules } from "../../../api/modulesApi";
 import { Module } from "../../../types/modules";
 import { Button } from "../../material/Button";
@@ -29,24 +28,22 @@ export function HistoryPage() {
       <View>
         {modules?.map((m, i) => {
           return (
-            <Card>
-              <CardContent key={m.id}>
-                <Text>Modul {i.toString()}</Text>
-                <Button
-                  onClick={() => {
-                    //@ts-ignore
-                    navigation.navigate("home", {
-                      screen: "History",
-                      params: {
-                        screen: "modulePart",
-                        params: { part: m.parts[0] },
-                      },
-                    });
-                  }}
-                >
-                  <Text>Se modul</Text>
-                </Button>
-              </CardContent>
+            <Card key={m.id}>
+              <Text>Modul {i.toString()}</Text>
+              <Button
+                onClick={() => {
+                  //@ts-ignore
+                  navigation.navigate("home", {
+                    screen: "History",
+                    params: {
+                      screen: "modulePart",
+                      params: { part: m.parts[0] },
+                    },
+                  });
+                }}
+              >
+                <Text>Se modul</Text>
+              </Button>
             </Card>
           );
         })}
