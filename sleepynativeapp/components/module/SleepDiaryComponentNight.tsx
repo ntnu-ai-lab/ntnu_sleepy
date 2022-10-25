@@ -15,6 +15,8 @@ import {
   getDiary,
   listDiaryEntries,
 } from "../../api/sleepDiaryApi";
+import { useRecoilState } from "recoil";
+import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
 
 export default function SleepDiaryComponentNight() {
   const [date, setDate] = useState<Date>(new Date()); // TODO hent date fra frontend
@@ -33,10 +35,16 @@ export default function SleepDiaryComponentNight() {
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
   const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
 
-  const [diaryEntry, setDiaryEntry] = useState<DiaryEntry>();
-  const [diaryID, setDiaryID] = useState<string>("");
+  const [sleepDiaryID, setSleepDiaryID] = useState<string>("");
 
-  async function checkSleepDiary(): Promise<void> {
+  const [storedSleepDiary, setStoredSleepDiary] =
+    useRecoilState(cachedSleepDiary);
+
+  const [diaryEntry, setStoredSleepDiaryEntry] = useRecoilState(
+    cachedSleepDiaryEntry
+  );
+
+  /* async function checkSleepDiary(): Promise<void> {
     {
       const diary = await getDiary().catch((e) => console.error(e));
       //console.log(diary);
@@ -81,13 +89,64 @@ export default function SleepDiaryComponentNight() {
       }
       //console.log(diaryEntry);
     }
+  } */
+
+  async function checkSleepDiary(): Promise<void> {
+    if (storedSleepDiary) {
+      console.log("Found sleepdiary from AsyncStorage!");
+      setSleepDiaryID(storedSleepDiary.id);
+      if (diaryEntry) {
+        console.log("Found sleepdiaryEntry from AsyncStorage!");
+        //setEntryValues();
+      }
+    } else {
+      console.log(
+        "Could not find sleepdiary in AsyncStorage, fetching from db.."
+      );
+      const diary = await getDiary();
+      //console.log(diary);
+      if (diary !== undefined) {
+        setSleepDiaryID(diary.id);
+      }
+    }
   }
 
   useEffect(() => {
     checkSleepDiary();
-  }, []);
+  }, [diaryEntry]);
+
+  function setEntryValues(): void {
+    setSleepAides(diaryEntry.sleep_aides);
+    setSleepAidesDetails(diaryEntry.sleep_aides_detail);
+    setNotes(diaryEntry.notes);
+    setSleepQuality(diaryEntry.sleep_quality);
+    setBedtime(diaryEntry.bedtime);
+    setLightsOut(diaryEntry.lights_out);
+    setTimeToSleep(diaryEntry.time_to_sleep);
+    setWaketime(diaryEntry.waketime);
+    setRisetime(diaryEntry.risetime);
+  }
+
+  useEffect(() => {
+    //setEntryValues();
+  }, [diaryEntry]);
+  /* function checkSleepDiaryEntries() {
+    if (storedSleepDiary) {
+      if(diaryEntry) {
+        return true;
+      }
+    }
+  }
+
+  useEffect(() => {
+    checkSleepDiaryEntries();
+    //console.log("DATE CHANGED");
+  }, [date]); */
 
   async function postEntry() {
+    console.log("DiaryID: " + sleepDiaryID, storedSleepDiary.id);
+    console.log("DiaryEntry: " + diaryEntry?.id);
+    console.log(bedtime, lightsOut, timeToSleep, waketime, risetime);
     if (
       diaryEntry &&
       bedtime &&
@@ -96,11 +155,20 @@ export default function SleepDiaryComponentNight() {
       waketime &&
       risetime
     ) {
-      const finalEntry: DiaryEntry = {
+      console.log("READY TO PATCH");
+      /* diaryEntry.sleep_aides = sleepAides;
+      diaryEntry.sleep_aides_detail = sleepAidesDetails;
+      diaryEntry.notes = notes;
+      diaryEntry.sleep_quality = sleepQuality ?? 0;
+      diaryEntry.bedtime = bedtime;
+      diaryEntry.lights_out = lightsOut;
+      diaryEntry.time_to_sleep = timeToSleep;
+      diaryEntry.waketime = waketime;
+      diaryEntry.risetime = risetime; */
+
+      const finalEntry: Omit<DiaryEntry, "day_rating" | "naps"> = {
         id: diaryEntry.id,
         date: diaryEntry.date,
-        day_rating: diaryEntry.day_rating,
-        naps: diaryEntry.naps,
         sleep_aides: sleepAides,
         sleep_aides_detail: sleepAidesDetails,
         notes: notes,
@@ -112,17 +180,9 @@ export default function SleepDiaryComponentNight() {
         waketime: waketime,
         risetime: risetime,
       };
-      /* console.log(
-        "Final entry: " +
-          finalEntry.id +
-          " " +
-          finalEntry.date +
-          " " +
-          finalEntry.sleep_quality
-      ); */
 
-      const result = await finishDiaryEntry(diaryID, finalEntry).then((res) =>
-        console.log("FINISH RESULTS: " + res)
+      const result = await finishDiaryEntry(sleepDiaryID, finalEntry).then(
+        (res) => console.log("FINISH RESULTS: " + res)
       );
     }
   }
@@ -153,7 +213,7 @@ export default function SleepDiaryComponentNight() {
             Noter medikament og dose, samt eventuelt alkoholinntak
           </Text>
           <TextField
-            style={{ width: "100%" }}
+            style={{ minWidth: "100%" }}
             value={sleepAidesDetails}
             onChange={setSleepAidesDetails}
           />
@@ -173,7 +233,10 @@ export default function SleepDiaryComponentNight() {
         Når gikk du til sengs?
       </Text>
 
-      <TimeField onChange={(date) => date && setBedtime(date)} />
+      <TimeField
+        onChange={(date) => date && setBedtime(date)}
+        baseDate={bedtime}
+      />
       <Text
         style={{
           alignItems: "center",
@@ -184,7 +247,10 @@ export default function SleepDiaryComponentNight() {
       >
         Når skrudde du av lyset?
       </Text>
-      <TimeField onChange={(date) => date && setLightsOut(date)} />
+      <TimeField
+        onChange={(date) => date && setLightsOut(date)}
+        baseDate={lightsOut}
+      />
 
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
@@ -192,7 +258,7 @@ export default function SleepDiaryComponentNight() {
         Hvor mange minutter tok det fra lyset var skrudd av til du sovnet?
       </Text>
       <TextField
-        style={{ minWidth: "10%" }}
+        style={{ minWidth: "30%", alignText: "center", alignItems: "center" }}
         keyboardType="numeric"
         value={timeToSleep ? timeToSleep.toString() : ""}
         onChange={(e) => setTimeToSleep(parseInt(e))}
@@ -204,7 +270,11 @@ export default function SleepDiaryComponentNight() {
         Hvor mange ganger våknet du iløpet av natten?
       </Text>
       <TextField
-        style={{ maxWidth: "20%", alignText: "center", alignItems: "center" }}
+        style={{
+          minWidth: "30%",
+          alignText: "center",
+          alignItems: "center",
+        }}
         keyboardType="numeric"
         placeholderText="          "
         value={numberOfNightWakes ? numberOfNightWakes.toString() : ""}
@@ -214,7 +284,12 @@ export default function SleepDiaryComponentNight() {
       numberOfNightWakes > 0 &&
       numberOfNightWakes <= 30 ? (
         <Text
-          style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+          style={{
+            alignItems: "center",
+            minWidth: "30%",
+            color: colors.primary,
+            marginTop: 10,
+          }}
         >
           Noter ned antall minutter for hver gang du våknet
         </Text>
@@ -262,7 +337,12 @@ export default function SleepDiaryComponentNight() {
 
       <TimeField onChange={(date) => date && setWaketime(date)} />
       <Text
-        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+        style={{
+          alignItems: "center",
+          minWidth: "30%",
+          color: colors.primary,
+          marginTop: 10,
+        }}
       >
         Når stod du opp?
       </Text>
