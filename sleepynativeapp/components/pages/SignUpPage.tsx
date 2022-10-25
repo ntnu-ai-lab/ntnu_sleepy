@@ -5,7 +5,7 @@ import {
 } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
-import { View, Text, ScrollView, Dimensions } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import { createUser } from "../../api/userApi";
 import { AuthContext } from "../../auth/AuthProvider";
 import { handleFormSubmitError } from "../../auth/form";
@@ -19,7 +19,7 @@ import { Card } from "../material/Card";
 import { TextField } from "../material/TextField";
 import { Select } from "../material/Select";
 import { IconButton } from "../material/IconButton";
-import ArrowBack from "../../assets/arrowBack.svg"
+import ArrowBack from "../../assets/arrowBack.svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export function SignupPage() {
@@ -51,12 +51,16 @@ export function SignupPage() {
   const [relationship, setRelationship] =
     useState<relationshipStatus>("undefined");
 
-  const cardHeight = Dimensions.get("window").height * 0.8 
+  const cardHeight = Dimensions.get("window").height * 0.8;
 
   function passwordMatch() {
     if (!password2) return true;
     else if (password === password2) return true;
     return false;
+  }
+
+  function dateToIsoDate(date: string): string {
+    return `${date.slice(4)}-${date.slice(2, 4)}-${date.slice(0, 2)}`;
   }
 
   const [flow, setConfig] = useState<SelfServiceRegistrationFlow | undefined>(
@@ -118,7 +122,7 @@ export function SignupPage() {
               name: name,
               email: email,
               username: email,
-              dateOfBirth: dateOfBirth,
+              dateOfBirth: dateToIsoDate(dateOfBirth),
               gender: gender,
               occupation: occupation,
               relationshipStatus: relationship,
@@ -136,9 +140,9 @@ export function SignupPage() {
 
   return (
     <PageTemplate style={{ paddingTop: 60, paddingBottom: 100 }}>
-      <View style={{position: "absolute", top: 60, left: 10, zIndex: 10000}}>
+      <View style={{ position: "absolute", top: 60, left: 10, zIndex: 10000 }}>
         <IconButton onClick={navigation.goBack}>
-          <ArrowBack/>
+          <ArrowBack />
         </IconButton>
       </View>
       <View style={{ marginVertical: 10 }}>
@@ -148,11 +152,14 @@ export function SignupPage() {
       </View>
       <Card style={{ alignSelf: "center", width: "95%", height: cardHeight }}>
         <View>
-          <KeyboardAwareScrollView viewIsInsideTabBar={true}
+          <KeyboardAwareScrollView
+            viewIsInsideTabBar={true}
             enableAutomaticScroll={true}
             enableResetScrollToCoords={false}
             extraScrollHeight={50}
-            enableOnAndroid={true} style={{height: cardHeight - 85}}>
+            enableOnAndroid={true}
+            style={{ height: cardHeight - 85 }}
+          >
             <TextField
               value={name}
               onChange={setName}
@@ -181,34 +188,49 @@ export function SignupPage() {
               style={{ marginBottom: 10 }}
             />
             <View>
-              <Text style={{fontSize: 12, color: colors.text_white, textTransform: "uppercase"}}>Sivilstatus</Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: colors.text_white,
+                  textTransform: "uppercase",
+                }}
+              >
+                Sivilstatus
+              </Text>
             </View>
             <View>
               <Select
-                options={[
-                  relationshipStatuses.married,
-                  relationshipStatuses.coliving,
-                  relationshipStatuses.relationship,
-                  relationshipStatuses.single,
-                  relationshipStatuses.undefined,
-                ]} 
-                optionDisplay={(o) => o}
-                onChange={setRelationship}
-                />
+                options={Object.entries(relationshipStatuses).map(([k, v]) => ({
+                  value: k,
+                  label: v,
+                }))}
+                optionDisplay={(o) => o.label}
+                onChange={(o: { value: relationshipStatus; label: string }) =>
+                  o && setRelationship(o.value)
+                }
+              />
             </View>
             <View>
-              <Text style={{fontSize: 12, color: colors.text_white, textTransform: "uppercase"}}>Kjønn</Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: colors.text_white,
+                  textTransform: "uppercase",
+                }}
+              >
+                Kjønn
+              </Text>
             </View>
             <View>
               <Select
-                options={[
-                  genders.male,
-                  genders.female,
-                  genders.other,
-                  genders.undefined,
-                ]}
-                optionDisplay={(o) => o}
-                onChange={setGender}
+                options={Object.entries(genders).map(([k, v]) => ({
+                  value: k,
+                  label: v,
+                }))}
+                optionDisplay={(o) => o.label}
+                onChange={(o: { value: gender; label: string }) =>
+                  o && setGender(o.value)
+                }
               />
             </View>
             <TextField
@@ -225,21 +247,21 @@ export function SignupPage() {
             />
           </KeyboardAwareScrollView>
         </View>
-        <View style={{height: 80}}>
-        <Button
-          variant="contained"
-          onClick={() => {
-            const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
-              {
-                method: "password",
-                password: password,
-                traits: { email: email },
-              };
-            onSubmit(userInput);
-          }}
-        >
-          <Text style={{ fontSize: 18 }}>Registrer</Text>
-        </Button>
+        <View style={{ height: 80 }}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
+                {
+                  method: "password",
+                  password: password,
+                  traits: { email: email },
+                };
+              onSubmit(userInput);
+            }}
+          >
+            <Text style={{ fontSize: 18 }}>Registrer</Text>
+          </Button>
         </View>
       </Card>
     </PageTemplate>

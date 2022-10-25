@@ -7,7 +7,6 @@ export async function createUser(user: User, identiyId: string) {
     method: "PATCH",
     body: JSON.stringify(user),
   });
-  
 }
 
 export async function getTest(identiyId: string) {
@@ -15,7 +14,7 @@ export async function getTest(identiyId: string) {
     method: "GET",
   });
   console.log("Trying to fetch user...");
-  if (!response.response.ok) return 0
+  if (!response.response.ok) return 0;
   if (response.data) {
     const user: User = {
       name: response.data.name,
