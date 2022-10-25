@@ -9,6 +9,7 @@ import { SleepDiaryPage } from "../pages/SleepDiaryPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import { ModulePartPage } from "../module/ModulePartPage";
 import { ModulePage } from "../module/ModulePage";
+import { HistoryNavigation } from "../pages/history/HistoryPage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -58,6 +59,7 @@ export function TabNavigation() {
           component={ProfilePage}
           options={{ tabBarLabel: "Innstillinger" }}
         />
+        <Tab.Screen name="History" component={HistoryNavigation} />
       </Tab.Navigator>
     </>
   );
