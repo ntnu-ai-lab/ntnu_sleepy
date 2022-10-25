@@ -1,4 +1,4 @@
-import { User } from "../types/Types";
+import { User, UserEx } from "../types/Types";
 import {
   Module,
   Page,
@@ -6,6 +6,8 @@ import {
   FormSection,
   ImageSection,
   VideoSection,
+  SleepDiary,
+  DiaryEntry,
   Part,
 } from "../types/modules";
 
@@ -115,29 +117,32 @@ const testFormSection: FormSection = {
       helptext: "Test helptext",
       value: "Test value",
       section: "test-section",
-      options: [{
-        value: "Skift",
-        lable: "Skift"
-      }, {
-        value: "Deltid",
-        lable: "Deltid"
-      },
-      {
-        value: "8-4",
-        lable: "8-4"
-      },
-      {
-        value: "Skift",
-        lable: "Skift"
-      }, {
-        value: "Deltid",
-        lable: "Deltid"
-      },
-      {
-        value: "8-4",
-        lable: "8-4"
-      }
-    ],
+      options: [
+        {
+          value: "Skift",
+          lable: "Skift",
+        },
+        {
+          value: "Deltid",
+          lable: "Deltid",
+        },
+        {
+          value: "8-4",
+          lable: "8-4",
+        },
+        {
+          value: "Skift",
+          lable: "Skift",
+        },
+        {
+          value: "Deltid",
+          lable: "Deltid",
+        },
+        {
+          value: "8-4",
+          lable: "8-4",
+        },
+      ],
       answers: [
         {
           id: "test-answer-list",
@@ -184,7 +189,7 @@ const testVideoSection: VideoSection = {
   page: "test-page",
 };
 
-const user: User = {
+/* const user: User = {
   email: "user@example.com",
   username: "user@example.com",
   name: "User Name",
@@ -192,7 +197,7 @@ const user: User = {
   gender: "male",
   occupation: "Lawyer",
   relationshipStatus: "married",
-};
+}; */
 
 export const testPage: Page = {
   id: "test-page",
@@ -211,17 +216,82 @@ export const testPage2: Page = {
     testFormSection,
     testTextSection,
     testImageSection,
-    testVideoSection
-  ]
-}
+    testVideoSection,
+  ],
+};
 
 export const testPart: Part = {
   id: "test-part",
   module: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
-  pages: [testPage, testPage2, testPage]
-}
+  pages: [testPage, testPage2, testPage],
+};
 
 export const testData: Module = {
   id: "aloihføsiegildrulairuhgliafliaøwodijaøowd",
   parts: [testPart, testPart, testPart],
+};
+
+const testDiaryEntry1: DiaryEntry = {
+  notes: "Jeg sov veldig godt i natt",
+  sleep_quality: 5,
+  day_rating: 5,
+  naps: [
+    [new Date("2022-10-09"), new Date("2022-10-09")],
+    [new Date("2022-10-09"), new Date("2022-10-09")],
+  ],
+  bedtime: new Date("2022-10-09"),
+  risetime: new Date("2022-10-09"),
+  date: new Date("2022-10-09"),
+  sleep_aides: false,
+  sleep_aides_detail: "",
+  lights_out: new Date("2022-10-09"),
+  time_to_sleep: 10,
+  night_wakes: [10, 15],
+  waketime: new Date("2022-10-09"),
+  id: "",
+};
+const testDiaryEntry2: DiaryEntry = {
+  notes: "Jeg sov veldig godt i natt",
+  sleep_quality: 5,
+  day_rating: 5,
+  naps: [
+    [new Date("2022-10-10"), new Date("2022-10-10")],
+    [new Date("2022-10-10"), new Date("2022-10-10")],
+  ],
+  bedtime: new Date("2022-10-10"),
+  risetime: new Date("2022-10-10"),
+  date: new Date("2022-10-10"),
+  sleep_aides: false,
+  sleep_aides_detail: "",
+  lights_out: new Date("2022-10-10"),
+  time_to_sleep: 10,
+  night_wakes: [10, 15],
+  waketime: new Date("2022-10-10"),
+  id: "",
+};
+const testDiaryEntry3: DiaryEntry = {
+  notes: "Jeg sov veldig godt i natt",
+  sleep_quality: 5,
+  day_rating: 5,
+  naps: [
+    [new Date("2022-10-11"), new Date("2022-10-11")],
+    [new Date("2022-10-11"), new Date("2022-10-11")],
+  ],
+  bedtime: new Date("2022-10-11"),
+  risetime: new Date("2022-10-11"),
+  date: new Date("2022-10-11"),
+  sleep_aides: false,
+  sleep_aides_detail: "",
+  lights_out: new Date("2022-10-11"),
+  time_to_sleep: 10,
+  night_wakes: [10, 15],
+  waketime: new Date("2022-10-11"),
+  id: "",
+};
+
+export const testDiary: SleepDiary = {
+  diary_entries: [testDiaryEntry1, testDiaryEntry2, testDiaryEntry3],
+  user: UserEx,
+  started_date: new Date("2022-10-09"),
+  id: "",
 };

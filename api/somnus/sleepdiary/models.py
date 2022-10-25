@@ -8,7 +8,7 @@ from somnus.users.models import User
 class SleepDiary(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(to=User, related_name='sleep_diary', on_delete=models.CASCADE)
-    started_date = models.DateField()
+    started_date = models.DateField(default=datetime.date.today)
 
     entries: models.Manager['DiaryEntry']
 
@@ -29,5 +29,10 @@ class DiaryEntry(models.Model):
     waketime = models.DateTimeField(blank=True, null=True)
     risetime = models.DateTimeField(blank=True, null=True)
 
+    @property
+    def finished(self) -> bool:
+        return self.bedtime is not None
+
     class Meta:
         unique_together = ('date', 'diary')
+        ordering = ['-date']
