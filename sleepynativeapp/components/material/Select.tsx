@@ -10,8 +10,15 @@ import {
 //import { IconButton } from "./IconButton";
 import { SvgXml } from "react-native-svg";
 import { colors } from "../../styles/styles";
-import { Card, Title, Paragraph, Button, TextInput, Text, IconButton } from 'react-native-paper'
-
+import {
+  Card,
+  Title,
+  Paragraph,
+  Button,
+  TextInput,
+  Text,
+  IconButton,
+} from "react-native-paper";
 
 export function Select(props: {
   placeholderText?: string;
@@ -104,28 +111,46 @@ export function Select(props: {
           <Text style={styles.textStyle}>
             {selected ? optionDisplay(selected) : placeholderText}
           </Text>
-          <SvgXml xml={angleXml}/>
-
+          <SvgXml xml={angleXml} />
         </View>
       </TouchableOpacity>
-
-      <ScrollView style={styles.dropdown} scrollToOverflowEnabled={true}>
-        {options.map((option: any, n) => {
-          return (
-            <TouchableOpacity
-              key={optionDisplay(option) + n}
-              {...props}
-              style={[styles.defaultOptionStyle]}
-              onPress={() => {
-                setSelected(option);
-                setTargeted(false);
-              }}
-            >
-              <Text style={{ fontSize: 16 }}>{optionDisplay(option)}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    </View >
+      {options.length < 5 ? (
+        <View style={styles.dropdown}>
+          {options.map((option: any, n) => {
+            return (
+              <TouchableOpacity
+                key={optionDisplay(option) + n}
+                {...props}
+                style={[styles.defaultOptionStyle]}
+                onPress={() => {
+                  setSelected(option);
+                  setTargeted(false);
+                }}
+              >
+                <Text style={{ fontSize: 16 }}>{optionDisplay(option)}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      ) : (
+        <ScrollView style={styles.dropdown} scrollToOverflowEnabled={true}>
+          {options.map((option: any, n) => {
+            return (
+              <TouchableOpacity
+                key={optionDisplay(option) + n}
+                {...props}
+                style={[styles.defaultOptionStyle]}
+                onPress={() => {
+                  setSelected(option);
+                  setTargeted(false);
+                }}
+              >
+                <Text style={{ fontSize: 16 }}>{optionDisplay(option)}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      )}
+    </View>
   );
 }
