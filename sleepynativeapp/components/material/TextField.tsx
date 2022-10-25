@@ -49,7 +49,7 @@ export function TextField(props: {
       maxWidth: "100%",
       borderRadius: 20,
       marginVertical: 5,
-      paddingHorizontal: 10,
+      paddingHorizontal: 14,
       paddingVertical: multiline ? 5 : 0,
     },
     text: {
