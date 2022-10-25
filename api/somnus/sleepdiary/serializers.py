@@ -19,11 +19,3 @@ class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
     class Meta:
         model = DiaryEntry
         fields = '__all__'
-
-    def create(self, validated_data: Any) -> DiaryEntry:
-        validated_data['diary'] = SleepDiary.objects.get(id=self.context['view'].kwargs['diary_pk'])
-        return super().create(validated_data)
-    
-    def update(self, instance: DiaryEntry, validated_data: Any) -> DiaryEntry:
-        validated_data['diary'] = SleepDiary.objects.get(id=self.context['view'].kwargs['diary_pk'])
-        return super().update(instance, validated_data)
