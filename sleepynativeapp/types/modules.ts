@@ -74,6 +74,12 @@ export interface FormSection extends BaseSection {
   answer_lists?: AnswerList[];
 }
 
+export interface QuizSection extends BaseSection {
+  type: "quiz";
+  questions: Input[];
+  correct_answers?: Answer[]
+}
+
 export type Nap = [Date, Date];
 
 export interface DiaryEntry {

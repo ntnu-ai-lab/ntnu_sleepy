@@ -10,11 +10,14 @@ import {
 } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { View, Dimensions, Text } from "react-native";
+import { useRecoilState } from "recoil";
+import { getUserByIdentiyId } from "../../api/userApi";
 import { SessionContext } from "../../auth/Auth";
 import { AuthContext } from "../../auth/AuthProvider";
 import { handleFormSubmitError } from "../../auth/form";
 import { ProjectContext } from "../../auth/ProjectProvider";
 import { newKratosSdk } from "../../auth/Sdk";
+import { loggedInUser } from "../../state/atoms";
 import { colors } from "../../styles/styles";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
@@ -30,6 +33,7 @@ export function LoginPage() {
     useContext(AuthContext);
   const [flow, setFlow] = useState<SelfServiceLoginFlow | undefined>(undefined);
   const route = useRoute();
+  const [,setThisUser] = useRecoilState(loggedInUser)
 
   const initializeFlow = () =>
     newKratosSdk(project)
@@ -74,6 +78,7 @@ export function LoginPage() {
           // Looks like everything worked and we have a session!
           .then((session) => {
             setSession(session);
+            if (session?.session.identity.id) getUserByIdentiyId(session.session.identity.id).then(r => {if (r) {setThisUser(r)}})
           })
           .catch(handleFormSubmitError(setFlow, initializeFlow))
       : Promise.resolve();

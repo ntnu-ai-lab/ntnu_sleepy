@@ -21,6 +21,8 @@ import { Select } from "../material/Select";
 import { IconButton } from "../material/IconButton";
 import ArrowBack from "../../assets/arrowBack.svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useRecoilState } from "recoil";
+import { loggedInUser } from "../../state/atoms";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -30,6 +32,7 @@ export function SignupPage() {
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [occupation, setOccupation] = useState<string>("");
   const [checked, setChecked] = useState<"checked" | "unchecked">("unchecked");
+  const [,setThisUser] = useRecoilState(loggedInUser)
 
   const navigation = useNavigation();
 
@@ -127,7 +130,7 @@ export function SignupPage() {
               occupation: occupation,
               relationshipStatus: relationship,
             };
-            createUser(user, s.session.identity.id); //@ts-ignore
+            createUser(user, s.session.identity.id).then(r => {if (r) setThisUser(r)}); //@ts-ignore
             navigation.navigate("home");
           })
           .catch(
