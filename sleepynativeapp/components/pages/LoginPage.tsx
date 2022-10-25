@@ -88,7 +88,7 @@ export function LoginPage() {
           justifyContent: "center",
         }}
       >
-        <Card style={{ padding: 20, borderRadius: 10 }}>
+        <Card style={{ padding: 20 }}>
           <TextField
             value={email}
             onChange={setEmail}

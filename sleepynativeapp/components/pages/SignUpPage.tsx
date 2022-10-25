@@ -20,6 +20,7 @@ import { TextField } from "../material/TextField";
 import { Select } from "../material/Select";
 import { IconButton } from "../material/IconButton";
 import ArrowBack from "../../assets/arrowBack.svg"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -147,7 +148,11 @@ export function SignupPage() {
       </View>
       <Card style={{ alignSelf: "center", width: "95%", height: cardHeight }}>
         <View>
-          <ScrollView style={{height: cardHeight - 85}}>
+          <KeyboardAwareScrollView viewIsInsideTabBar={true}
+            enableAutomaticScroll={true}
+            enableResetScrollToCoords={false}
+            extraScrollHeight={50}
+            enableOnAndroid={true} style={{height: cardHeight - 85}}>
             <TextField
               value={name}
               onChange={setName}
@@ -218,7 +223,7 @@ export function SignupPage() {
               style={{ marginBottom: 10 }}
               placeholderText="Yrke"
             />
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </View>
         <View style={{height: 80}}>
         <Button
