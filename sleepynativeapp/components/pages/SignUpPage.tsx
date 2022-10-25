@@ -5,7 +5,7 @@ import {
 } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView, Dimensions } from "react-native";
 import { createUser } from "../../api/userApi";
 import { AuthContext } from "../../auth/AuthProvider";
 import { handleFormSubmitError } from "../../auth/form";
@@ -13,10 +13,13 @@ import { ProjectContext } from "../../auth/ProjectProvider";
 import { newKratosSdk } from "../../auth/Sdk";
 import { User, gender, relationshipStatus } from "../../types/Types";
 import { PageTemplate } from "../material/PageTemplate";
-import { Card, Button, TextInput, Divider } from "react-native-paper";
-import SelectDropdown from "react-native-select-dropdown";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { colors } from "../../styles/styles";
+import { Button } from "../material/Button";
+import { Card } from "../material/Card";
+import { TextField } from "../material/TextField";
+import { Select } from "../material/Select";
+import { IconButton } from "../material/IconButton";
+import ArrowBack from "../../assets/arrowBack.svg"
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -45,6 +48,8 @@ export function SignupPage() {
   const [gender, setGender] = useState<gender>("undefined");
   const [relationship, setRelationship] =
     useState<relationshipStatus>("undefined");
+
+  const cardHeight = Dimensions.get("window").height * 0.8 
 
   function passwordMatch() {
     if (!password2) return true;
@@ -79,19 +84,6 @@ export function SignupPage() {
       };
     }, [project])
   );
-
-  /*
-  useEffect(() => {
-    if (isAuthenticated && sessionToken && session) {
-      console.log("Opprette bruker i django");
-      const user: DjangoUser = {
-        name: name,
-      };
-      createUser(user, session.identity.id, sessionToken); //@ts-ignore
-      navigation.navigate("profile");
-    }
-  }, [isAuthenticated]);
-  */
 
   // This will update the registration flow with the user provided input:
   const onSubmit = (
@@ -142,141 +134,95 @@ export function SignupPage() {
 
   return (
     <PageTemplate style={{ paddingTop: 60, paddingBottom: 100 }}>
+      <View style={{position: "absolute", top: 60, left: 10, zIndex: 10000}}>
+        <IconButton onClick={navigation.goBack}>
+          <ArrowBack/>
+        </IconButton>
+      </View>
       <View style={{ marginVertical: 10 }}>
         <Text style={{ fontSize: 24, alignSelf: "center" }}>
           Registrer ny bruker
         </Text>
       </View>
-      <Card style={{ alignSelf: "center" }}>
-        <Card.Actions style={{ alignSelf: "center", marginBottom: 10 }}>
-          <KeyboardAwareScrollView
-            viewIsInsideTabBar={true}
-            enableAutomaticScroll={true}
-            enableResetScrollToCoords={false}
-            enableOnAndroid={true}
-            style={{ width: "90%" }}
-          >
-            <TextInput
+      <Card style={{ alignSelf: "center", width: "95%", height: cardHeight }}>
+        <View>
+          <ScrollView style={{height: cardHeight - 85}}>
+            <TextField
               value={name}
-              onChangeText={setName}
-              label="Fullt navn"
+              onChange={setName}
+              placeholderText="Fullt navn"
               style={{ marginBottom: 10 }}
             />
-            <TextInput
+            <TextField
               value={email}
-              onChangeText={setEmail}
-              label="E-postadresse"
+              onChange={setEmail}
+              placeholderText="E-postadresse"
               style={{ marginBottom: 10 }}
             />
-            <TextInput
+            <TextField
               value={password}
-              onChangeText={setPassword}
-              label="Passord"
-              secureTextEntry={true}
+              onChange={setPassword}
+              placeholderText="Passord"
+              password={true}
               style={{ marginBottom: 10 }}
             />
-            <TextInput
+            <TextField
               value={password2}
-              onChangeText={setPassword2}
-              label="Oppgi passord på nytt"
-              secureTextEntry={true}
+              onChange={setPassword2}
+              placeholderText="Oppgi passord på nytt"
+              password={true}
               error={!passwordMatch()}
               style={{ marginBottom: 10 }}
             />
-            <Card.Actions>
-              <Text>Sivilstatus</Text>
-            </Card.Actions>
-            <Card.Content>
-              <SelectDropdown
-                defaultButtonText={"Velg et alternativ"}
-                selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-                //defaultValue={}
-                buttonStyle={{ width: "100%", borderRadius: 10 }}
-                buttonTextStyle={{ textAlign: "center" }}
-                dropdownStyle={{
-                  width: "90%",
-                  borderRadius: 10,
-                  justifyContent: "center",
-                }}
-                data={[
+            <View>
+              <Text style={{fontSize: 12, color: colors.text_white, textTransform: "uppercase"}}>Sivilstatus</Text>
+            </View>
+            <View>
+              <Select
+                options={[
                   relationshipStatuses.married,
                   relationshipStatuses.coliving,
                   relationshipStatuses.relationship,
                   relationshipStatuses.single,
                   relationshipStatuses.undefined,
-                ]}
-                onSelect={(selectedItem, index) => {
-                  //console.log(selectedItem, index);
-                  setRelationship(selectedItem);
-                }}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                  // text represented after item is selected
-                  // if data array is an array of objects then return selectedItem.property to render after item is selected
-                  return selectedItem;
-                }}
-                rowTextForSelection={(item, index) => {
-                  // text represented for each item in dropdown
-                  // if data array is an array of objects then return item.property to represent item in dropdown
-                  return item;
-                }}
-              />
-            </Card.Content>
-            <Card.Actions>
-              <Text>Kjønn</Text>
-            </Card.Actions>
-            <Card.Content>
-              <SelectDropdown
-                defaultButtonText={"Velg et alternativ"}
-                selectedRowStyle={{ backgroundColor: colors.primary_dark }}
-                defaultValue={"undefined"}
-                buttonStyle={{ width: "100%", borderRadius: 10 }}
-                buttonTextStyle={{ textAlign: "center" }}
-                dropdownStyle={{
-                  width: "90%",
-                  borderRadius: 10,
-                }}
-                data={[
+                ]} 
+                optionDisplay={(o) => o}
+                onChange={setRelationship}
+                />
+            </View>
+            <View>
+              <Text style={{fontSize: 12, color: colors.text_white, textTransform: "uppercase"}}>Kjønn</Text>
+            </View>
+            <View>
+              <Select
+                options={[
                   genders.male,
                   genders.female,
                   genders.other,
                   genders.undefined,
                 ]}
-                onSelect={(selectedItem, index) => {
-                  //console.log(selectedItem, index);
-                  setGender(selectedItem);
-                }}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                  // text represented after item is selected
-                  // if data array is an array of objects then return selectedItem.property to render after item is selected
-                  return selectedItem;
-                }}
-                rowTextForSelection={(item, index) => {
-                  // text represented for each item in dropdown
-                  // if data array is an array of objects then return item.property to represent item in dropdown
-                  return item;
-                }}
+                optionDisplay={(o) => o}
+                onChange={setGender}
               />
-            </Card.Content>
-            <Divider style={{ margin: 5 }} />
-
-            <TextInput
+            </View>
+            <TextField
               value={dateOfBirth}
-              onChangeText={setDateOfBirth}
+              onChange={setDateOfBirth}
               style={{ marginBottom: 10 }}
-              label="Fødselsdato på format: ddmmåååå"
+              placeholderText="Fødselsdato på format: ddmmåååå"
             />
-            <TextInput
+            <TextField
               value={occupation}
-              onChangeText={setOccupation}
+              onChange={setOccupation}
               style={{ marginBottom: 10 }}
-              label="Yrke"
+              placeholderText="Yrke"
             />
-          </KeyboardAwareScrollView>
-        </Card.Actions>
-
+          </ScrollView>
+        </View>
+        <View style={{height: 80}}>
         <Button
-          style={{ width: "50%", alignSelf: "center" }}
-          onPress={() => {
+          variant="contained"
+          onClick={() => {
             const userInput: SubmitSelfServiceRegistrationFlowWithPasswordMethodBody =
               {
                 method: "password",
@@ -286,8 +232,9 @@ export function SignupPage() {
             onSubmit(userInput);
           }}
         >
-          <Text style={{ fontSize: 20 }}>Registrer</Text>
+          <Text style={{ fontSize: 18 }}>Registrer</Text>
         </Button>
+        </View>
       </Card>
     </PageTemplate>
   );
