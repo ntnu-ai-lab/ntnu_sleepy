@@ -39,6 +39,16 @@ class DiaryEntry(models.Model):
             return datetime.timedelta(0)
         return self.waketime - (self.lights_out + datetime.timedelta(minutes=self.time_to_sleep)) - datetime.timedelta(minutes=sum(self.night_wakes if self.night_wakes else [0]))
 
+    @property
+    def bed_duration(self) -> datetime.timedelta:
+        if self.bedtime is None or self.risetime is None:
+            return datetime.timedelta(0)
+        return self.risetime - self.bedtime
+
+    @property
+    def efficiency(self) -> float:
+        return self.sleep_duration / self.bed_duration
+
     class Meta:
         unique_together = ('date', 'diary')
         ordering = ['-date']
