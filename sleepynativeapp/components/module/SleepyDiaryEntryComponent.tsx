@@ -11,13 +11,13 @@ export default function SleepyDiaryEntryComponent(props: {
   index: number;
 }) {
   const [show, setShow] = useState(false);
-  const søvnvurdering = ["Veldig dyp", "Dyp", "Middels", "Lett", "Veldig dyp"];
+  const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
   const dagvurdering = [
-    "Veldig bra",
-    "Bra",
-    "Middels",
-    "Dårlig",
     "Veldig dårlig",
+    "Dårlig",
+    "Middels",
+    "Bra",
+    "Veldig bra",
   ];
 
   return (

@@ -7,7 +7,7 @@ import { Card } from "../material/Card";
 import { Divider, Text, Title } from "react-native-paper";
 import { Select } from "../material/Select";
 import { TextField } from "../material/TextField";
-import { DateField } from "../material/DateField";
+import { TimeField } from "../material/TimeField";
 import { testDiary } from "../../testing/testdata";
 import { getAuthenticatedSession } from "../../auth/Auth";
 import {
@@ -39,7 +39,7 @@ export default function SleepDiaryComponentNight() {
   async function checkSleepDiary(): Promise<void> {
     {
       const diary = await getDiary().catch((e) => console.error(e));
-      console.log(diary);
+      //console.log(diary);
       if (diary) {
         setDiaryID(diary.id);
       }
@@ -48,6 +48,7 @@ export default function SleepDiaryComponentNight() {
         await listDiaryEntries(diary.id)
           .then((entry) => {
             if (entry) {
+              let found: boolean = false;
               const sleepDiary: SleepDiary = {
                 id: diary.id,
                 user: diary.user,
@@ -55,23 +56,30 @@ export default function SleepDiaryComponentNight() {
                 diary_entries: entry,
               };
               if (sleepDiary.diary_entries) {
-                console.log(sleepDiary.diary_entries);
+                //console.log(sleepDiary.diary_entries);
                 sleepDiary.diary_entries.map((entry) => {
-                  console.log("ENTRY DATE " + entry.date);
-                  const temp = new Date(entry.date);
-                  console.log("TEMP: " + temp.toLocaleDateString());
-                  console.log("DATE: " + date.toLocaleDateString());
-                  if (temp.toLocaleDateString() == date.toLocaleDateString()) {
-                    console.log("MATCH");
-                    setDiaryEntry(entry);
+                  if (entry) {
+                    const temp = new Date(entry.date);
+                    if (
+                      temp.getFullYear() === date.getFullYear() &&
+                      temp.getMonth() === date.getMonth() &&
+                      temp.getDate() === date.getDate()
+                    ) {
+                      found = true;
+                      console.log("Entry already exists");
+                      setDiaryEntry(entry);
+                    }
                   }
                 });
+              }
+              if (!found) {
+                console.log("Entry does not exist");
               }
             }
           })
           .catch((e) => console.error(e));
       }
-      console.log(diaryEntry);
+      //console.log(diaryEntry);
     }
   }
 
@@ -104,14 +112,14 @@ export default function SleepDiaryComponentNight() {
         waketime: waketime,
         risetime: risetime,
       };
-      console.log(
+      /* console.log(
         "Final entry: " +
           finalEntry.id +
           " " +
           finalEntry.date +
           " " +
           finalEntry.sleep_quality
-      );
+      ); */
 
       const result = await finishDiaryEntry(diaryID, finalEntry).then((res) =>
         console.log("FINISH RESULTS: " + res)
@@ -165,7 +173,7 @@ export default function SleepDiaryComponentNight() {
         Når gikk du til sengs?
       </Text>
 
-      <DateField onChange={(date) => date && setBedtime(date)} />
+      <TimeField onChange={(date) => date && setBedtime(date)} />
       <Text
         style={{
           alignItems: "center",
@@ -176,7 +184,7 @@ export default function SleepDiaryComponentNight() {
       >
         Når skrudde du av lyset?
       </Text>
-      <DateField onChange={(date) => date && setLightsOut(date)} />
+      <TimeField onChange={(date) => date && setLightsOut(date)} />
 
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
@@ -252,14 +260,14 @@ export default function SleepDiaryComponentNight() {
         oppvåkningstidspunkt.
       </Text>
 
-      <DateField onChange={(date) => date && setWaketime(date)} />
+      <TimeField onChange={(date) => date && setWaketime(date)} />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
         Når stod du opp?
       </Text>
 
-      <DateField onChange={(date) => date && setRisetime(date)} />
+      <TimeField onChange={(date) => date && setRisetime(date)} />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >

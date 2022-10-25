@@ -37,6 +37,15 @@ export function DateField({
               parseInt(e.slice(0, 4)),
               parseInt(e.slice(5, 7)) - 1,
               parseInt(e.slice(8, 10))
+              /* baseDate.getFullYear(),
+              baseDate.getMonth(),
+              baseDate.getDate(),
+              parseInt(e.slice(3)) */
+            );
+            console.log(
+              parseInt(e.slice(0, 4)),
+              parseInt(e.slice(5, 7)),
+              parseInt(e.slice(8, 10))
             );
             onChange(time.date);
           } else {
