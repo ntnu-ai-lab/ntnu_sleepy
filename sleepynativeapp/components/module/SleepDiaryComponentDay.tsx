@@ -84,35 +84,6 @@ export default function SleepDiaryComponentDay() {
         //resetEntryValues();
       }
     }
-
-    /* if (sleepDiaryID) {
-      await listDiaryEntries(sleepDiaryID)
-        .then((res) => {
-          if (res) {
-            let found: boolean = false;
-            res.map((entry) => {
-              if (entry) {
-                const temp = new Date(entry.date);
-                if (
-                  temp.getFullYear() === date.getFullYear() &&
-                  temp.getMonth() === date.getMonth() &&
-                  temp.getDate() === date.getDate()
-                ) {
-                  found = true;
-                  console.log("Entry already exists");
-                  setStoredSleepDiaryEntry(entry);
-                  setEntryValues(entry);
-                }
-              }
-            });
-            if (!found) {
-              console.log("Entry does not exist");
-              resetEntryValues();
-            }
-          }
-        })
-        .catch((e) => console.error(e));
-    } */
   }
 
   useEffect(() => {
@@ -158,8 +129,29 @@ export default function SleepDiaryComponentDay() {
       await checkSleepDiaryEntries();
 
       console.log(sleepDiaryID, diaryEntry);
-      const error = await createDiaryEntry(storedSleepDiary.id, diaryEntry);
-      console.log(error);
+      await createDiaryEntry(storedSleepDiary.id, diaryEntry).then((entry) => {
+        if (entry) {
+          const finalEntry: DiaryEntry = {
+            id: entry.id ?? "",
+            date: entry.date ?? new Date(),
+            sleep_aides: entry.sleep_aides ?? false,
+            sleep_aides_detail: entry.sleep_aides_detail ?? "",
+            notes: entry.notes ?? "",
+            sleep_quality: entry.sleep_quality ?? 0,
+            bedtime: entry.bedtime ?? new Date(),
+            lights_out: entry.lights_out ?? new Date(),
+            time_to_sleep: entry.time_to_sleep ?? 0,
+            night_wakes: entry.night_wakes ?? [0],
+            waketime: entry.waketime ?? new Date(),
+            risetime: entry.risetime ?? new Date(),
+            day_rating: entry.day_rating ?? 0,
+            naps: entry.naps ?? [],
+          };
+          console.log(entry);
+          storedSleepDiary.diary_entries.push(finalEntry);
+          setStoredSleepDiary(storedSleepDiary);
+        }
+      });
     } else {
       console.log("DiaryEntry not valid");
       console.log(allNapsAreValid, sleepDiaryID);
@@ -279,11 +271,11 @@ export default function SleepDiaryComponentDay() {
         <></>
       )}
       {hasNapped === "Ja" ? (
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", maxWidth: "100%" }}>
           <Button
             variant="outlined"
             onClick={() => setNaps((naps) => [...naps, [false, false]])}
-            style={{ padding: 10, margin: 10 }}
+            style={{ padding: 10, margin: 10, maxWidth: "50%" }}
           >
             <Text
               style={{
@@ -302,7 +294,7 @@ export default function SleepDiaryComponentDay() {
                 return [...naps];
               })
             }
-            style={{ padding: 10, margin: 10 }}
+            style={{ padding: 10, margin: 10, maxWidth: "50%" }}
           >
             <Text
               style={{
