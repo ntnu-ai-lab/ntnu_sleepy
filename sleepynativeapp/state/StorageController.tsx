@@ -140,5 +140,15 @@ export function StorageController(props: {
     }
   }, [progression]);
 
+  useEffect(() => {
+    if (sleepDiary != undefined) {
+      try {
+        storeSleepDiary(sleepDiary);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [sleepDiary]);
+
   return <>{children}</>;
 }
