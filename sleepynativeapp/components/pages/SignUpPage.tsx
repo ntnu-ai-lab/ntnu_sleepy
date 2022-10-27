@@ -129,8 +129,7 @@ export function SignupPage() {
             const user: User = {
               name: name,
               email: email,
-              username: email,
-              dateOfBirth: dateOfBirth.toISOString(),
+              dateOfBirth: `${dateOfBirth.getFullYear()}-${dateOfBirth.getMonth() + 1}-${dateOfBirth.getDate()}`,
               gender: gender,
               occupation: occupation,
               relationshipStatus: relationship,

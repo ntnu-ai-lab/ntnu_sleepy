@@ -19,7 +19,6 @@ export async function getUserByIdentiyId(identiyId: string) {
     const user: User = {
       name: response.data.name,
       email: response.data.email,
-      username: response.data.email,
       dateOfBirth: response.data.dateOfBirth,
       gender: response.data.gender,
       occupation: response.data.occupation,
