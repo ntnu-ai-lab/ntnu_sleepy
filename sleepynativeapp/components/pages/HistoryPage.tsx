@@ -1,11 +1,9 @@
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { useRecoilState } from "recoil";
-import { getAllModules } from "../../api/modulesApi";
 import { cachedModules } from "../../state/atoms";
-import { Module } from "../../types/modules";
 import { Alert } from "../material/Alert";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
