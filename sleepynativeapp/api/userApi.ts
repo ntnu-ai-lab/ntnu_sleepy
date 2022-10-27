@@ -3,18 +3,18 @@ import { callApi } from "./callApi";
 import { User } from "../types/Types";
 
 export async function createUser(user: User, identiyId: string) {
-  await callApi<User>(`users/${identiyId}/`, {
+  const response = await callApi<User>(`users/${identiyId}/`, {
     method: "PATCH",
     body: JSON.stringify(user),
   });
+  return response.data
 }
 
-export async function getTest(identiyId: string) {
+export async function getUserByIdentiyId(identiyId: string) {
   const response = await callApi<User>(`users/${identiyId}/`, {
     method: "GET",
   });
-  console.log("Trying to fetch user...");
-  if (!response.response.ok) return 0;
+  if (!response.response.ok) return undefined;
   if (response.data) {
     const user: User = {
       name: response.data.name,
@@ -26,6 +26,6 @@ export async function getTest(identiyId: string) {
       relationshipStatus: response.data.relationshipStatus,
     };
     storeLocalUser(user);
-    console.log("Fetched user: " + user.name);
+    return user
   }
 }

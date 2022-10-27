@@ -5,17 +5,17 @@ import { Module, SleepDiary } from "../types/modules";
 import { useRecoilState } from "recoil";
 import { cachedModules, cachedSleepDiary, loggedInUser } from "./atoms";
 
-export async function storeLocalUser(user: User) {
+export async function storeLocalUser(user: User | undefined) {
   const userAsString = JSON.stringify(user);
   await AsyncStorage.setItem("Local_User", userAsString);
 }
 
-export async function storeCachedModules(modules: Module[]) {
+export async function storeCachedModules(modules: Module[] | undefined) {
   const modulesAsString = JSON.stringify(modules);
   await AsyncStorage.setItem("Modules", modulesAsString);
 }
 
-export async function storeSleepDiary(sleepDiary: SleepDiary) {
+export async function storeSleepDiary(sleepDiary: SleepDiary | undefined) {
   const sleepDiaryAsString = JSON.stringify(sleepDiary);
   await AsyncStorage.setItem("SleepDiary", sleepDiaryAsString);
 }
