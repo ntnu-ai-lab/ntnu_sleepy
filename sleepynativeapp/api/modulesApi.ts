@@ -35,7 +35,12 @@ export async function getAllModules() {
   }
 }
 
-export function useModule(id?: string) {
+export function useModule(
+  id?: string
+):
+  | { module: Module; loading: false; error: undefined }
+  | { module: undefined; loading: true; error: undefined }
+  | { module: undefined; loading: false; error: string } {
   const [module, setModule] = useState<Module | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -50,9 +55,23 @@ export function useModule(id?: string) {
     handleGetModules();
   }, [id]);
 
+  if (module) {
+    return {
+      module,
+      loading: false,
+      error: undefined,
+    };
+  }
+  if (error) {
+    return {
+      module: undefined,
+      error,
+      loading: false,
+    };
+  }
   return {
-    module,
-    error,
-    loading: !module && !error,
+    loading: true,
+    error: undefined,
+    module: undefined,
   };
 }
