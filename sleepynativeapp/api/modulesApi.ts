@@ -10,7 +10,7 @@ export async function getModule(
   { module: Module; error: undefined } | { error: any; module: undefined }
 > {
   const response = await callApi<Module>(
-    `modules/${id}/?expand=pages,pages.sections`,
+    `modules/${id}/?expand=parts,parts.pages,parts.pages.sections`,
     {
       method: "GET",
     }
