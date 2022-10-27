@@ -11,6 +11,7 @@ import { PageTemplate } from "../material/PageTemplate";
 import { ModulePartPage } from "../module/ModulePartPage";
 
 export function HistoryPage() {
+  //legg til progress når det er lagret i state hvor i treningen brukeren er
   const navigation = useNavigation();
   const [thisModules] = useRecoilState(cachedModules);
   const [openAlert, setOpenAlert] = useState(false);
