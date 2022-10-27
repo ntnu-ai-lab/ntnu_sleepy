@@ -1,5 +1,5 @@
-import { useMatomo, AppStart } from "matomo-tracker-react-native";
-import React, { ReactNode, useEffect, useState } from "react";
+import { useMatomo } from "matomo-tracker-react-native";
+import React, { ReactNode, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { loggedInUser } from "../../state/atoms";
 
