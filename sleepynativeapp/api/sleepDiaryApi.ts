@@ -29,7 +29,7 @@ export async function createDiaryEntry(
 
 export async function finishDiaryEntry(
   diary: SleepDiary["id"],
-  entry: Omit<DiaryEntry, "day_rating" | "naps">
+  entry: Partial<DiaryEntry>
 ): Promise<DiaryEntry | undefined> {
   return (
     await callApi<DiaryEntry>(

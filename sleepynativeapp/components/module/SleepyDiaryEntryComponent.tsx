@@ -42,13 +42,26 @@ export default function SleepyDiaryEntryComponent(props: {
     value: number;
     text: string;
   }>({
-    value: sleepDiaryEntry.night_wakes ? sleepDiaryEntry.night_wakes.length : 0,
-    text: sleepDiaryEntry.night_wakes
-      ? sleepDiaryEntry.night_wakes.length.toString()
-      : "0",
+    value:
+      sleepDiaryEntry.night_wakes !== null
+        ? sleepDiaryEntry.night_wakes.length
+        : 0,
+    text:
+      sleepDiaryEntry.night_wakes !== null
+        ? sleepDiaryEntry.night_wakes.length.toString()
+        : "0",
   });
+  //const [nightWakes, setNightWakes] = useState<number[]>([]);
   const [storedSleepDiary, setStoredSleepDiary] =
     useRecoilState(cachedSleepDiary);
+  const [hasNapped, setHasNapped] = useState<string>(
+    sleepDiaryEntry.naps.length !== 0 ? "Ja" : "Nei"
+  );
+  const [naps, setNaps] = useState<[Date | false, Date | false][]>([
+    ...sleepDiaryEntry.naps,
+  ]);
+
+  const allNapsAreValid = naps.every((nap) => nap.every((date) => date));
 
   async function postEntry() {
     //console.log("DiaryID: " + sleepDiaryID, storedSleepDiary.id);
@@ -65,12 +78,20 @@ export default function SleepyDiaryEntryComponent(props: {
       sleepDiaryEntry.risetime
     ) {
       console.log("READY TO PATCH");
+      if (allNapsAreValid) {
+        //@ts-ignore
+        setSleepDiaryEntry((entry) => ({
+          ...entry,
+          naps: [...naps], //ts ignore fordi alle naps er valid
+        }));
+      }
 
+      /* setSleepDiaryEntry((entry) => ({
+        ...entry, date: new Date(entry.date.getFullYear(), )
+      })) */
+      const { date, ...rest } = sleepDiaryEntry;
       setLoading(true);
-      const entryResult = await finishDiaryEntry(
-        props.sleepDiaryID,
-        sleepDiaryEntry
-      )
+      const entryResult = await finishDiaryEntry(storedSleepDiary.id, rest)
         .then((entry) => {
           if (entry) {
             console.log("Result", entry);
@@ -167,6 +188,166 @@ export default function SleepyDiaryEntryComponent(props: {
                 }}
                 value={dagvurdering[sleepDiaryEntry.day_rating - 1]}
               />
+              <Text
+                style={{
+                  alignItems: "center",
+                  color: colors.primary,
+                  marginTop: 10,
+                }}
+              >
+                Har du tatt en eller flere blunder iløpet av dagen?
+              </Text>
+              <Select
+                placeholderText="Har du tatt en eller flere blunder iløpet av dagen?"
+                options={["Ja", "Nei"]}
+                optionDisplay={(options: string) => options}
+                onChange={setHasNapped}
+                value={hasNapped}
+              />
+              {naps.length > 0 && hasNapped === "Ja" ? (
+                <Text
+                  style={{
+                    color: colors.primary,
+                    minWidth: "100%",
+                    textAlign: "center",
+                  }}
+                >
+                  Noter ned tidspunkt for alle blundene
+                </Text>
+              ) : (
+                <></>
+              )}
+              {naps.length > 0 && hasNapped === "Ja" ? (
+                naps.map((_, n) => (
+                  <Card
+                    style={{ maxWidth: "70%", padding: 5, margin: 0 }}
+                    key={n}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignContent: "center",
+                        alignSelf: "center",
+                      }}
+                    >
+                      {/* <TimeField
+                        baseDate={sleepDiaryEntry.date}
+                        onChange={(nap) =>
+                          setSleepDiaryEntry((entry) => {
+                            if (nap) {
+                              entry.naps[n][0] = nap;
+                              return { ...entry };
+                            } else {
+                              return { ...entry };
+                            }
+                          })
+                        }
+                      />
+                      <TimeField
+                        baseDate={sleepDiaryEntry.date}
+                        onChange={(nap) =>
+                          setSleepDiaryEntry((entry) => {
+                            if (nap) {
+                              entry.naps[n][1] = nap;
+                              return { ...entry };
+                            } else {
+                              return { ...entry };
+                            }
+                          })
+                        }
+                      /> */}
+                      <TimeField
+                        baseDate={new Date(sleepDiaryEntry.date)}
+                        onChange={(nap) =>
+                          setNaps((naps) => {
+                            naps[n][0] = nap;
+                            return [...naps];
+                          })
+                        }
+                        //@ts-ignore
+                        //Vet at hvis type er object, så er den ikke false, og dermed et date object
+                        initialState={{
+                          string:
+                            typeof naps[n][0] !== "boolean"
+                              ? "" +
+                                //@ts-ignore
+                                new Date(naps[n][0]).getHours() +
+                                ":" +
+                                //@ts-ignore
+                                new Date(naps[n][0]).getMinutes()
+                              : "",
+                          valid: true,
+                        }}
+                      />
+                      <TimeField
+                        baseDate={new Date(sleepDiaryEntry.date)}
+                        onChange={(nap) =>
+                          setNaps((naps) => {
+                            naps[n][1] = nap;
+                            return [...naps];
+                          })
+                        }
+                        //@ts-ignore
+                        //Vet at hvis type er object, så er den ikke false, og dermed et date object
+                        initialState={{
+                          string:
+                            typeof naps[n][0] !== "boolean"
+                              ? "" +
+                                //@ts-ignore
+                                new Date(naps[n][0]).getHours() +
+                                ":" +
+                                //@ts-ignore
+                                new Date(naps[n][0]).getMinutes()
+                              : "",
+                          valid: true,
+                        }}
+                      />
+                    </View>
+                  </Card>
+                ))
+              ) : (
+                <></>
+              )}
+              {hasNapped === "Ja" ? (
+                <View style={{ flexDirection: "row", maxWidth: "100%" }}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setNaps((naps) => [...naps, [false, false]])}
+                    //onClick={() => setSleepDiaryEntry((entry) => ({...entry, naps: [...entry.naps, [false, false]]}))}
+                    style={{ padding: 10, margin: 10, maxWidth: "50%" }}
+                  >
+                    <Text
+                      style={{
+                        color: colors.primary,
+                        textAlign: "center",
+                      }}
+                    >
+                      Legg til en blund
+                    </Text>
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      setNaps((naps) => {
+                        naps.pop();
+                        return [...naps];
+                      })
+                    }
+                    style={{ padding: 10, margin: 10, maxWidth: "50%" }}
+                  >
+                    <Text
+                      style={{
+                        color: colors.primary,
+                        textAlign: "center",
+                      }}
+                    >
+                      Fjern en blund
+                    </Text>
+                  </Button>
+                </View>
+              ) : (
+                <View />
+              )}
               <Card
                 style={{
                   alignItems: "center",
@@ -194,6 +375,7 @@ export default function SleepyDiaryEntryComponent(props: {
                       sleep_aides: answer === "Ja",
                     }));
                   }}
+                  value={sleepDiaryEntry.sleep_aides ? "Ja" : "Nei"}
                 />
                 {sleepDiaryEntry.sleep_aides ? (
                   <>
@@ -234,7 +416,16 @@ export default function SleepyDiaryEntryComponent(props: {
                       bedtime: date,
                     }))
                   }
-                  baseDate={sleepDiaryEntry.date}
+                  baseDate={new Date(sleepDiaryEntry.date)}
+                  initialState={{
+                    string: sleepDiaryEntry.bedtime
+                      ? "" +
+                        new Date(sleepDiaryEntry.bedtime).getHours() +
+                        ":" +
+                        new Date(sleepDiaryEntry.bedtime).getMinutes()
+                      : "",
+                    valid: true,
+                  }}
                 />
                 <Text
                   style={{
@@ -254,7 +445,16 @@ export default function SleepyDiaryEntryComponent(props: {
                       lights_out: date,
                     }))
                   }
-                  baseDate={sleepDiaryEntry.date}
+                  initialState={{
+                    string: sleepDiaryEntry.lights_out
+                      ? "" +
+                        new Date(sleepDiaryEntry.lights_out).getHours() +
+                        ":" +
+                        new Date(sleepDiaryEntry.lights_out).getMinutes()
+                      : "",
+                    valid: true,
+                  }}
+                  baseDate={new Date(sleepDiaryEntry.date)}
                 />
                 <Text
                   style={{
@@ -332,8 +532,11 @@ export default function SleepyDiaryEntryComponent(props: {
                 {numberOfNightWakes.value &&
                 numberOfNightWakes.value > 0 &&
                 numberOfNightWakes.value <= 30 ? (
-                  [...Array(numberOfNightWakes || 0).keys()].map((n) => (
-                    <Card style={{ maxWidth: "100%", padding: 5, margin: 0 }}>
+                  [...Array(numberOfNightWakes.value || 0).keys()].map((n) => (
+                    <Card
+                      key={n}
+                      style={{ maxWidth: "100%", padding: 5, margin: 0 }}
+                    >
                       <TextField
                         style={{
                           minWidth: "30%",
@@ -343,16 +546,26 @@ export default function SleepyDiaryEntryComponent(props: {
                         placeholderText="          "
                         keyboardType="numeric"
                         value={
-                          sleepDiaryEntry.night_wakes[n]?.toString() === "NaN"
-                            ? ""
-                            : sleepDiaryEntry.night_wakes[n]?.toString()
+                          sleepDiaryEntry.night_wakes &&
+                          sleepDiaryEntry.night_wakes[n]?.toString() !== "NaN"
+                            ? sleepDiaryEntry.night_wakes[n]?.toString()
+                            : ""
                         }
                         onChange={(e) => {
                           setSleepDiaryEntry((entry) => {
                             entry.night_wakes[n] = parseInt(e);
+                            console.log(entry.night_wakes);
+
                             return { ...entry };
                           });
                         }}
+                        /* onChange={(e) => {
+                          setNightWakes((wake) => {
+                            nightWakes[n] = parseInt(e);
+                            //setRefreshScreen(!refreshScreen);
+                            return wake;
+                          });
+                        }} */
                       />
                     </Card>
                   ))
@@ -377,6 +590,15 @@ export default function SleepyDiaryEntryComponent(props: {
                       waketime: date,
                     }))
                   }
+                  initialState={{
+                    string: sleepDiaryEntry.waketime
+                      ? "" +
+                        new Date(sleepDiaryEntry.waketime).getHours() +
+                        ":" +
+                        new Date(sleepDiaryEntry.waketime).getMinutes()
+                      : "",
+                    valid: true,
+                  }}
                 />
                 <Text
                   style={{
@@ -396,6 +618,15 @@ export default function SleepyDiaryEntryComponent(props: {
                       risetime: date,
                     }))
                   }
+                  initialState={{
+                    string: sleepDiaryEntry.risetime
+                      ? "" +
+                        new Date(sleepDiaryEntry.risetime).getHours() +
+                        ":" +
+                        new Date(sleepDiaryEntry.risetime).getMinutes()
+                      : "",
+                    valid: true,
+                  }}
                 />
                 <Text
                   style={{
@@ -416,6 +647,7 @@ export default function SleepyDiaryEntryComponent(props: {
                       sleep_quality: søvnvurdering.indexOf(e) + 1,
                     }));
                   }}
+                  value={søvnvurdering[sleepDiaryEntry.sleep_quality - 1]}
                 />
                 <Text
                   style={{
@@ -441,7 +673,7 @@ export default function SleepyDiaryEntryComponent(props: {
                 <Button
                   style={{ width: "70%", marginBottom: 30 }}
                   variant="outlined"
-                  //onClick={() => postEntry()}
+                  onClick={() => postEntry()}
                 >
                   <Text
                     style={{
