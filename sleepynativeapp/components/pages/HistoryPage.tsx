@@ -17,10 +17,6 @@ export function HistoryPage() {
   const [thisModules] = useRecoilState(cachedModules);
   const [openAlert, setOpenAlert] = useState(false);
 
-  useEffect(() => {
-    console.log(thisModules);
-  }, []);
-
   return (
     <PageTemplate>
       <View>
