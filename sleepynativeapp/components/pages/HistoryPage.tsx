@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { useRecoilState } from "recoil";
 import { cachedModules } from "../../state/atoms";
@@ -16,10 +16,15 @@ export function HistoryPage() {
   const [thisModules] = useRecoilState(cachedModules);
   const [openAlert, setOpenAlert] = useState(false);
 
+  useEffect(() => {
+    console.log("cached", cachedModules);
+    console.log(thisModules);
+  }, []);
+
   return (
     <PageTemplate>
       <View>
-        {thisModules?.map((m, i) => {
+        {thisModules?.map((m) => {
           return (
             <Card key={m.id}>
               <Text>{m.title}</Text>
