@@ -11,8 +11,6 @@ export default (parent = {}) => {
     USE_LOCAL = "true",
   } = env;
 
-  console.log(USE_LOCAL);
-
   return {
     ...config,
     extra: {
