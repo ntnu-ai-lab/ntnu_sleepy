@@ -137,8 +137,7 @@ export function SignupPage() {
             };
             createUser(user, s.session.identity.id).then((r) => {
               if (r) setThisUser(r);
-            }); //@ts-ignore
-            navigation.navigate("home");
+            });
           })
           .catch(
             handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
