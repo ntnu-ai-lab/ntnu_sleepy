@@ -118,12 +118,23 @@ export default function SleepDiaryComponentNight() {
         risetime: risetime,
       };
       setLoading(true);
-      await finishDiaryEntry(sleepDiaryID, finalEntry)
+      const entryResult = await finishDiaryEntry(sleepDiaryID, finalEntry)
         .then((entry) => {
           if (entry) {
-            console.log(entry);
-            storedSleepDiary.diary_entries.push(entry);
-            setStoredSleepDiary(storedSleepDiary);
+            console.log("Result", entry);
+            const tempEntries = [...storedSleepDiary.diary_entries];
+            tempEntries.push(entry);
+            setStoredSleepDiary((diary) => ({
+              ...diary,
+              diary_entries: tempEntries,
+            }));
+            console.log("STORED: ", storedSleepDiary);
+            //const temp = storedSleepDiary;
+            //temp.diary_entries.push(entry);
+            //storedSleepDiary.diary_entries.push(entry);
+            //console.log("stored", temp);
+            return entry;
+            //setStoredSleepDiary(temp);
           }
         })
         .catch((err) => {

@@ -147,9 +147,24 @@ export default function SleepDiaryComponentDay() {
             day_rating: entry.day_rating ?? 0,
             naps: entry.naps ?? [],
           };
-          console.log(entry);
+          /* console.log(entry);
           storedSleepDiary.diary_entries.push(finalEntry);
-          setStoredSleepDiary(storedSleepDiary);
+          setStoredSleepDiary(storedSleepDiary); */
+
+          console.log("Result", entry);
+          const tempEntries = [...storedSleepDiary.diary_entries];
+          tempEntries.push(finalEntry);
+          console.log("tempEntries", tempEntries);
+
+          const newDiary = { ...storedSleepDiary, diary_entries: tempEntries };
+          console.log("newDiary", newDiary);
+
+          /* setStoredSleepDiary((diary) => ({
+            ...diary,
+            diary_entries: [...tempEntries],
+          })); */
+          setStoredSleepDiary(newDiary);
+          console.log("STORED: ", storedSleepDiary);
         }
       });
     } else {

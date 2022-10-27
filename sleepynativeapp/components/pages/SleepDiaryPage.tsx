@@ -29,6 +29,7 @@ export function SleepDiaryPage() {
     useRecoilState(cachedSleepDiary);
   const [sleepDiary, setSleepDiary] = useState<SleepDiary>();
   const [hasSleepDiary, setHasSleepDiary] = useState<boolean>(); //TODO fetch hasSleepDiary from backend
+  const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
 
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
     if (storedSleepDiary) {
@@ -79,10 +80,11 @@ export function SleepDiaryPage() {
 
   useEffect(() => {
     checkSleepDiary();
-  }, []);
+  }, [storedSleepDiary]);
 
   useEffect(() => {
-    setShowAllDiaries(!showAllDiaries);
+    setRefreshScreen(!refreshScreen);
+    console.log("Refreshed screen");
   }, [storedSleepDiary]);
 
   return (
@@ -126,7 +128,11 @@ export function SleepDiaryPage() {
         )}
         {showAllDiaries && storedSleepDiary ? (
           storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => (
-            <SleepyDiaryEntryComponent sleepDiaryEntry={e} index={i} />
+            <SleepyDiaryEntryComponent
+              sleepDiaryEntry={e}
+              sleepDiaryID={storedSleepDiary.id}
+              index={i}
+            />
           ))
         ) : (
           <></>
