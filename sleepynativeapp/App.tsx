@@ -11,6 +11,7 @@ import MatomoTracker, {
   MatomoProvider,
   useMatomo,
 } from "matomo-tracker-react-native";
+import { ApiController } from "./state/ApiController";
 
 export default function App() {
   const instance = new MatomoTracker({
@@ -22,13 +23,15 @@ export default function App() {
       <AuthProvider>
         <PaperProvider>
           <RecoilRoot>
-            <StorageController>
-              <MatomoProvider instance={instance}>
-                <MainAppContainer>
-                  <Navigation />
-                </MainAppContainer>
-              </MatomoProvider>
-            </StorageController>
+            <ApiController>
+              <StorageController>
+                <MatomoProvider instance={instance}>
+                  <MainAppContainer>
+                    <Navigation />
+                  </MainAppContainer>
+                </MatomoProvider>
+              </StorageController>
+            </ApiController>
           </RecoilRoot>
         </PaperProvider>
       </AuthProvider>

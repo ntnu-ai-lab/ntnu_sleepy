@@ -8,6 +8,7 @@ export default (parent = {}) => {
     KRATOS_URL = "https://somnus.idi.ntnu.no/auth",
     STATIC_URL = "https://somnus.idi.ntnu.no/static",
     API_URL = "https://somnus.idi.ntnu.no/api",
+    USE_LOCAL = "true",
   } = env;
 
   return {
@@ -16,6 +17,7 @@ export default (parent = {}) => {
       kratosUrl: KRATOS_URL,
       staticUrl: STATIC_URL,
       apiUrl: API_URL,
+      useLocal: USE_LOCAL,
       eas: {
         projectId: "4682f5a6-523f-4b8b-b5d2-08754e05b2c0",
       },

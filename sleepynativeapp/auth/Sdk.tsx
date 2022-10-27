@@ -13,7 +13,8 @@ const canonicalize = (url: string = "") => url.replace(/\/+$/, "");
 export const kratosUrl = (project: string = "Sleepyapp") => {
   const url =
     canonicalize(
-      Constants.manifest?.debuggerHost
+      Constants.manifest?.extra?.useLocal === "true" &&
+        Constants.manifest?.debuggerHost
         ? `http://${Constants.manifest.debuggerHost.split(":").shift()}:4433`
         : Constants.manifest?.extra?.kratosUrl
     ) || "";

@@ -16,3 +16,8 @@ export const cachedSleepDiary = atom<SleepDiary | undefined>({
   key: "cachedSleepDiary",
   default: undefined,
 });
+
+export const moduleIds = atom<Module[] | undefined>({
+  key: "cachedModuleIds",
+  default: undefined,
+})

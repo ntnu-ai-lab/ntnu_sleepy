@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { storeCachedModules } from "../state/StorageController";
+import { storeCachedModules, storeModuleIds } from "../state/StorageController";
 import { callApi } from "./callApi";
-import { Module } from "../types/modules";
+import { Module, ModuleExpanded } from "../types/modules";
 
 //gets specific module based on id
 export async function getModule(
   id: string
 ): Promise<
-  { module: Module; error: undefined } | { error: any; module: undefined }
+  | { module: ModuleExpanded; error: undefined }
+  | { error: any; module: undefined }
 > {
-  const response = await callApi<Module>(
-    `modules/${id}/?expand=pages,pages.sections`,
+  const response = await callApi<ModuleExpanded>(
+    `modules/${id}/?expand=parts,parts.pages,parts.pages.sections`,
     {
       method: "GET",
     }
@@ -29,14 +30,18 @@ export async function getAllModules() {
   });
 
   if (response.data) {
-    const modules: Module[] = response.data;
-    storeCachedModules(modules);
-    return modules;
+    const moduleIds = response.data;
+    storeModuleIds(moduleIds)
   }
 }
 
-export function useModule(id?: string) {
-  const [module, setModule] = useState<Module | undefined>(undefined);
+export function useModule(
+  id?: string
+):
+  | { module: ModuleExpanded; loading: false; error: undefined }
+  | { module: undefined; loading: true; error: undefined }
+  | { module: undefined; loading: false; error: string } {
+  const [module, setModule] = useState<ModuleExpanded | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -50,9 +55,23 @@ export function useModule(id?: string) {
     handleGetModules();
   }, [id]);
 
+  if (module) {
+    return {
+      module,
+      loading: false,
+      error: undefined,
+    };
+  }
+  if (error) {
+    return {
+      module: undefined,
+      error,
+      loading: false,
+    };
+  }
   return {
-    module,
-    error,
-    loading: !module && !error,
+    loading: true,
+    error: undefined,
+    module: undefined,
   };
 }

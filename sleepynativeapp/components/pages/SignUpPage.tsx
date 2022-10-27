@@ -5,7 +5,7 @@ import {
 } from "@ory/kratos-client";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { createUser } from "../../api/userApi";
 import { AuthContext } from "../../auth/AuthProvider";
 import { handleFormSubmitError } from "../../auth/form";
@@ -23,6 +23,7 @@ import ArrowBack from "../../assets/arrowBack.svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRecoilState } from "recoil";
 import { loggedInUser } from "../../state/atoms";
+import { Checkbox } from "react-native-paper";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -32,7 +33,7 @@ export function SignupPage() {
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [occupation, setOccupation] = useState<string>("");
   const [checked, setChecked] = useState<"checked" | "unchecked">("unchecked");
-  const [,setThisUser] = useRecoilState(loggedInUser)
+  const [, setThisUser] = useRecoilState(loggedInUser);
 
   const navigation = useNavigation();
 
@@ -130,7 +131,9 @@ export function SignupPage() {
               occupation: occupation,
               relationshipStatus: relationship,
             };
-            createUser(user, s.session.identity.id).then(r => {if (r) setThisUser(r)}); //@ts-ignore
+            createUser(user, s.session.identity.id).then((r) => {
+              if (r) setThisUser(r);
+            }); //@ts-ignore
             navigation.navigate("home");
           })
           .catch(
@@ -248,6 +251,40 @@ export function SignupPage() {
               style={{ marginBottom: 10 }}
               placeholderText="Yrke"
             />
+            <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "#00000064", borderRadius: 20, padding: 20, alignItems: "center" }}>
+              <View style={{ width: "80%" }}>
+                <Text style={{color: colors.text_white}}>
+                  Jeg samtykker til å delta i prosjektet og til at mine
+                  personopplysninger brukes slik det er beskrevet i{" "}
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      //@ts-ignore
+                      navigation.navigate("consent");
+                    }}
+                  >
+                    <Text style={{ color: "#7094DB", textDecorationLine: "underline" }}>samtykkeskjemaet.</Text>
+                  </TouchableWithoutFeedback>
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.primary,
+                  borderRadius: 10,
+                  width: 38,
+                  height: 38,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  status={checked}
+                  onPress={() => {
+                    if (checked === "checked") setChecked("unchecked");
+                    else setChecked("checked");
+                  }}
+                />
+              </View>
+            </View>
           </KeyboardAwareScrollView>
         </View>
         <View style={{ height: 80 }}>
