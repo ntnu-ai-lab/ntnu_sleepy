@@ -10,10 +10,21 @@ import {
 import { AxiosError } from "axios"
 import { showMessage } from "react-native-flash-message"
 import { UiNodeAttributes } from "@ory/kratos-client"
+import { Alert } from "react-native"
 
 export function camelize<T>(str: string) {
   return str.replace(/_([a-z])/g, (g) => g[1].toUpperCase()) as keyof T
 }
+
+const responsePopUp = (title: string, msg: string) => Alert.alert(
+  title,
+  msg,
+  [
+    {
+      text: "ok",
+    }
+  ]
+)
 
 export function isUiNodeAnchorAttributes(
   pet: UiNodeAttributes,
@@ -83,16 +94,21 @@ export function handleFormSubmitError<T>(
     if (err.response) {
       switch (err.response.status) {
         case 400:
-          if (typeof (err.response.data as unknown as any).error === "object") {
+          if (typeof (err.response.data as unknown as any) === "object") {
             const ge: GenericError = (err.response.data as GenericError)
             showMessage({
               message: `${ge.message}: ${ge.reason}`,
               type: "danger",
+            }) //@ts-ignore
+            const nodes: [] = err.response.data.ui.nodes as any
+            nodes.forEach((node) => { //@ts-ignore
+              if (node.attributes.name === "password") { //@ts-ignore
+                responsePopUp("Error", node.messages[0].text)
+              }
             })
-
             return Promise.resolve()
           }
-
+          //@ts-ignore
           console.debug("Form validation failed:", err.response.data)
           setConfig((err.response.data as T))
           return Promise.resolve()

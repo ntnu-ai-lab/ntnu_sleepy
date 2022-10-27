@@ -103,6 +103,7 @@ export function SignupPage() {
       ? newKratosSdk(project)
           .submitSelfServiceRegistrationFlow(flow.id, payload)
           .then(({ data }) => {
+            console.log(data)
             // ORY Kratos can be configured in such a way that it requires a login after
             // registration. You could handle that case by navigating to the Login screen
             // but for simplicity we'll just print an error here:
@@ -133,8 +134,7 @@ export function SignupPage() {
             };
             createUser(user, s.session.identity.id).then((r) => {
               if (r) setThisUser(r);
-            }); //@ts-ignore
-            navigation.navigate("home");
+            });
           })
           .catch(
             handleFormSubmitError<SelfServiceRegistrationFlow | undefined>(
