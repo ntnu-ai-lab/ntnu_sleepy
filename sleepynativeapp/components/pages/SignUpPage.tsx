@@ -24,6 +24,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRecoilState } from "recoil";
 import { loggedInUser } from "../../state/atoms";
 import { DateField } from "../material/DateField";
+import { Checkbox } from "react-native-paper";
 
 export function SignupPage() {
   const [email, setEmail] = useState<string>("");
