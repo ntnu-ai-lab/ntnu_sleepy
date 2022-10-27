@@ -63,7 +63,11 @@ export function TabNavigation() {
           component={ProfilePage}
           options={{ tabBarLabel: "Innstillinger" }}
         />
-        <Tab.Screen name="History" component={HistoryNavigation} />
+        <Tab.Screen
+          name="History"
+          component={HistoryNavigation}
+          options={{ tabBarLabel: "Fullførte Moduler" }}
+        />
       </Tab.Navigator>
     </>
   );
