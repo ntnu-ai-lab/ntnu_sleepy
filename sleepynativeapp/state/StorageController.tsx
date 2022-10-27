@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect } from "react";
 import { User } from "../types/Types";
 import { Module, SleepDiary } from "../types/modules";
 import { useRecoilState } from "recoil";
-import { cachedModules, cachedSleepDiary, loggedInUser } from "./atoms";
+import { cachedModules, cachedSleepDiary, loggedInUser, moduleIds } from "./atoms";
 
 export async function storeLocalUser(user: User | undefined) {
   const userAsString = JSON.stringify(user);
@@ -20,6 +20,11 @@ export async function storeSleepDiary(sleepDiary: SleepDiary | undefined) {
   await AsyncStorage.setItem("SleepDiary", sleepDiaryAsString);
 }
 
+export async function storeModuleIds(ids: Module[] | undefined) {
+  const moduleIdsAsString = JSON.stringify(ids);
+  await AsyncStorage.setItem("ModuleIds", moduleIdsAsString);
+}
+
 export function StorageController(props: {
   children: ReactNode | ReactNode[];
 }) {
@@ -27,6 +32,7 @@ export function StorageController(props: {
   const [localUser, setLocalUser] = useRecoilState(loggedInUser);
   const [modules, setModules] = useRecoilState(cachedModules);
   const [sleepDiary, setSleepDiary] = useRecoilState(cachedSleepDiary);
+  const [cachedModuleIds, setCachedModuleIds] = useRecoilState(moduleIds);
 
   async function getLocalUser() {
     const getData = async () => {
@@ -58,10 +64,20 @@ export function StorageController(props: {
     if (sleepDiary != null) setSleepDiary(sleepDiary);
   }
 
+  async function getCachedModuleIds() {
+    const getData = async () => {
+      const jsonValue = await AsyncStorage.getItem("ModuleIds");
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    }
+    const moduleIds: Module[] = await getData();
+    if (moduleIds != null) setCachedModuleIds(moduleIds)
+  }
+
   useEffect(() => {
     getLocalUser();
     getCachedModules();
-    getCachedSleepDiary;
+    getCachedSleepDiary();
+    getCachedModuleIds();
   }, []);
 
   useEffect(() => {

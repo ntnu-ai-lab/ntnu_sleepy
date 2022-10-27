@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { storeCachedModules } from "../state/StorageController";
+import { storeCachedModules, storeModuleIds } from "../state/StorageController";
 import { callApi } from "./callApi";
 import { Module, ModuleExpanded } from "../types/modules";
 
@@ -30,9 +30,8 @@ export async function getAllModules() {
   });
 
   if (response.data) {
-    const modules: Module[] = response.data;
-    storeCachedModules(modules);
-    return modules;
+    const moduleIds = response.data;
+    storeModuleIds(moduleIds)
   }
 }
 
