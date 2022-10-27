@@ -52,3 +52,14 @@ class DiaryEntry(models.Model):
     class Meta:
         unique_together = ('date', 'diary')
         ordering = ['-date']
+
+class SleepRestrictionPlan(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(to=User, related_name='sleep_restriction_plan', on_delete=models.CASCADE)
+    custom_rise_time = models.TimeField(default=datetime.time.fromisoformat('07:00+00:00'))
+    duration = models.IntegerField(default=300)
+
+    def increment_duration(self) -> None:
+        self.duration = self.duration + 20
+        self.save()
+    

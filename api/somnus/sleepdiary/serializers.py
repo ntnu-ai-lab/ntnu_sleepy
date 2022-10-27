@@ -1,7 +1,7 @@
 from typing import Any
 from rest_framework import serializers
 
-from .models import DiaryEntry, SleepDiary
+from .models import DiaryEntry, SleepDiary, SleepRestrictionPlan
 
 
 class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
@@ -18,4 +18,9 @@ class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
 class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
     class Meta:
         model = DiaryEntry
+        fields = '__all__'
+
+class SleepRestrictionPlanSerializer(serializers.ModelField):
+    class Meta:
+        model = SleepRestrictionPlan
         fields = '__all__'

@@ -25,3 +25,8 @@ class DiaryEntryViewSet(viewsets.ModelViewSet):
     def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         request.data.update({'diary': kwargs['diary_pk']})
         return super().update(request, *args, **kwargs)
+
+class SleepRestrictionPlan(viewsets.ModelViewSet):
+
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        return super().create(request, *args, **kwargs)
