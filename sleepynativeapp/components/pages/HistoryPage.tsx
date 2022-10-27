@@ -2,35 +2,32 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text } from "react-native";
+import { useRecoilState } from "recoil";
 import { getAllModules } from "../../api/modulesApi";
+import { cachedModules } from "../../state/atoms";
 import { Module } from "../../types/modules";
+import { Alert } from "../material/Alert";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { PageTemplate } from "../material/PageTemplate";
 import { ModulePartPage } from "../module/ModulePartPage";
 
 export function HistoryPage() {
-  //hente ut hvor langt man har kommer i modulene
-  //gjøre det samme for sleep diary: hente liste med entries og displaye alt som ligger inne til å når den trykkes på.
-  const [modules, setModules] = useState<Module[]>();
   const navigation = useNavigation();
-
-  const getModules = async () => {
-    const allModules = getAllModules();
-    setModules(await allModules);
-  };
+  const [thisModules] = useRecoilState(cachedModules);
+  const [openAlert, setOpenAlert] = useState(false);
 
   useEffect(() => {
-    getModules;
+    console.log(thisModules);
   }, []);
 
   return (
     <PageTemplate>
       <View>
-        {modules?.map((m, i) => {
+        {thisModules?.map((m, i) => {
           return (
             <Card key={m.id}>
-              <Text>Modul {i.toString()}</Text>
+              <Text>{m.title}</Text>
               <Button
                 onClick={() => {
                   //@ts-ignore
@@ -49,6 +46,17 @@ export function HistoryPage() {
           );
         })}
       </View>
+
+      <View style={{ height: 80, width: "100%" }} />
+
+      <Alert
+        type={"alert"}
+        content={
+          "Klarte ikke å hente test, dette kan skyldes mangel på internett, eller mangel på kompetanse fra vår side"
+        }
+        open={openAlert}
+        setOpen={setOpenAlert}
+      />
     </PageTemplate>
   );
 }
