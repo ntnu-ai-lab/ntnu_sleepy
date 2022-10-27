@@ -23,6 +23,7 @@ import ArrowBack from "../../assets/arrowBack.svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRecoilState } from "recoil";
 import { loggedInUser } from "../../state/atoms";
+import { DateField } from "../material/DateField";
 import { Checkbox } from "react-native-paper";
 
 export function SignupPage() {
@@ -30,10 +31,11 @@ export function SignupPage() {
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
+  const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
   const [occupation, setOccupation] = useState<string>("");
   const [checked, setChecked] = useState<"checked" | "unchecked">("unchecked");
   const [, setThisUser] = useRecoilState(loggedInUser);
+  const [validEmail, setValidEmail] = useState<boolean>(false);
 
   const navigation = useNavigation();
 
@@ -54,6 +56,8 @@ export function SignupPage() {
   const [gender, setGender] = useState<gender>("undefined");
   const [relationship, setRelationship] =
     useState<relationshipStatus>("undefined");
+
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
   const cardHeight = Dimensions.get("window").height * 0.8;
 
@@ -126,7 +130,7 @@ export function SignupPage() {
               name: name,
               email: email,
               username: email,
-              dateOfBirth: dateToIsoDate(dateOfBirth),
+              dateOfBirth: dateOfBirth.toISOString(),
               gender: gender,
               occupation: occupation,
               relationshipStatus: relationship,
@@ -173,7 +177,11 @@ export function SignupPage() {
             />
             <TextField
               value={email}
-              onChange={setEmail}
+              onChange={(e) => {
+                setEmail(e);
+                setValidEmail(!emailRegex.test(e));
+              }}
+              error={validEmail}
               placeholderText="E-postadresse"
               style={{ marginBottom: 10 }}
             />
@@ -238,11 +246,29 @@ export function SignupPage() {
                 }
               />
             </View>
-            <TextField
-              value={dateOfBirth}
-              onChange={setDateOfBirth}
-              style={{ marginBottom: 10 }}
-              placeholderText="Fødselsdato på format: ddmmåååå"
+
+            <DateField
+              onChange={(date) => {
+                date &&
+                  setDateOfBirth(
+                    new Date(
+                      date.getFullYear(),
+                      date.getMonth(),
+                      date.getDate()
+                    )
+                  );
+              }}
+              initialState={{
+                string:
+                  "" +
+                  dateOfBirth.getFullYear() +
+                  "-" +
+                  (dateOfBirth.getMonth() + 1) +
+                  "-" +
+                  dateOfBirth.getDate(),
+                date: dateOfBirth ?? undefined,
+                valid: true,
+              }}
             />
             <TextField
               value={occupation}
@@ -250,9 +276,18 @@ export function SignupPage() {
               style={{ marginBottom: 10 }}
               placeholderText="Yrke"
             />
-            <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "#00000064", borderRadius: 20, padding: 20, alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: "#00000064",
+                borderRadius: 20,
+                padding: 20,
+                alignItems: "center",
+              }}
+            >
               <View style={{ width: "80%" }}>
-                <Text style={{color: colors.text_white}}>
+                <Text style={{ color: colors.text_white }}>
                   Jeg samtykker til å delta i prosjektet og til at mine
                   personopplysninger brukes slik det er beskrevet i{" "}
                   <TouchableWithoutFeedback
@@ -261,7 +296,14 @@ export function SignupPage() {
                       navigation.navigate("consent");
                     }}
                   >
-                    <Text style={{ color: "#7094DB", textDecorationLine: "underline" }}>samtykkeskjemaet.</Text>
+                    <Text
+                      style={{
+                        color: "#7094DB",
+                        textDecorationLine: "underline",
+                      }}
+                    >
+                      samtykkeskjemaet.
+                    </Text>
                   </TouchableWithoutFeedback>
                 </Text>
               </View>
