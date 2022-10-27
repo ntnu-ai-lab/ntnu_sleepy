@@ -2,9 +2,10 @@ import { getAuthenticatedSession } from "../auth/Auth";
 import Constants from "expo-constants";
 const { manifest } = Constants;
 
-const api = manifest?.debuggerHost
-  ? `http://${manifest.debuggerHost.split(`:`).shift()}:8000`
-  : manifest?.extra?.apiUrl;
+const api =
+  manifest?.extra?.useLocal === "true" && manifest?.debuggerHost
+    ? `http://${manifest.debuggerHost.split(`:`).shift()}:8000`
+    : manifest?.extra?.apiUrl;
 
 export async function callApi<T>(
   path: string,
