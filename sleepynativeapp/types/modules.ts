@@ -31,6 +31,11 @@ export interface FormSelectOption {
 
 export interface Module {
   id: string;
+  parts: string[];
+}
+
+export interface ModuleExpanded {
+  id: string;
   parts: Part[];
 }
 
@@ -77,7 +82,7 @@ export interface FormSection extends BaseSection {
 export interface QuizSection extends BaseSection {
   type: "quiz";
   questions: Input[];
-  correct_answers?: Answer[]
+  correct_answers?: Answer[];
 }
 
 export type Nap = [Date, Date];

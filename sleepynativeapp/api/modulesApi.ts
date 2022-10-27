@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { storeCachedModules } from "../state/StorageController";
 import { callApi } from "./callApi";
-import { Module } from "../types/modules";
+import { Module, ModuleExpanded } from "../types/modules";
 
 //gets specific module based on id
 export async function getModule(
   id: string
 ): Promise<
-  { module: Module; error: undefined } | { error: any; module: undefined }
+  | { module: ModuleExpanded; error: undefined }
+  | { error: any; module: undefined }
 > {
-  const response = await callApi<Module>(
+  const response = await callApi<ModuleExpanded>(
     `modules/${id}/?expand=parts,parts.pages,parts.pages.sections`,
     {
       method: "GET",
@@ -38,10 +39,10 @@ export async function getAllModules() {
 export function useModule(
   id?: string
 ):
-  | { module: Module; loading: false; error: undefined }
+  | { module: ModuleExpanded; loading: false; error: undefined }
   | { module: undefined; loading: true; error: undefined }
   | { module: undefined; loading: false; error: string } {
-  const [module, setModule] = useState<Module | undefined>(undefined);
+  const [module, setModule] = useState<ModuleExpanded | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
