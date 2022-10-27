@@ -25,6 +25,6 @@ class OryBackend(BaseBackend):
         user_id = sess.json().get('identity', {}).get('id', None)
         if not user_id:
             return None
-        user, created = User._default_manager.get_or_create(id=user_id)
+        user, created = User._default_manager.get_or_create(id=user_id, username=user_id)
 
         return user
