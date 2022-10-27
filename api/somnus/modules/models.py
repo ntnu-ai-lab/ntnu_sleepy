@@ -117,7 +117,6 @@ class Input(models.Model):
     name = models.CharField(max_length=255)
     label = models.CharField(max_length=255)
     helptext = models.CharField(max_length=255)
-    value = models.CharField(max_length=255, blank=True)
     section = models.ForeignKey(to=FormSection, related_name='form', on_delete=models.CASCADE)
     ordering = models.PositiveIntegerField(
         default=0,
