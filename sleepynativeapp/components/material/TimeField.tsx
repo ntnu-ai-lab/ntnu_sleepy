@@ -40,7 +40,6 @@ export function TimeField({
         setState((time) => {
           time.string = e;
           time.valid = timeRegex.test(e);
-          console.log(time.valid);
           if (time.valid) {
             time.date = new Date(
               baseDate.getFullYear(),

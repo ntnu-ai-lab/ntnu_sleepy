@@ -2,11 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { View, Text } from "react-native";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useModule } from "../../api/modulesApi";
-import { moduleIds } from "../../state/atoms";
+import { moduleIds, moduleProgression } from "../../state/atoms";
 import { colors } from "../../styles/styles";
-import { Module } from "../../types/modules";
+import { ModuleExpanded } from "../../types/modules";
+import { ModuleProgression } from "../../types/Types";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { PageTemplate } from "../material/PageTemplate";
@@ -15,8 +16,29 @@ import { ModulePartPage } from "./ModulePartPage";
 
 export function ModulePage() {
   const cachedModuleIds = useRecoilValue(moduleIds);
+  const progression = useRecoilValue(moduleProgression);
 
-  const module = useModule(cachedModuleIds?.[0].id);
+  function moduleToGet() {
+    let id: string | undefined = undefined
+    cachedModuleIds?.forEach((m) => {
+      let finished = false
+      let opened = false
+      progression.forEach((p) => {
+        if (m.id === p.module) {
+          opened = true
+          if (p.finished) finished = true
+        }
+      })
+      if (!opened || !finished){
+        id = id || m.id
+        return
+      }
+    })
+    if (id !== undefined) return id
+    else return undefined
+  }
+
+  const module = useModule(moduleToGet());
 
   const Stack = createNativeStackNavigator();
 
@@ -60,41 +82,85 @@ export function ModulePage() {
   );
 }
 
-export function ModulePageOverview(props: { module: Module }) {
+export function ModulePageOverview(props: { module: ModuleExpanded }) {
   const { module } = props;
-  const [currentPart, setCurrentPart] = useState(0);
   const navigation = useNavigation();
+  const [progression, setProgression] = useRecoilState(moduleProgression);
+  const currentPart =
+    progression.find((mp) => mp.module === module.id)?.part ?? 0;
+
+  function finishModule() {
+    const newProgressionList = [...progression]
+    newProgressionList.forEach((mp, n) => {
+      if (mp.module === module.id) {
+        const newProgression: ModuleProgression = {
+          module: mp.module,
+          part: mp.part,
+          finished: true
+        }
+        newProgressionList.splice(n, 1, newProgression)
+        setProgression(newProgressionList)
+        return
+      }
+    })
+  }
 
   return (
     <PageTemplate>
       <View style={{ marginHorizontal: 10, paddingTop: 10 }}>
-        <Text style={{ fontSize: 16, paddingBottom: 5 }}>Modul 1</Text>
-        <ProgressBar
-          percentage={(currentPart / (module.parts.length - 1)) * 100}
-        />
+        <Text style={{ fontSize: 16, paddingBottom: 5 }}>{module.title}</Text>
+        {module.id === "0" ? <View /> : <ProgressBar percentage={(currentPart / module.parts.length) * 100} />}
       </View>
       <Card>
-        <Text
-          style={{
-            color: colors.text_white,
-            fontSize: 20,
-            alignSelf: "center",
-          }}
-        >
-          Del {currentPart}
-        </Text>
-        <Button
-          variant="contained"
-          onClick={() => {
-            //@ts-ignore
-            navigation.navigate("home", {
-              screen: "Home",
-              params: { screen: "part", params: { part: module.parts[0] } },
-            });
-          }}
-        >
-          <Text>Start Del</Text>
-        </Button>
+        {currentPart === module.parts.length ? (
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ color: colors.text_white, fontSize: 20 }}>
+              Modulen er fullført!
+            </Text>
+            <View style={{width: "100%"}}>
+              <Button variant="contained" onClick={finishModule}>
+                <Text>Neste Modul</Text>
+              </Button>
+            </View>
+          </View>
+        ) : (
+          <View>
+            <Text
+              style={{
+                color: colors.text_white,
+                fontSize: 20,
+                alignSelf: "center",
+              }}
+            >
+              {module.parts[currentPart].title}
+            </Text>
+            <Button
+              variant="contained"
+              onClick={() => {
+                //@ts-ignore
+                navigation.navigate("home", {
+                  screen: "Home",
+                  params: {
+                    screen: "part",
+                    params: { part: module.parts[currentPart] },
+                  },
+                });
+
+                if (!progression.find((mp) => mp.module === module.id)) {
+                  const newProgressionList = [...progression];
+                  newProgressionList.push({
+                    module: module.id,
+                    part: 0,
+                    finished: false
+                  });
+                  setProgression(newProgressionList);
+                }
+              }}
+            >
+              <Text>Start Del</Text>
+            </Button>
+          </View>
+        )}
       </Card>
     </PageTemplate>
   );
