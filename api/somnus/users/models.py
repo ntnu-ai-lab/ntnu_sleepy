@@ -57,6 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user with that username already exists."),
         },
     )
+    password = models.CharField(blank=True, max_length=255, default='')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     email = models.EmailField(_("email address"), blank=True)
     is_staff = models.BooleanField(
@@ -89,4 +90,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     def __str__(self) -> str:
-        return f"{self.name} ({self.email})"
+        return f"{self.name if self.name else self.id}{f' ({self.email})' if self.email else ''}"
