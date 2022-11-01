@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 import { Module, SleepDiary } from "../types/modules";
-import { User } from "../types/Types";
+import { ModuleProgression, User } from "../types/Types";
 
 export const loggedInUser = atom<User | undefined>({
   key: "loggedInUser",
@@ -20,4 +20,10 @@ export const cachedSleepDiary = atom<SleepDiary | undefined>({
 export const moduleIds = atom<Module[] | undefined>({
   key: "cachedModuleIds",
   default: undefined,
+})
+
+// This should be stored on server aswell so that users that log out of the app does not lose progression
+export const moduleProgression = atom<ModuleProgression[]>({
+  key: "moduleProgression",
+  default: []
 })

@@ -13,7 +13,7 @@ import { Alert } from "../material/Alert";
 import { Card } from "../material/Card";
 import { Button } from "../material/Button";
 import { TextField } from "../material/TextField";
-import { storeCachedModules, storeLocalUser, storeSleepDiary } from "../../state/StorageController";
+import { storeCachedModules, storeLocalUser, storeModuleIds, storeProgression, storeSleepDiary } from "../../state/StorageController";
 
 export function ProfilePage() {
   const [thisUser, setThisUser] = useRecoilState(loggedInUser);
@@ -40,6 +40,8 @@ export function ProfilePage() {
     storeCachedModules(undefined);
     storeLocalUser(undefined);
     storeSleepDiary(undefined);
+    storeModuleIds(undefined);
+    storeProgression([]);
 
     const removeUserFromStorage = async () => {
       try {
@@ -84,6 +86,9 @@ export function ProfilePage() {
           }}
         >
           <Text style={{ fontSize: 18 }}>Logg ut</Text>
+        </Button>{/** @ts-ignore */}
+        <Button onClick={() => getUserByIdentiyId(session?.identity.id).then((r) => console.log(r))}>
+          <Text>Text</Text>
         </Button>
       </Card>
 

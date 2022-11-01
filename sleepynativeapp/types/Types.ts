@@ -29,3 +29,8 @@ export const UserEx: User = {
   occupation: "Advokat",
   relationshipStatus: "married",
 };
+export interface ModuleProgression {
+  module: string //Id of module,
+  part: number //Which part in module user is on currently
+  finished: boolean //pretty selfexplanitory
+}

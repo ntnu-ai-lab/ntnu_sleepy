@@ -32,8 +32,6 @@ export function DateField({
         setState((time) => {
           time.string = e;
           time.valid = timeRegex.test(e);
-          console.log(e);
-          console.log(time.valid);
           if (time.valid) {
             time.date = new Date(
               parseInt(e.slice(0, 4)),

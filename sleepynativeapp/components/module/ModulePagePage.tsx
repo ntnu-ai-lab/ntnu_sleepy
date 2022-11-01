@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, View, Text } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import { Page, Section } from "../../types/modules";
 import { FormSectionComponent } from "./section/FormSectionComponent";
 import { ImageSectionComponent } from "./section/ImageSectionComponent";
@@ -9,13 +9,19 @@ import { PageTemplate } from "../material/PageTemplate";
 import { IconButton } from "../material/IconButton";
 import ArrowForward from "../../assets/arrowForward.svg";
 import ArrowBack from "../../assets/arrowBack.svg";
+import { useNavigation } from "@react-navigation/native";
+import { moduleProgression } from "../../state/atoms";
+import { useRecoilState } from "recoil";
 
 export function ModulePagePage(props: {
   page: Page;
   navigatePage: (arg1: number) => void;
+  navigatePart: (arg1: number) => void;
+  pageProgression: number;
 }) {
-  const { page, navigatePage } = props;
+  const { page, navigatePage, pageProgression, navigatePart } = props;
   const scrollRef = useRef(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     //@ts-ignore
@@ -74,12 +80,39 @@ export function ModulePagePage(props: {
             paddingHorizontal: 20,
           }}
         >
-          <IconButton onClick={() => navigatePage(-1)}>
-            <ArrowBack />
-          </IconButton>
-          <IconButton onClick={() => navigatePage(1)}>
-            <ArrowForward />
-          </IconButton>
+          {pageProgression === 0 ? (
+            <View />
+          ) : (
+            <TouchableOpacity onPress={() => navigatePage(-1)}>
+              <View
+                style={{ flexDirection: "row-reverse", alignItems: "center" }}
+              >
+                <Text style={{ fontSize: 18 }}>Forrige</Text>
+                <ArrowBack />
+              </View>
+            </TouchableOpacity>
+          )}
+          {pageProgression === 1 ? (
+            <TouchableOpacity
+              onPress={() => { 
+                navigatePart(1)
+                //@ts-ignore because navigation wack as fuck
+                navigation.goBack();
+              }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ fontSize: 18 }}>Fullfør</Text>
+                <ArrowForward />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => navigatePage(1)}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ fontSize: 18 }}>Neste</Text>
+                <ArrowForward />
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
         <View style={{ height: 80 }} />
       </ScrollView>
