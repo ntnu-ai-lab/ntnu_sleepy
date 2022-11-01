@@ -553,10 +553,10 @@ export default function SleepyDiaryEntryComponent(props: {
                         }
                         onChange={(e) => {
                           setSleepDiaryEntry((entry) => {
-                            entry.night_wakes[n] = parseInt(e);
-                            console.log(entry.night_wakes);
+                            const night_wakes = [...entry.night_wakes];
+                            night_wakes[n] = parseInt(e);
 
-                            return { ...entry };
+                            return { ...entry, night_wakes: night_wakes };
                           });
                         }}
                         /* onChange={(e) => {

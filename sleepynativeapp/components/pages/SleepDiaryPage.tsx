@@ -132,6 +132,7 @@ export function SleepDiaryPage() {
               sleepDiaryEntry={e}
               sleepDiaryID={storedSleepDiary.id}
               index={i}
+              key={i}
             />
           ))
         ) : (
