@@ -21,6 +21,7 @@ export default function SleepDiaryComponentDay() {
   const [date, setDate] = useState<Date>(new Date()); //TODO hent date fra frontend
   const [dayRating, setDayRating] = useState<number>();
   const [rerender, setRerender] = useState<boolean>(false);
+  const [dateValid, setDateValid] = useState<boolean>(true);
 
   const [hasNapped, setHasNapped] = useState<"Ja" | "Nei" | "">("");
   const [naps, setNaps] = useState<[Date | false, Date | false][]>([]);
@@ -59,6 +60,12 @@ export default function SleepDiaryComponentDay() {
   useEffect(() => {
     checkSleepDiary();
   }, []);
+  useEffect(() => {
+    console.log("hasNapped: ", hasNapped);
+    console.log("dayRating: ", dayRating);
+    console.log("allNapsAreValid: ", allNapsAreValid);
+    console.log("dateValid: ", dateValid);
+  }, [hasNapped, dayRating, allNapsAreValid, dateValid]);
 
   const [sleepDiaryID, setSleepDiaryID] = useState<string>();
 
@@ -201,6 +208,11 @@ export default function SleepDiaryComponentDay() {
             setDate(
               new Date(date.getFullYear(), date.getMonth(), date.getDate())
             );
+          if (date) {
+            setDateValid(true);
+          } else {
+            setDateValid(false);
+          }
         }}
         initialState={{
           string:
@@ -340,9 +352,12 @@ export default function SleepDiaryComponentDay() {
         variant="outlined"
         disabled={
           dayRating === (null || undefined || 0) ||
+          hasNapped === (undefined || "")
+          /* dayRating === (null || undefined || 0) ||
           hasNapped === (undefined || "") ||
           (hasNapped === "Ja" && !allNapsAreValid) ||
-          hasNapped !== "Nei"
+          hasNapped !== ("Nei" || "Ja") ||
+          !dateValid */
         }
         onClick={() => postEntry()}
       >

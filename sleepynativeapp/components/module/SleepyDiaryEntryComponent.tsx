@@ -8,6 +8,7 @@ import { colors } from "../../styles/styles";
 import { DiaryEntry, SleepDiary } from "../../types/modules";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
+import { DateField } from "../material/DateField";
 import { Select } from "../material/Select";
 import { TextField } from "../material/TextField";
 import { TimeField } from "../material/TimeField";
@@ -64,6 +65,27 @@ export default function SleepyDiaryEntryComponent(props: {
   const [naps, setNaps] = useState<[Date | false, Date | false][]>([
     ...sleepDiaryEntry.naps,
   ]);
+  const [sleepTimeDate, setSleepTimeDate] = useState<Date>(
+    sleepDiaryEntry.date
+  );
+  const [lightsOutDate, setLightsOutDate] = useState<Date>(
+    sleepDiaryEntry.date
+  );
+
+  const [wakeDate, setWakeDate] = useState<Date>(
+    new Date(
+      sleepDiaryEntry.date.getFullYear(),
+      sleepDiaryEntry.date.getMonth(),
+      sleepDiaryEntry.date.getDate() + 1
+    )
+  );
+  const [riseDate, setRiseDate] = useState<Date>(
+    new Date(
+      sleepDiaryEntry.date.getFullYear(),
+      sleepDiaryEntry.date.getMonth(),
+      sleepDiaryEntry.date.getDate() + 1
+    )
+  );
 
   const allNapsAreValid = naps.every((nap) => nap.every((date) => date));
 
@@ -81,19 +103,19 @@ export default function SleepyDiaryEntryComponent(props: {
       sleepDiaryEntry.risetime
     ) {
       console.log("READY TO PATCH");
-      if (allNapsAreValid) {
+      /* if (allNapsAreValid) {
         //@ts-ignore
         setSleepDiaryEntry((entry) => ({
           ...entry,
           naps: [...naps], //ts ignore fordi alle naps er valid
         }));
-      }
+      } */
       const { date, ...rest } = sleepDiaryEntry;
       setLoading(true);
       const entryResult = await finishDiaryEntry(storedSleepDiary.id, rest)
         .then((entry) => {
           if (entry) {
-            //console.log("Result", entry);
+            console.log("Result", entry);
             const tempEntries = [...storedSleepDiary.diary_entries];
             tempEntries.push(entry);
             setStoredSleepDiary((diary) => ({
@@ -130,6 +152,7 @@ export default function SleepyDiaryEntryComponent(props: {
     } else {
       setAllValuesAreValid(false);
     }
+    //console.log(sleepDiaryEntry);
   }, [sleepDiaryEntry]);
 
   return (
@@ -221,12 +244,20 @@ export default function SleepyDiaryEntryComponent(props: {
                     >
                       <TimeField
                         baseDate={new Date(sleepDiaryEntry.date)}
-                        onChange={(nap) =>
+                        onChange={(nap) => {
                           setNaps((naps) => {
                             naps[n][0] = nap;
                             return [...naps];
-                          })
-                        }
+                          });
+                          if ((naps[n][0] && naps[n][1]) !== false) {
+                            //console.log(naps);
+                            //@ts-ignore
+                            setSleepDiaryEntry((entry) => ({
+                              ...entry,
+                              naps: [...naps],
+                            }));
+                          }
+                        }}
                         //@ts-ignore
                         //Vet at hvis type er object, så er den ikke false, og dermed et date object
                         initialState={{
@@ -244,12 +275,20 @@ export default function SleepyDiaryEntryComponent(props: {
                       />
                       <TimeField
                         baseDate={new Date(sleepDiaryEntry.date)}
-                        onChange={(nap) =>
+                        onChange={(nap) => {
                           setNaps((naps) => {
                             naps[n][1] = nap;
                             return [...naps];
-                          })
-                        }
+                          });
+                          if ((naps[n][0] && naps[n][1]) !== false) {
+                            //console.log(naps);
+                            //@ts-ignore
+                            setSleepDiaryEntry((entry) => ({
+                              ...entry,
+                              naps: [...naps],
+                            }));
+                          }
+                        }}
                         //@ts-ignore
                         //Vet at hvis type er object, så er den ikke false, og dermed et date object
                         initialState={{
@@ -360,71 +399,151 @@ export default function SleepyDiaryEntryComponent(props: {
                 ) : (
                   <></>
                 )}
-                <Text
-                  style={{
-                    alignItems: "center",
-                    alignSelf: "center",
-                    color: colors.primary,
-                    marginTop: 10,
-                  }}
-                >
-                  Når gikk du til sengs? (HH:MM)
-                </Text>
-                <TimeField
-                  //onChange={(date) => date && setBedtime(date)}
-                  onChange={(date) => {
-                    if (date) {
-                      setSleepDiaryEntry((entry) => ({
-                        ...entry,
-                        bedtime: date,
-                      }));
-                    } else {
-                      setAllValuesAreValid(false);
-                    }
-                  }}
-                  baseDate={new Date(sleepDiaryEntry.date)}
-                  initialState={{
-                    string: sleepDiaryEntry.bedtime
-                      ? "" +
-                        new Date(sleepDiaryEntry.bedtime).getHours() +
-                        ":" +
-                        new Date(sleepDiaryEntry.bedtime).getMinutes()
-                      : "",
-                    valid: true,
-                  }}
-                />
-                <Text
-                  style={{
-                    alignItems: "center",
-                    alignSelf: "center",
-                    color: colors.primary,
-                    marginTop: 10,
-                  }}
-                >
-                  Når skrudde du av lyset? (HH:MM)
-                </Text>
-                <TimeField
-                  onChange={(date) => {
-                    if (date) {
-                      setSleepDiaryEntry((entry) => ({
-                        ...entry,
-                        lights_out: date,
-                      }));
-                    } else {
-                      setAllValuesAreValid(false);
-                    }
-                  }}
-                  initialState={{
-                    string: sleepDiaryEntry.lights_out
-                      ? "" +
-                        new Date(sleepDiaryEntry.lights_out).getHours() +
-                        ":" +
-                        new Date(sleepDiaryEntry.lights_out).getMinutes()
-                      : "",
-                    valid: true,
-                  }}
-                  baseDate={new Date(sleepDiaryEntry.date)}
-                />
+
+                <View style={{ flexDirection: "row" }}>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        alignSelf: "center",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Når gikk du til sengs? (YYYY-MM-DD)
+                    </Text>
+                    <DateField
+                      onChange={(date) => {
+                        date &&
+                          setSleepTimeDate(
+                            new Date(
+                              date.getFullYear(),
+                              date.getMonth(),
+                              date.getDate()
+                            )
+                          );
+                      }}
+                      initialState={{
+                        string:
+                          "" +
+                          sleepTimeDate.getFullYear() +
+                          "-" +
+                          (sleepTimeDate.getMonth() + 1) +
+                          "-" +
+                          sleepTimeDate.getDate(),
+                        date: sleepTimeDate,
+                        valid: true,
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        alignSelf: "center",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Når gikk du til sengs? (HH:MM)
+                    </Text>
+                    <TimeField
+                      //onChange={(date) => date && setBedtime(date)}
+                      onChange={(date) => {
+                        if (date) {
+                          setSleepDiaryEntry((entry) => ({
+                            ...entry,
+                            bedtime: date,
+                          }));
+                        } else {
+                          setAllValuesAreValid(false);
+                        }
+                      }}
+                      baseDate={sleepTimeDate}
+                      initialState={{
+                        string: sleepDiaryEntry.bedtime
+                          ? "" +
+                            new Date(sleepDiaryEntry.bedtime).getHours() +
+                            ":" +
+                            new Date(sleepDiaryEntry.bedtime).getMinutes()
+                          : "",
+                        valid: true,
+                      }}
+                    />
+                  </View>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        alignSelf: "center",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Når skrudde du av lyset? (YYYY-MM-DD)
+                    </Text>
+                    <DateField
+                      onChange={(date) => {
+                        date &&
+                          setLightsOutDate(
+                            new Date(
+                              date.getFullYear(),
+                              date.getMonth(),
+                              date.getDate()
+                            )
+                          );
+                      }}
+                      initialState={{
+                        string:
+                          "" +
+                          lightsOutDate.getFullYear() +
+                          "-" +
+                          (lightsOutDate.getMonth() + 1) +
+                          "-" +
+                          lightsOutDate.getDate(),
+                        date: lightsOutDate,
+                        valid: true,
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        alignSelf: "center",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Når skrudde du av lyset? (HH:MM)
+                    </Text>
+                    <TimeField
+                      onChange={(date) => {
+                        if (date) {
+                          setSleepDiaryEntry((entry) => ({
+                            ...entry,
+                            lights_out: date,
+                          }));
+                        } else {
+                          setAllValuesAreValid(false);
+                        }
+                      }}
+                      initialState={{
+                        string: sleepDiaryEntry.lights_out
+                          ? "" +
+                            new Date(sleepDiaryEntry.lights_out).getHours() +
+                            ":" +
+                            new Date(sleepDiaryEntry.lights_out).getMinutes()
+                          : "",
+                        valid: true,
+                      }}
+                      baseDate={lightsOutDate}
+                    />
+                  </View>
+                </View>
+
                 <Text
                   style={{
                     alignItems: "center",
@@ -542,60 +661,158 @@ export default function SleepyDiaryEntryComponent(props: {
                   }}
                 >
                   Når våknet du på morgenen uten å få sove igjen? Noter ned ditt
-                  endelige oppvåkningstidspunkt. (HH:MM)
+                  endelige oppvåkningstidspunkt.
                 </Text>
-                <TimeField
-                  onChange={(date) => {
-                    if (date) {
-                      setSleepDiaryEntry((entry) => ({
-                        ...entry,
-                        waketime: date,
-                      }));
-                    } else {
-                      setAllValuesAreValid(false);
-                    }
-                  }}
-                  initialState={{
-                    string: sleepDiaryEntry.waketime
-                      ? "" +
-                        new Date(sleepDiaryEntry.waketime).getHours() +
-                        ":" +
-                        new Date(sleepDiaryEntry.waketime).getMinutes()
-                      : "",
-                    valid: true,
-                  }}
-                />
+                <View style={{ flexDirection: "row" }}>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        alignSelf: "center",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Skriv inn dato (YYYY-MM-DD)
+                    </Text>
+                    <DateField
+                      onChange={(date) => {
+                        date &&
+                          setWakeDate(
+                            new Date(
+                              date.getFullYear(),
+                              date.getMonth(),
+                              date.getDate()
+                            )
+                          );
+                      }}
+                      initialState={{
+                        string:
+                          "" +
+                          wakeDate.getFullYear() +
+                          "-" +
+                          (wakeDate.getMonth() + 1) +
+                          "-" +
+                          wakeDate.getDate(),
+                        date: wakeDate,
+                        valid: true,
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Skriv inn tidspunkt (HH:MM)
+                    </Text>
+                    <TimeField
+                      onChange={(date) => {
+                        if (date) {
+                          setSleepDiaryEntry((entry) => ({
+                            ...entry,
+                            waketime: date,
+                          }));
+                        } else {
+                          setAllValuesAreValid(false);
+                        }
+                      }}
+                      initialState={{
+                        string: sleepDiaryEntry.waketime
+                          ? "" +
+                            new Date(sleepDiaryEntry.waketime).getHours() +
+                            ":" +
+                            new Date(sleepDiaryEntry.waketime).getMinutes()
+                          : "",
+                        valid: true,
+                      }}
+                      baseDate={wakeDate}
+                    />
+                  </View>
+                </View>
                 <Text
                   style={{
                     alignItems: "center",
-                    minWidth: "30%",
                     color: colors.primary,
                     marginTop: 10,
                   }}
                 >
-                  Når stod du opp? (HH:MM)
+                  Når stod du opp?
                 </Text>
-                <TimeField
-                  onChange={(date) => {
-                    if (date) {
-                      setSleepDiaryEntry((entry) => ({
-                        ...entry,
-                        risetime: date,
-                      }));
-                    } else {
-                      setAllValuesAreValid(false);
-                    }
-                  }}
-                  initialState={{
-                    string: sleepDiaryEntry.risetime
-                      ? "" +
-                        new Date(sleepDiaryEntry.risetime).getHours() +
-                        ":" +
-                        new Date(sleepDiaryEntry.risetime).getMinutes()
-                      : "",
-                    valid: true,
-                  }}
-                />
+                <View style={{ flexDirection: "row" }}>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        alignSelf: "center",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Skriv inn dato (YYYY-MM-DD)
+                    </Text>
+                    <DateField
+                      onChange={(date) => {
+                        date &&
+                          setRiseDate(
+                            new Date(
+                              date.getFullYear(),
+                              date.getMonth(),
+                              date.getDate()
+                            )
+                          );
+                      }}
+                      initialState={{
+                        string:
+                          "" +
+                          riseDate.getFullYear() +
+                          "-" +
+                          (riseDate.getMonth() + 1) +
+                          "-" +
+                          riseDate.getDate(),
+                        date: riseDate,
+                        valid: true,
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        alignItems: "center",
+                        minWidth: "30%",
+                        color: colors.primary,
+                        marginTop: 10,
+                      }}
+                    >
+                      Skriv inn tidspunkt (HH:MM)
+                    </Text>
+                    <TimeField
+                      onChange={(date) => {
+                        if (date) {
+                          setSleepDiaryEntry((entry) => ({
+                            ...entry,
+                            risetime: date,
+                          }));
+                        } else {
+                          setAllValuesAreValid(false);
+                        }
+                      }}
+                      initialState={{
+                        string: sleepDiaryEntry.risetime
+                          ? "" +
+                            new Date(sleepDiaryEntry.risetime).getHours() +
+                            ":" +
+                            new Date(sleepDiaryEntry.risetime).getMinutes()
+                          : "",
+                        valid: true,
+                      }}
+                      baseDate={riseDate}
+                    />
+                  </View>
+                </View>
                 <Text
                   style={{
                     alignItems: "center",
