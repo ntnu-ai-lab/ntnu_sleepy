@@ -21,32 +21,40 @@ import {
 } from "../../api/sleepDiaryApi";
 import { useRecoilState } from "recoil";
 import { cachedSleepDiary } from "../../state/atoms";
+import SleepDiaryComponentDay from "../module/SleepDiaryComponentDay";
 
 export function SleepDiaryPage() {
   const [createNewDiary, setCreateNewDiary] = useState<boolean>(false);
   const [showAllDiaries, setShowAllDiaries] = useState<boolean>(false);
+  const [storedSleepDiary, setStoredSleepDiary] =
+    useRecoilState(cachedSleepDiary);
+  const [sleepDiary, setSleepDiary] = useState<SleepDiary>();
+  const [hasSleepDiary, setHasSleepDiary] = useState<boolean>(); //TODO fetch hasSleepDiary from backend
+  const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
 
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
-    {
+    if (storedSleepDiary) {
+      console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
+      setHasSleepDiary(true);
+    } else {
       const diary = await getDiary();
-      //console.log(diary);
       if (diary === undefined) {
         console.log("No sleepdiary found..");
         return undefined;
       } else {
         console.log("Sleepdiary found!");
         const diaryEntries = await listDiaryEntries(diary.id);
-        console.log(diaryEntries);
+        //console.log(diaryEntries);
         const tempDiary: SleepDiary = {
           id: diary.id,
           user: diary.user,
           started_date: diary.started_date,
           diary_entries: diaryEntries ?? [],
         };
-        console.log(tempDiary);
         setSleepDiary(tempDiary);
+        setStoredSleepDiary(tempDiary);
+        //console.log("STORED DIARY: " + storedSleepDiary);
         setHasSleepDiary(true);
-        console.log("Sleepdiary: " + tempDiary?.diary_entries[0].date);
       }
     }
   }
@@ -63,7 +71,7 @@ export function SleepDiaryPage() {
         started_date: result.started_date,
         diary_entries: diaryEntries ?? [],
       };
-      //setStoredSleepDiary(sleepDiary);
+      setStoredSleepDiary(sleepDiary);
       //console.log(storedSleepDiary);
       //setSleepDiary(sleepDiary);
       //setHasSleepDiary(true);
@@ -73,14 +81,12 @@ export function SleepDiaryPage() {
 
   useEffect(() => {
     checkSleepDiary();
-  }, []);
+  }, [storedSleepDiary]);
 
-  const [storedSleepDiary, setStoredSleepDiary] =
-    useRecoilState(cachedSleepDiary);
-
-  const [sleepDiary, setSleepDiary] = useState<SleepDiary>();
-
-  const [hasSleepDiary, setHasSleepDiary] = useState<boolean>(); //TODO fetch hasSleepDiary from backend
+  useEffect(() => {
+    setRefreshScreen(!refreshScreen);
+    console.log("Refreshed screen");
+  }, [storedSleepDiary]);
 
   return (
     <PageTemplate>
@@ -121,15 +127,20 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {showAllDiaries && sleepDiary ? (
-          sleepDiary.diary_entries.map((e: DiaryEntry, i) => (
-            <SleepyDiaryEntryComponent sleepDiaryEntry={e} index={i} />
+        {showAllDiaries && storedSleepDiary ? (
+          storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => (
+            <SleepyDiaryEntryComponent
+              sleepDiaryEntry={e}
+              sleepDiaryID={storedSleepDiary.id}
+              index={i}
+              key={i}
+            />
           ))
         ) : (
           <></>
         )}
-        {createNewDiary ? <SleepDiaryComponent /> : <></>}
-        {sleepDiary !== undefined ? (
+        {createNewDiary ? <SleepDiaryComponentDay /> : <></>}
+        {storedSleepDiary !== undefined ? (
           <></>
         ) : (
           <Card

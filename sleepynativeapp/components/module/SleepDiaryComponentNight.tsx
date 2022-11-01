@@ -7,7 +7,7 @@ import { Card } from "../material/Card";
 import { Divider, Text, Title } from "react-native-paper";
 import { Select } from "../material/Select";
 import { TextField } from "../material/TextField";
-import { DateField } from "../material/DateField";
+import { TimeField } from "../material/TimeField";
 import { testDiary } from "../../testing/testdata";
 import { getAuthenticatedSession } from "../../auth/Auth";
 import {
@@ -15,9 +15,11 @@ import {
   getDiary,
   listDiaryEntries,
 } from "../../api/sleepDiaryApi";
+import { useRecoilState } from "recoil";
+import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
 
 export default function SleepDiaryComponentNight() {
-  const [date, setDate] = useState<Date>(new Date()); // TODO hent date fra frontend
+  //const [date, setDate] = useState<Date>(new Date()); // TODO hent date fra frontend
   const [sleepAides, setSleepAides] = useState<boolean>(false);
   const [sleepAidesDetails, setSleepAidesDetails] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
@@ -27,59 +29,70 @@ export default function SleepDiaryComponentNight() {
   const [lightsOut, setLightsOut] = useState<Date>();
   const [waketime, setWaketime] = useState<Date>();
   const [risetime, setRisetime] = useState<Date>();
-  const [timeToSleep, setTimeToSleep] = useState<number>(0);
-  const [numberOfNightWakes, setNumberOfNightWakes] = useState<number>();
+  const [timeToSleep, setTimeToSleep] = useState<{
+    value: number;
+    text: string;
+  }>({ value: 0, text: "" });
+  const [numberOfNightWakes, setNumberOfNightWakes] = useState<{
+    value: number;
+    text: string;
+  }>({ value: 0, text: "" });
   const [nightWakes, setNightWakes] = useState<number[]>([]);
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
   const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
+  const [sleepDiaryID, setSleepDiaryID] = useState<string>("");
+  const [storedSleepDiary, setStoredSleepDiary] =
+    useRecoilState(cachedSleepDiary);
+  const [diaryEntry, setStoredSleepDiaryEntry] = useRecoilState(
+    cachedSleepDiaryEntry
+  );
 
-  const [diaryEntry, setDiaryEntry] = useState<DiaryEntry>();
-  const [diaryID, setDiaryID] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function checkSleepDiary(): Promise<void> {
-    {
-      const diary = await getDiary().catch((e) => console.error(e));
-      console.log(diary);
-      if (diary) {
-        setDiaryID(diary.id);
+    if (storedSleepDiary) {
+      console.log("Found sleepdiary from AsyncStorage!");
+      setSleepDiaryID(storedSleepDiary.id);
+      if (diaryEntry) {
+        console.log("Found sleepdiaryEntry from AsyncStorage!");
+        //setEntryValues();
       }
-
+    } else {
+      console.log(
+        "Could not find sleepdiary in AsyncStorage, fetching from db.."
+      );
+      const diary = await getDiary();
       if (diary !== undefined) {
-        await listDiaryEntries(diary.id)
-          .then((entry) => {
-            if (entry) {
-              const sleepDiary: SleepDiary = {
-                id: diary.id,
-                user: diary.user,
-                started_date: diary.started_date,
-                diary_entries: entry,
-              };
-              if (sleepDiary.diary_entries) {
-                console.log(sleepDiary.diary_entries);
-                sleepDiary.diary_entries.map((entry) => {
-                  console.log("ENTRY DATE " + entry.date);
-                  const temp = new Date(entry.date);
-                  console.log("TEMP: " + temp.toLocaleDateString());
-                  console.log("DATE: " + date.toLocaleDateString());
-                  if (temp.toLocaleDateString() == date.toLocaleDateString()) {
-                    console.log("MATCH");
-                    setDiaryEntry(entry);
-                  }
-                });
-              }
-            }
-          })
-          .catch((e) => console.error(e));
+        setSleepDiaryID(diary.id);
       }
-      console.log(diaryEntry);
     }
   }
 
   useEffect(() => {
     checkSleepDiary();
-  }, []);
+  }, [diaryEntry]);
+
+  function setEntryValues(): void {
+    setSleepAides(diaryEntry.sleep_aides);
+    setSleepAidesDetails(diaryEntry.sleep_aides_detail);
+    setNotes(diaryEntry.notes);
+    setSleepQuality(diaryEntry.sleep_quality);
+    setBedtime(diaryEntry.bedtime);
+    setLightsOut(diaryEntry.lights_out);
+    setTimeToSleep((prev) => ({
+      ...prev,
+      value: diaryEntry.time_to_sleep,
+    }));
+    setWaketime(diaryEntry.waketime);
+    setRisetime(diaryEntry.risetime);
+  }
+
+  useEffect(() => {}, [diaryEntry]);
 
   async function postEntry() {
+    console.log("DiaryID: " + sleepDiaryID, storedSleepDiary.id);
+    console.log("DiaryEntry: " + diaryEntry?.id);
+    console.log(bedtime, lightsOut, timeToSleep, waketime, risetime);
     if (
       diaryEntry &&
       bedtime &&
@@ -88,35 +101,47 @@ export default function SleepDiaryComponentNight() {
       waketime &&
       risetime
     ) {
-      const finalEntry: DiaryEntry = {
+      console.log("READY TO PATCH");
+
+      const finalEntry: Omit<DiaryEntry, "day_rating" | "naps"> = {
         id: diaryEntry.id,
         date: diaryEntry.date,
-        day_rating: diaryEntry.day_rating,
-        naps: diaryEntry.naps,
         sleep_aides: sleepAides,
         sleep_aides_detail: sleepAidesDetails,
         notes: notes,
         sleep_quality: sleepQuality ?? 0,
         bedtime: bedtime,
         lights_out: lightsOut,
-        time_to_sleep: timeToSleep,
+        time_to_sleep: timeToSleep.value,
         night_wakes: nightWakes,
         waketime: waketime,
         risetime: risetime,
       };
-      console.log(
-        "Final entry: " +
-          finalEntry.id +
-          " " +
-          finalEntry.date +
-          " " +
-          finalEntry.sleep_quality
-      );
-
-      const result = await finishDiaryEntry(diaryID, finalEntry).then((res) =>
-        console.log("FINISH RESULTS: " + res)
-      );
+      setLoading(true);
+      const entryResult = await finishDiaryEntry(sleepDiaryID, finalEntry)
+        .then((entry) => {
+          if (entry) {
+            console.log("Result", entry);
+            const tempEntries = [...storedSleepDiary.diary_entries];
+            tempEntries.push(entry);
+            setStoredSleepDiary((diary) => ({
+              ...diary,
+              diary_entries: tempEntries,
+            }));
+            console.log("STORED: ", storedSleepDiary);
+            //const temp = storedSleepDiary;
+            //temp.diary_entries.push(entry);
+            //storedSleepDiary.diary_entries.push(entry);
+            //console.log("stored", temp);
+            return entry;
+            //setStoredSleepDiary(temp);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
+    setLoading(false);
   }
 
   return (
@@ -145,7 +170,7 @@ export default function SleepDiaryComponentNight() {
             Noter medikament og dose, samt eventuelt alkoholinntak
           </Text>
           <TextField
-            style={{ width: "100%" }}
+            style={{ minWidth: "100%" }}
             value={sleepAidesDetails}
             onChange={setSleepAidesDetails}
           />
@@ -153,7 +178,6 @@ export default function SleepDiaryComponentNight() {
       ) : (
         <></>
       )}
-
       <Text
         style={{
           alignItems: "center",
@@ -164,8 +188,10 @@ export default function SleepDiaryComponentNight() {
       >
         Når gikk du til sengs?
       </Text>
-
-      <DateField onChange={(date) => date && setBedtime(date)} />
+      <TimeField
+        onChange={(date) => date && setBedtime(date)}
+        baseDate={bedtime}
+      />
       <Text
         style={{
           alignItems: "center",
@@ -176,51 +202,74 @@ export default function SleepDiaryComponentNight() {
       >
         Når skrudde du av lyset?
       </Text>
-      <DateField onChange={(date) => date && setLightsOut(date)} />
-
+      <TimeField
+        onChange={(date) => date && setLightsOut(date)}
+        baseDate={lightsOut}
+      />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
         Hvor mange minutter tok det fra lyset var skrudd av til du sovnet?
       </Text>
       <TextField
-        style={{ minWidth: "10%" }}
+        style={{ minWidth: "30%", alignText: "center", alignItems: "center" }}
         keyboardType="numeric"
-        value={timeToSleep ? timeToSleep.toString() : ""}
-        onChange={(e) => setTimeToSleep(parseInt(e))}
+        placeholderText="          "
+        value={timeToSleep.text}
+        onChange={(e) => {
+          setTimeToSleep((prev) => ({
+            ...prev,
+            text: e,
+            value: parseInt(e),
+          }));
+        }}
       />
-
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
         Hvor mange ganger våknet du iløpet av natten?
       </Text>
       <TextField
-        style={{ maxWidth: "20%", alignText: "center", alignItems: "center" }}
+        style={{
+          minWidth: "30%",
+          alignText: "center",
+          alignItems: "center",
+        }}
         keyboardType="numeric"
         placeholderText="          "
-        value={numberOfNightWakes ? numberOfNightWakes.toString() : ""}
-        onChange={(e) => setNumberOfNightWakes(parseInt(e))}
+        value={numberOfNightWakes.text}
+        onChange={(e) => {
+          setNumberOfNightWakes((prev) => ({
+            ...prev,
+            text: e,
+            value: parseInt(e),
+          }));
+        }}
       />
-      {numberOfNightWakes &&
-      numberOfNightWakes > 0 &&
-      numberOfNightWakes <= 30 ? (
+      {numberOfNightWakes.value &&
+      numberOfNightWakes.value > 0 &&
+      numberOfNightWakes.value <= 30 ? (
         <Text
-          style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+          style={{
+            alignItems: "center",
+            minWidth: "30%",
+            color: colors.primary,
+            marginTop: 10,
+          }}
         >
           Noter ned antall minutter for hver gang du våknet
         </Text>
       ) : (
         <>{}</>
       )}
-      {numberOfNightWakes &&
-      numberOfNightWakes > 0 &&
-      numberOfNightWakes <= 30 ? (
+      {numberOfNightWakes.value &&
+      numberOfNightWakes.value > 0 &&
+      numberOfNightWakes.value <= 30 ? (
         [...Array(numberOfNightWakes || 0).keys()].map((n) => (
           <Card style={{ maxWidth: "100%", padding: 5, margin: 0 }}>
             <TextField
               style={{
-                minWidth: "20%",
+                minWidth: "30%",
                 alignText: "center",
                 alignItems: "center",
               }}
@@ -244,22 +293,24 @@ export default function SleepDiaryComponentNight() {
       ) : (
         <></>
       )}
-
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
         Når våknet du på morgenen uten å få sove igjen? Noter ned ditt endelige
         oppvåkningstidspunkt.
       </Text>
-
-      <DateField onChange={(date) => date && setWaketime(date)} />
+      <TimeField onChange={(date) => date && setWaketime(date)} />
       <Text
-        style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
+        style={{
+          alignItems: "center",
+          minWidth: "30%",
+          color: colors.primary,
+          marginTop: 10,
+        }}
       >
         Når stod du opp?
       </Text>
-
-      <DateField onChange={(date) => date && setRisetime(date)} />
+      <TimeField onChange={(date) => date && setRisetime(date)} />
       <Text
         style={{ alignItems: "center", color: colors.primary, marginTop: 10 }}
       >
@@ -294,9 +345,10 @@ export default function SleepDiaryComponentNight() {
           style={{
             color: colors.primary,
             textAlign: "center",
+            padding: 3,
           }}
         >
-          Lagre dagbok
+          {loading ? "Lagrer dagbok..." : "Lagre dagbok"}
         </Text>
       </Button>
     </Card>

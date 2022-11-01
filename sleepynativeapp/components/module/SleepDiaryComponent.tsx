@@ -8,22 +8,7 @@ import SleepDiaryComponentNight from "./SleepDiaryComponentNight";
 
 export default function SleepyDiaryEntryComponent() {
   const [dayDone, setDayDone] = useState<boolean>(false); //TODO få state fra backend
-  const [nightDone, setNightDone] = useState<boolean>(false); //TODO få state fra backend
-
-  /* async function checkSleepDiary(): Promise<void> {
-    {
-      const diary = await getDiary();
-      //console.log(diary);
-      if (diary !== undefined) {
-        const diaryEntries = listDiaryEntries(diary.id);
-      }
-    }
-  }
-
-  const [storedSleepDiary, setStoredSleepDiary] =
-    useRecoilState(cachedSleepDiary);
-
-  console.log("STORED" + storedSleepDiary); */
+  const [nightDone, setNightDone] = useState<boolean>(true); //TODO få state fra backend
 
   return (
     <Card
@@ -34,7 +19,6 @@ export default function SleepyDiaryEntryComponent() {
       }}
     >
       {dayDone ? <></> : <SleepDiaryComponentDay />}
-      {nightDone ? <></> : <SleepDiaryComponentNight />}
     </Card>
   );
 }

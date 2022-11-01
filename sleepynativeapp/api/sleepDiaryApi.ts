@@ -24,12 +24,12 @@ export async function createDiaryEntry(
       method: "POST",
       body: JSON.stringify(entry),
     })
-  ).error;
+  ).data;
 }
 
 export async function finishDiaryEntry(
   diary: SleepDiary["id"],
-  entry: Omit<DiaryEntry, "day_rating" | "naps">
+  entry: Partial<DiaryEntry>
 ): Promise<DiaryEntry | undefined> {
   return (
     await callApi<DiaryEntry>(

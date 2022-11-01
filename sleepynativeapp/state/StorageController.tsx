@@ -1,9 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { ReactNode, useEffect } from "react";
 import { ModuleProgression, User } from "../types/Types";
-import { Module, SleepDiary } from "../types/modules";
+import { DiaryEntry, Module, SleepDiary } from "../types/modules";
 import { useRecoilState } from "recoil";
-import { cachedModules, cachedSleepDiary, loggedInUser, moduleIds, moduleProgression } from "./atoms";
+import {
+  cachedModules,
+  cachedSleepDiary,
+  cachedSleepDiaryEntry,
+  loggedInUser,
+  moduleIds,
+  moduleProgression,
+} from "./atoms";
 
 export async function storeLocalUser(user: User | undefined) {
   const userAsString = JSON.stringify(user);
@@ -19,6 +26,10 @@ export async function storeSleepDiary(sleepDiary: SleepDiary | undefined) {
   const sleepDiaryAsString = JSON.stringify(sleepDiary);
   await AsyncStorage.setItem("SleepDiary", sleepDiaryAsString);
 }
+export async function storeSleepDiaryEntry(sleepDiaryEntry: DiaryEntry) {
+  const sleepDiaryEntryAsString = JSON.stringify(sleepDiaryEntry);
+  await AsyncStorage.setItem("SleepDiaryEntry", sleepDiaryEntryAsString);
+}
 
 export async function storeModuleIds(ids: Module[] | undefined) {
   const moduleIdsAsString = JSON.stringify(ids);
@@ -27,8 +38,8 @@ export async function storeModuleIds(ids: Module[] | undefined) {
 
 export async function storeProgression(progression: ModuleProgression[]) {
   const progressionAsString = JSON.stringify(progression);
-  await AsyncStorage.setItem("Progression", progressionAsString)
-} 
+  await AsyncStorage.setItem("Progression", progressionAsString);
+}
 
 export function StorageController(props: {
   children: ReactNode | ReactNode[];
@@ -38,7 +49,10 @@ export function StorageController(props: {
   const [modules, setModules] = useRecoilState(cachedModules);
   const [sleepDiary, setSleepDiary] = useRecoilState(cachedSleepDiary);
   const [cachedModuleIds, setCachedModuleIds] = useRecoilState(moduleIds);
-  const [progression, setProgression] = useRecoilState(moduleProgression)
+  const [progression, setProgression] = useRecoilState(moduleProgression);
+  const [sleepDiaryEntry, setSleepDiaryEntry] = useRecoilState(
+    cachedSleepDiaryEntry
+  );
 
   async function getLocalUser() {
     const getData = async () => {
@@ -69,23 +83,32 @@ export function StorageController(props: {
     const sleepDiary: SleepDiary = await getData();
     if (sleepDiary != null) setSleepDiary(sleepDiary);
   }
+  async function getCachedSleepDiaryEntry() {
+    const getData = async () => {
+      const jsonValue = await AsyncStorage.getItem("sleep_diary_entry");
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    };
+
+    const sleepDiaryEntry: DiaryEntry = await getData();
+    if (sleepDiary != null) setSleepDiaryEntry(sleepDiaryEntry);
+  }
 
   async function getCachedModuleIds() {
     const getData = async () => {
       const jsonValue = await AsyncStorage.getItem("ModuleIds");
       return jsonValue != null ? JSON.parse(jsonValue) : null;
-    }
+    };
     const moduleIds: Module[] = await getData();
-    if (moduleIds != null) setCachedModuleIds(moduleIds)
+    if (moduleIds != null) setCachedModuleIds(moduleIds);
   }
 
   async function getMyProgression() {
     const getData = async () => {
       const jsonValue = await AsyncStorage.getItem("Progression");
-      return jsonValue != null ? JSON.parse(jsonValue) : null
-    }
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    };
     const progression: ModuleProgression[] = await getData();
-    if (progression != null) setProgression(progression)
+    if (progression != null) setProgression(progression);
   }
 
   useEffect(() => {
@@ -94,6 +117,7 @@ export function StorageController(props: {
     getCachedSleepDiary();
     getCachedModuleIds();
     getMyProgression();
+    getCachedSleepDiaryEntry();
   }, []);
 
   useEffect(() => {
@@ -114,7 +138,17 @@ export function StorageController(props: {
         console.error;
       }
     }
-  }, [progression])
+  }, [progression]);
+
+  useEffect(() => {
+    if (sleepDiary != undefined) {
+      try {
+        storeSleepDiary(sleepDiary);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [sleepDiary]);
 
   return <>{children}</>;
 }
