@@ -1,9 +1,9 @@
 import { PageTemplate } from "../material/PageTemplate";
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { UserEx } from "../../types/Types";
+import { User, UserEx } from "../../types/Types";
 import { AuthContext } from "../../auth/AuthProvider";
-import { getUserByIdentiyId } from "../../api/userApi";
+import { createUser, getUserByIdentiyId } from "../../api/userApi";
 import { useRecoilState } from "recoil";
 import { cachedSleepDiary, loggedInUser } from "../../state/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,7 +13,13 @@ import { Alert } from "../material/Alert";
 import { Card } from "../material/Card";
 import { Button } from "../material/Button";
 import { TextField } from "../material/TextField";
-import { storeCachedModules, storeLocalUser, storeModuleIds, storeProgression, storeSleepDiary } from "../../state/StorageController";
+import {
+  storeCachedModules,
+  storeLocalUser,
+  storeModuleIds,
+  storeProgression,
+  storeSleepDiary,
+} from "../../state/StorageController";
 
 export function ProfilePage() {
   const [thisUser, setThisUser] = useRecoilState(loggedInUser);
@@ -22,6 +28,17 @@ export function ProfilePage() {
   const { sessionToken, session, setSession } = useContext(AuthContext);
   const navigation = useNavigation();
   const [openAlert, setOpenAlert] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [user, setUser] = useState<User>(
+    thisUser ?? {
+      email: "",
+      name: "",
+      dateOfBirth: "",
+      gender: "undefined",
+      occupation: "",
+      relationshipStatus: "undefined",
+    }
+  );
 
   const style = StyleSheet.create({
     fieldDescriptions: {
@@ -61,33 +78,108 @@ export function ProfilePage() {
     <PageTemplate>
       <Card style={{ margin: 10 }}>
         <View style={{ marginBottom: 10 }}>
-          <Text
-            style={{ color: colors.text_white, fontSize: 24, marginBottom: 15 }}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            Din Profil:
-          </Text>
-          {
-            thisUser ? (<View><Text style={style.fieldDescriptions}>Epost</Text>
-            <TextField editable={false} value={thisUser.email} />
-            <Text style={style.fieldDescriptions}>Navn</Text>
-            <TextField value={thisUser.name} editable={false} />
-            <Text style={style.fieldDescriptions}>Fødselsdato</Text>
-            <TextField editable={false} value={thisUser.dateOfBirth} />
-            <Text style={style.fieldDescriptions}>Kjønn</Text>
-            <TextField editable={false} value={thisUser.gender} />
-            <Text style={style.fieldDescriptions}>Yrke</Text>
-            <TextField editable={false} value={thisUser.occupation} /></View>) : <View />
-          }
+            <Text
+              style={{
+                color: colors.text_white,
+                fontSize: 24,
+                marginBottom: 15,
+              }}
+            >
+              Din Profil:
+            </Text>
+            <Button
+              variant="contained"
+              style={{ width: 100 }}
+              onClick={() => setEdit(!edit)}
+            >
+              {!edit ? <Text>Endre</Text> : <Text>Stop Endre</Text>}
+            </Button>
+          </View>
+          {thisUser ? (
+            <View>
+              <Text style={style.fieldDescriptions}>Epost</Text>
+              <TextField
+                editable={edit}
+                value={user.email}
+                onChange={(arg: string) => {
+                  setUser((prev) => ({ ...prev, email: arg }));
+                }}
+              />
+              <Text style={style.fieldDescriptions}>Navn</Text>
+              <TextField
+                value={user.name}
+                editable={edit}
+                onChange={(arg: string) => {
+                  setUser((prev) => ({ ...prev, name: arg }));
+                }}
+              />
+              <Text style={style.fieldDescriptions}>Fødselsdato</Text>
+              <TextField
+                editable={edit}
+                value={user.dateOfBirth}
+                onChange={(arg: string) => {
+                  setUser((prev) => ({ ...prev, dateOfBirth: arg }));
+                }}
+              />
+              <Text style={style.fieldDescriptions}>Kjønn</Text>
+              <TextField
+                editable={edit}
+                value={user.gender}
+                onChange={(arg: string) => {
+                  if (arg === ("male" || "female" || "other" || "undefined"))
+                    setUser((prev) => ({ ...prev, gender: arg }));
+                }}
+              />
+              <Text style={style.fieldDescriptions}>Yrke</Text>
+              <TextField
+                editable={edit}
+                value={user.occupation}
+                onChange={(arg: string) => {
+                  setUser((prev) => ({ ...prev, occupation: arg }));
+                }}
+              />
+            </View>
+          ) : (
+            <View />
+          )}
         </View>
+        {edit ? (
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (session?.identity.id) {
+                setThisUser(user);
+                createUser(user, session?.identity.id);
+                setEdit(false);
+              }
+            }}
+          >
+            <Text style={{ fontSize: 18 }}>Lagre</Text>
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            onClick={() => {
+              logOut();
+            }}
+          >
+            <Text style={{ fontSize: 18 }}>Logg ut</Text>
+          </Button>
+        )}
+
         <Button
-          variant="contained"
-          onClick={() => {
-            logOut();
-          }}
+          onClick={() =>
+            //@ts-ignore
+            getUserByIdentiyId(session?.identity.id).then((r) => console.log(r))
+          }
         >
-          <Text style={{ fontSize: 18 }}>Logg ut</Text>
-        </Button>{/** @ts-ignore */}
-        <Button onClick={() => getUserByIdentiyId(session?.identity.id).then((r) => console.log(r))}>
           <Text>Text</Text>
         </Button>
       </Card>
