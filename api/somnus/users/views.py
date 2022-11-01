@@ -8,4 +8,4 @@ from somnus.users.serializers import UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     def get_queryset(self) -> QuerySet[User]:
-        return User.objects.filter(self.request.user)
+        return User.objects.filter(id=self.request.user.id) # type: ignore[union-attr]
