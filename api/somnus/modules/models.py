@@ -1,3 +1,4 @@
+from cgitb import text
 import operator
 from typing import Any, Callable
 import uuid
@@ -106,12 +107,16 @@ class VideoSection(Section):
 
 
 class Input(models.Model):
+    class InputType(models.TextChoices):
+        select = 'select', 'Flervalg'
+        text = 'text', 'Fritekst'
+        checkbox = 'checkbox', 'Avkrysning'
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    type = models.CharField(max_length=255)
+    type = models.CharField(max_length=255, choices=InputType.choices)
     name = models.CharField(max_length=255)
     label = models.CharField(max_length=255)
     helptext = models.CharField(max_length=255)
-    value = models.CharField(max_length=255, blank=True)
     section = models.ForeignKey(to=FormSection, related_name='form', on_delete=models.CASCADE)
     ordering = models.PositiveIntegerField(
         default=0,
