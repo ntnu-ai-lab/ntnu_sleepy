@@ -20,7 +20,7 @@ class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
         model = DiaryEntry
         fields = '__all__'
 
-class SleepRestrictionPlanSerializer(serializers.ModelField):
+class SleepRestrictionPlanSerializer(serializers.ModelSerializer[SleepRestrictionPlan]):
     class Meta:
         model = SleepRestrictionPlan
         fields = '__all__'
