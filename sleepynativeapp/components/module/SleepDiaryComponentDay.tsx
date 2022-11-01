@@ -112,7 +112,7 @@ export default function SleepDiaryComponentDay() {
   }
 
   async function postEntry() {
-    if (allNapsAreValid && storedSleepDiary.id) {
+    if (allNapsAreValid && storedSleepDiary && storedSleepDiary.id) {
       /* console.log(
         "DATE: " +
           date +
@@ -165,14 +165,17 @@ export default function SleepDiaryComponentDay() {
           setStoredSleepDiary(storedSleepDiary); */
 
           console.log("Result", entry);
-          const tempEntries = [finalEntry, ...storedSleepDiary.diary_entries];
+          if (storedSleepDiary?.diary_entries) {
+            const tempEntries = [finalEntry, ...storedSleepDiary.diary_entries];
+            const newDiary = {
+              ...storedSleepDiary,
+              diary_entries: [...tempEntries],
+            };
+            setStoredSleepDiary(newDiary);
+          }
+
           //tempEntries.push(finalEntry);
           //console.log("tempEntries", tempEntries);
-
-          const newDiary = {
-            ...storedSleepDiary,
-            diary_entries: [...tempEntries],
-          };
 
           //console.log("newDiary", newDiary);
 
@@ -180,7 +183,6 @@ export default function SleepDiaryComponentDay() {
             ...diary,
             diary_entries: [...tempEntries],
           })); */
-          setStoredSleepDiary(newDiary);
           //console.log("STORED: ", storedSleepDiary);
         }
       });
