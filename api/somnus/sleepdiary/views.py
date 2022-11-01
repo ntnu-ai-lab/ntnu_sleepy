@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Any
 from rest_framework import viewsets
 from rest_framework.request import Request
@@ -29,4 +30,6 @@ class DiaryEntryViewSet(viewsets.ModelViewSet):
 class SleepRestrictionPlan(viewsets.ModelViewSet):
 
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        duration = max(SleepDiary.objects.get(user=request.user).average_sleep_duration, timedelta(hours=5))
+        request.data.update({'user': request.user, 'duration': duration})
         return super().create(request, *args, **kwargs)
