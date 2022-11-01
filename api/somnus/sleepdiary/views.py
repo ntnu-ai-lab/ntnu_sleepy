@@ -51,7 +51,7 @@ class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
                 user=plan.user,
                 custom_rise_time=plan.custom_rise_time,
                 week=date.today(),
-                duration=plan.duration + timedelta(minutes=20) if plan.user.diary.first().average_efficiency else plan.duration
+                duration=plan.duration + timedelta(minutes=20) if plan.user.diary.first().average_efficiency > 0.8 else plan.duration
             )
 
         return Response(self.serializer_class(plan).data)
