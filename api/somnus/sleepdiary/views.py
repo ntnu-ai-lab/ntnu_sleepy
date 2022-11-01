@@ -43,9 +43,7 @@ class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        if not self.queryset:
-            return Response()
-        plan = self.queryset.first()
+        plan = SleepRestrictionPlan.objects.filter(user=request.user).first()
 
         if plan and plan.week < date.today() - timedelta(weeks=1):
             plan = self.queryset.create(
@@ -56,5 +54,5 @@ class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
                 duration=plan.duration + timedelta(minutes=20) if plan.user.diary.first().average_efficiency else plan.duration
             )
 
-        return Response(plan)
+        return Response(self.serializer_class(plan).data)
 
