@@ -18,7 +18,7 @@ class OryBackend(BaseBackend):
         sdk_url = config().get('ORY_SDK_URL')
         sess = requests.get(
             f"{sdk_url}/sessions/whoami",
-            headers=request.headers
+            headers={'X-Session-Token': request.headers.get('X-Session-Token', '')}
         )
         if sess.status_code != HTTP_STATUS_OK:
             return None
