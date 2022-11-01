@@ -6,6 +6,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from django.db import models
 
+from somnus.common.request import AuthenticatedRequest
+
 from .serializers import DiaryEntrySerializer, SleepDiarySerializer, SleepRestrictionPlanSerializer
 
 from .models import DiaryEntry, SleepDiary, SleepRestrictionPlan
@@ -35,12 +37,14 @@ class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> models.QuerySet[SleepRestrictionPlan]:
         return SleepRestrictionPlan.objects.filter(user=self.request.user)
 
-    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+    def create(self, request: AuthenticatedRequest, *args: Any, **kwargs: Any) -> Response: # type: ignore [override]
         duration = max(SleepDiary.objects.get(user=request.user).average_sleep_duration, timedelta(hours=5))
-        request.data.update({'user': request.user, 'duration': duration})
+        request.data.update({'user': request.user.id, 'duration': duration})
         return super().create(request, *args, **kwargs)
 
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        if not self.queryset:
+            return Response()
         plan = self.queryset.first()
 
         if plan and plan.week < date.today() - timedelta(weeks=1):
