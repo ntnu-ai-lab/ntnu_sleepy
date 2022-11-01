@@ -7,7 +7,6 @@ export async function createUser(user: User, identiyId: string) {
     method: "PATCH",
     body: JSON.stringify(user),
   });
-  console.log(response.data)
   return response.data
 }
 
