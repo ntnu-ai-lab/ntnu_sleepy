@@ -51,7 +51,7 @@ class InputAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimpo
     extra = 0
     model = Input
     inlines = (RuleGroupsAdminInput,)
-    exclude = ('ordering', 'id')
+    exclude = ('id',)
 
 class FormSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
@@ -76,6 +76,8 @@ class PageAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-
     can_delete = False
 
 class PageAdmin(sortableadmin.SortableAdminMixin, admin.ModelAdmin): # type: ignore[no-any-unimported]
+    search_fields = ['title']
+    list_filter = ('part', 'part__module')
     exclude = ['id']
     inlines = [SectionAdminSortable]
 
@@ -92,23 +94,12 @@ class PartAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-
     cal_delete = False
 
 class PartAdmin(nested_admin.NestedModelAdmin): # type: ignore[no-any-unimported]
-    exclude = ('id',)
+    exclude = ('id', 'ordering', 'module')
     inlines = [PageAdminNested]
     show_change_link = True
 
-
-class PartProxy(Part):
-    class Meta:
-        proxy = True
-        verbose_name = 'Part ordering'
-        verbose_name_plural = 'Parts Ordering'
-
-class PartAdminList(sortableadmin.SortableAdminMixin, admin.ModelAdmin): # type: ignore[no-any-unimported]
-    exclude = ['id']
-    inlines = [PageAdminNested]
-
 class ModuleAdminList(sortableadmin.SortableAdminMixin, admin.ModelAdmin): # type: ignore[no-any-unimported]
-    exclude = ['id']
+    exclude = ['id', 'ordering']
     inlines = [PartAdminSortable]
     show_change_link = True
     
