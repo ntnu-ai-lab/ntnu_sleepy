@@ -55,7 +55,7 @@ export function TextField(props: {
     text: {
       fontWeight: "400",
       fontSize: 16,
-      color: textColor === "white" ? colors.text_white : colors.text_primary,
+      color: !editable ? colors.text_secondary : textColor === "white" ? colors.text_white : colors.text_primary,
       height: "100%",
     },
   });
