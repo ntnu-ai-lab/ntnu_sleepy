@@ -12,10 +12,22 @@ class SleepDiary(models.Model):
 
     entries: models.Manager['DiaryEntry']
 
+    @property
+    def average_sleep_duration(self) -> datetime.timedelta:
+        # entries = self.entries.order_by('-date')[:14]
+        # return sum([entry.sleep_duaration for entry in entries], datetime.timedelta()) / len(entries)
+        entries = self.entries.filter(date__gt=datetime.date.today() - datetime.timedelta(days=14)).all()
+        return sum([entry.sleep_duration for entry in entries], datetime.timedelta()) / len(entries)
+
+    @property
+    def average_efficiency(self) -> float:
+        entries = self.entries.filter(date__gt=datetime.date.today() - datetime.timedelta(days=14)).all()
+        return sum([entry.efficiency for entry in entries]) / len(entries)
+
 class DiaryEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.DateField(default=datetime.date.today, editable=True)
-    diary = models.ForeignKey(to=SleepDiary, related_name='entry', on_delete=models.CASCADE)
+    date = models.DateField(default=datetime.date.today, editable=False)
+    diary = models.ForeignKey(to=SleepDiary, related_name='entries', on_delete=models.CASCADE)
     day_rating = models.IntegerField()
     naps = ArrayField(ArrayField(models.DateTimeField(), size=2), size=100, blank=True)
     sleep_aides = models.BooleanField(blank=True, null=True)
