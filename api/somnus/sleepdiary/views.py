@@ -1,13 +1,14 @@
-from datetime import timedelta
+from datetime import date, timedelta
 from typing import Any
+from uuid import uuid4
 from rest_framework import viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 from django.db import models
 
-from .serializers import DiaryEntrySerializer, SleepDiarySerializer
+from .serializers import DiaryEntrySerializer, SleepDiarySerializer, SleepRestrictionPlanSerializer
 
-from .models import DiaryEntry, SleepDiary
+from .models import DiaryEntry, SleepDiary, SleepRestrictionPlan
 
 class SleepDiaryViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> models.QuerySet[SleepDiary]:
@@ -27,9 +28,29 @@ class DiaryEntryViewSet(viewsets.ModelViewSet):
         request.data.update({'diary': kwargs['diary_pk']})
         return super().update(request, *args, **kwargs)
 
-class SleepRestrictionPlan(viewsets.ModelViewSet):
+class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
+    serializer_class = SleepRestrictionPlanSerializer
+    queryset: models.Manager[SleepRestrictionPlan]
+
+    def get_queryset(self) -> models.QuerySet[SleepRestrictionPlan]:
+        return SleepRestrictionPlan.objects.filter(user=self.request.user)
 
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         duration = max(SleepDiary.objects.get(user=request.user).average_sleep_duration, timedelta(hours=5))
         request.data.update({'user': request.user, 'duration': duration})
         return super().create(request, *args, **kwargs)
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        plan = self.queryset.first()
+
+        if plan and plan.week < date.today() - timedelta(weeks=1):
+            plan = self.queryset.create(
+                id=uuid4(),
+                user=plan.user,
+                custom_rise_time=plan.custom_rise_time,
+                week=date.today(),
+                duration=plan.duration + timedelta(minutes=20) if plan.user.diary.first().average_efficiency else plan.duration
+            )
+
+        return Response(plan)
+
