@@ -14,14 +14,12 @@ class SleepDiary(models.Model):
 
     @property
     def average_sleep_duration(self) -> datetime.timedelta:
-        # entries = self.entries.order_by('-date')[:14]
-        # return sum([entry.sleep_duaration for entry in entries], datetime.timedelta()) / len(entries)
-        entries = self.entries.filter(date__gt=datetime.date.today() - datetime.timedelta(days=14)).all()
+        entries = self.entries.order_by('-date')[:7]
         return sum([entry.sleep_duration for entry in entries], datetime.timedelta()) / len(entries)
 
     @property
     def average_efficiency(self) -> float:
-        entries = self.entries.filter(date__gt=datetime.date.today() - datetime.timedelta(days=14)).all()
+        entries = self.entries.order_by('-date')[:7]
         return sum([entry.efficiency for entry in entries]) / len(entries)
 
 class DiaryEntry(models.Model):
