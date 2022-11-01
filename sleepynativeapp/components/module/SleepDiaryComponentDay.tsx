@@ -19,7 +19,7 @@ import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
 
 export default function SleepDiaryComponentDay() {
   const [date, setDate] = useState<Date>(new Date()); //TODO hent date fra frontend
-  const [dayRating, setDayRating] = useState<number>(0);
+  const [dayRating, setDayRating] = useState<number>();
   const [rerender, setRerender] = useState<boolean>(false);
 
   const [hasNapped, setHasNapped] = useState<"Ja" | "Nei" | "">("");
@@ -95,7 +95,7 @@ export default function SleepDiaryComponentDay() {
     setDayRating(diaryEntry.day_rating);
     diaryEntry.naps.length > 0 ? setHasNapped("Ja") : setHasNapped("Nei");
     setNaps(diaryEntry.naps);
-    console.log(dayRating);
+    //console.log(dayRating);
   }
 
   function resetEntryValues(): void {
@@ -106,14 +106,14 @@ export default function SleepDiaryComponentDay() {
 
   async function postEntry() {
     if (allNapsAreValid && storedSleepDiary.id) {
-      console.log(
+      /* console.log(
         "DATE: " +
           date +
           date.getFullYear() +
           date.getMonth() +
           1 +
           date.getDate()
-      );
+      ); */
       const diaryEntry: Pick<DiaryEntry, "day_rating" | "naps"> = {
         date:
           "" +
@@ -122,29 +122,35 @@ export default function SleepDiaryComponentDay() {
           (date.getMonth() + 1) +
           "-" +
           date.getDate(),
-        day_rating: dayRating,
+        day_rating: dayRating ?? 0,
         //@ts-ignore
         naps: naps,
       };
       await checkSleepDiaryEntries();
 
-      console.log(sleepDiaryID, diaryEntry);
+      //console.log(sleepDiaryID, diaryEntry);
       await createDiaryEntry(storedSleepDiary.id, diaryEntry).then((entry) => {
         if (entry) {
           const finalEntry: DiaryEntry = {
             id: entry.id ?? "",
-            date: entry.date ?? new Date(),
+            //@ts-ignore kan sendes til backend uten verdi, legges til av brukeren senere
+            date: entry.date,
             sleep_aides: entry.sleep_aides ?? false,
             sleep_aides_detail: entry.sleep_aides_detail ?? "",
             notes: entry.notes ?? "",
             sleep_quality: entry.sleep_quality ?? 0,
-            bedtime: entry.bedtime ?? new Date(),
-            lights_out: entry.lights_out ?? new Date(),
+            //@ts-ignore
+            bedtime: entry.bedtime,
+            //@ts-ignore
+            lights_out: entry.lights_out,
             time_to_sleep: entry.time_to_sleep ?? 0,
             night_wakes: entry.night_wakes ?? [0],
-            waketime: entry.waketime ?? new Date(),
-            risetime: entry.risetime ?? new Date(),
-            day_rating: entry.day_rating ?? 0,
+            //@ts-ignore
+            waketime: entry.waketime,
+            //@ts-ignore
+            risetime: entry.risetime,
+            //@ts-ignore Kan ikke være udefinert, siden brukeren ikke kan trykke på knappen uten at man har valgt en verdi
+            day_rating: entry.day_rating,
             naps: entry.naps ?? [],
           };
           /* console.log(entry);
@@ -152,24 +158,28 @@ export default function SleepDiaryComponentDay() {
           setStoredSleepDiary(storedSleepDiary); */
 
           console.log("Result", entry);
-          const tempEntries = [...storedSleepDiary.diary_entries];
-          tempEntries.push(finalEntry);
-          console.log("tempEntries", tempEntries);
+          const tempEntries = [finalEntry, ...storedSleepDiary.diary_entries];
+          //tempEntries.push(finalEntry);
+          //console.log("tempEntries", tempEntries);
 
-          const newDiary = { ...storedSleepDiary, diary_entries: tempEntries };
-          console.log("newDiary", newDiary);
+          const newDiary = {
+            ...storedSleepDiary,
+            diary_entries: [...tempEntries],
+          };
+
+          //console.log("newDiary", newDiary);
 
           /* setStoredSleepDiary((diary) => ({
             ...diary,
             diary_entries: [...tempEntries],
           })); */
           setStoredSleepDiary(newDiary);
-          console.log("STORED: ", storedSleepDiary);
+          //console.log("STORED: ", storedSleepDiary);
         }
       });
     } else {
       console.log("DiaryEntry not valid");
-      console.log(allNapsAreValid, sleepDiaryID);
+      //console.log(allNapsAreValid, sleepDiaryID);
     }
   }
 
@@ -220,6 +230,7 @@ export default function SleepDiaryComponentDay() {
         onChange={(e) => {
           setDayRating(dagvurdering.indexOf(e) + 1);
         }}
+        //@ts-ignore Kan ikke være udefinert, siden brukeren ikke kan trykke på knappen uten at man har valgt en verdi
         value={dagvurdering[dayRating]}
       />
       <Text
@@ -328,9 +339,10 @@ export default function SleepDiaryComponentDay() {
         style={{ width: "50%" }}
         variant="outlined"
         disabled={
-          dayRating === 0 ||
-          hasNapped === undefined ||
-          (hasNapped === "Ja" && !allNapsAreValid)
+          dayRating === (null || undefined || 0) ||
+          hasNapped === (undefined || "") ||
+          (hasNapped === "Ja" && !allNapsAreValid) ||
+          hasNapped !== "Nei"
         }
         onClick={() => postEntry()}
       >

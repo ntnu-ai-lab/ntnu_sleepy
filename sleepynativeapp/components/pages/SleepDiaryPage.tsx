@@ -21,6 +21,7 @@ import {
 } from "../../api/sleepDiaryApi";
 import { useRecoilState } from "recoil";
 import { cachedSleepDiary } from "../../state/atoms";
+import SleepDiaryComponentDay from "../module/SleepDiaryComponentDay";
 
 export function SleepDiaryPage() {
   const [createNewDiary, setCreateNewDiary] = useState<boolean>(false);
@@ -138,7 +139,7 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {createNewDiary ? <SleepDiaryComponent /> : <></>}
+        {createNewDiary ? <SleepDiaryComponentDay /> : <></>}
         {storedSleepDiary !== undefined ? (
           <></>
         ) : (

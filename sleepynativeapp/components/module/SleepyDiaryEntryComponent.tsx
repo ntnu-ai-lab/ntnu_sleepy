@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Title, Text } from "react-native-paper";
 import { useRecoilState } from "recoil";
@@ -26,10 +26,15 @@ export default function SleepyDiaryEntryComponent(props: {
     "Bra",
     "Veldig bra",
   ];
+
   const [loading, setLoading] = useState<boolean>(false);
   const [sleepDiaryEntry, setSleepDiaryEntry] = useState<DiaryEntry>({
     ...props.sleepDiaryEntry,
     date: new Date(props.sleepDiaryEntry.date),
+    night_wakes:
+      props.sleepDiaryEntry.night_wakes !== null
+        ? props.sleepDiaryEntry.night_wakes
+        : [],
   });
   const [timeToSleep, setTimeToSleep] = useState<{
     value: number;
@@ -43,7 +48,7 @@ export default function SleepyDiaryEntryComponent(props: {
     text: string;
   }>({
     value:
-      sleepDiaryEntry.night_wakes !== null
+      sleepDiaryEntry.night_wakes !== (null && undefined && 0)
         ? sleepDiaryEntry.night_wakes.length
         : 0,
     text:
@@ -51,7 +56,6 @@ export default function SleepyDiaryEntryComponent(props: {
         ? sleepDiaryEntry.night_wakes.length.toString()
         : "0",
   });
-  //const [nightWakes, setNightWakes] = useState<number[]>([]);
   const [storedSleepDiary, setStoredSleepDiary] =
     useRecoilState(cachedSleepDiary);
   const [hasNapped, setHasNapped] = useState<string>(
@@ -63,17 +67,16 @@ export default function SleepyDiaryEntryComponent(props: {
 
   const allNapsAreValid = naps.every((nap) => nap.every((date) => date));
 
+  const [allValuesAreValid, setAllValuesAreValid] = useState<boolean>(false);
+
   async function postEntry() {
-    //console.log("DiaryID: " + sleepDiaryID, storedSleepDiary.id);
-    //console.log("DiaryEntry: " + diaryEntry?.id);
-    //console.log(bedtime, lightsOut, timeToSleep, waketime, risetime);
     console.log(sleepDiaryEntry, props.sleepDiaryID);
     if (
       props.sleepDiaryID &&
       sleepDiaryEntry &&
       sleepDiaryEntry.bedtime &&
       sleepDiaryEntry.lights_out &&
-      sleepDiaryEntry.time_to_sleep &&
+      sleepDiaryEntry.time_to_sleep !== (null || undefined) &&
       sleepDiaryEntry.waketime &&
       sleepDiaryEntry.risetime
     ) {
@@ -85,29 +88,20 @@ export default function SleepyDiaryEntryComponent(props: {
           naps: [...naps], //ts ignore fordi alle naps er valid
         }));
       }
-
-      /* setSleepDiaryEntry((entry) => ({
-        ...entry, date: new Date(entry.date.getFullYear(), )
-      })) */
       const { date, ...rest } = sleepDiaryEntry;
       setLoading(true);
       const entryResult = await finishDiaryEntry(storedSleepDiary.id, rest)
         .then((entry) => {
           if (entry) {
-            console.log("Result", entry);
+            //console.log("Result", entry);
             const tempEntries = [...storedSleepDiary.diary_entries];
             tempEntries.push(entry);
             setStoredSleepDiary((diary) => ({
               ...diary,
               diary_entries: tempEntries,
             }));
-            console.log("STORED: ", storedSleepDiary);
-            //const temp = storedSleepDiary;
-            //temp.diary_entries.push(entry);
-            //storedSleepDiary.diary_entries.push(entry);
-            //console.log("stored", temp);
+            //console.log("STORED: ", storedSleepDiary);
             return entry;
-            //setStoredSleepDiary(temp);
           }
         })
         .catch((err) => {
@@ -116,6 +110,27 @@ export default function SleepyDiaryEntryComponent(props: {
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    //console.log(sleepDiaryEntry.night_wakes);
+  }, [sleepDiaryEntry.night_wakes]);
+
+  useEffect(() => {
+    if (
+      props.sleepDiaryID &&
+      sleepDiaryEntry &&
+      sleepDiaryEntry.bedtime &&
+      sleepDiaryEntry.lights_out &&
+      sleepDiaryEntry.time_to_sleep !== (null || undefined) &&
+      sleepDiaryEntry.waketime &&
+      sleepDiaryEntry.risetime &&
+      sleepDiaryEntry.sleep_quality
+    ) {
+      setAllValuesAreValid(true);
+    } else {
+      setAllValuesAreValid(false);
+    }
+  }, [sleepDiaryEntry]);
 
   return (
     <>
@@ -141,32 +156,6 @@ export default function SleepyDiaryEntryComponent(props: {
 
           {show ? (
             <View style={{ alignItems: "center" }}>
-              {/* <Text
-                style={{
-                  alignItems: "center",
-                  color: colors.primary,
-                }}
-              >
-                Hvor dypt sov du i natt?
-              </Text>
-              <TextField
-                style={{ minWidth: "80%", alignItems: "center" }}
-                value={søvnvurdering[sleepDiaryEntry.sleep_quality - 1]}
-                editable={false}
-              /> */}
-              {/* <Text
-                style={{
-                  alignItems: "center",
-                  color: colors.primary,
-                }}
-              >
-                Hvordan har du fungert på dagtid?
-              </Text>
-              <TextField
-                style={{ minWidth: "80%", alignItems: "center" }}
-                value={dagvurdering[sleepDiaryEntry.day_rating - 1]}
-                editable={false}
-              /> */}
               <Text
                 style={{
                   alignItems: "center",
@@ -230,32 +219,6 @@ export default function SleepyDiaryEntryComponent(props: {
                         alignSelf: "center",
                       }}
                     >
-                      {/* <TimeField
-                        baseDate={sleepDiaryEntry.date}
-                        onChange={(nap) =>
-                          setSleepDiaryEntry((entry) => {
-                            if (nap) {
-                              entry.naps[n][0] = nap;
-                              return { ...entry };
-                            } else {
-                              return { ...entry };
-                            }
-                          })
-                        }
-                      />
-                      <TimeField
-                        baseDate={sleepDiaryEntry.date}
-                        onChange={(nap) =>
-                          setSleepDiaryEntry((entry) => {
-                            if (nap) {
-                              entry.naps[n][1] = nap;
-                              return { ...entry };
-                            } else {
-                              return { ...entry };
-                            }
-                          })
-                        }
-                      /> */}
                       <TimeField
                         baseDate={new Date(sleepDiaryEntry.date)}
                         onChange={(nap) =>
@@ -405,17 +368,20 @@ export default function SleepyDiaryEntryComponent(props: {
                     marginTop: 10,
                   }}
                 >
-                  Når gikk du til sengs?
+                  Når gikk du til sengs? (HH:MM)
                 </Text>
                 <TimeField
                   //onChange={(date) => date && setBedtime(date)}
-                  onChange={(date) =>
-                    date &&
-                    setSleepDiaryEntry((entry) => ({
-                      ...entry,
-                      bedtime: date,
-                    }))
-                  }
+                  onChange={(date) => {
+                    if (date) {
+                      setSleepDiaryEntry((entry) => ({
+                        ...entry,
+                        bedtime: date,
+                      }));
+                    } else {
+                      setAllValuesAreValid(false);
+                    }
+                  }}
                   baseDate={new Date(sleepDiaryEntry.date)}
                   initialState={{
                     string: sleepDiaryEntry.bedtime
@@ -435,16 +401,19 @@ export default function SleepyDiaryEntryComponent(props: {
                     marginTop: 10,
                   }}
                 >
-                  Når skrudde du av lyset?
+                  Når skrudde du av lyset? (HH:MM)
                 </Text>
                 <TimeField
-                  onChange={(date) =>
-                    date &&
-                    setSleepDiaryEntry((entry) => ({
-                      ...entry,
-                      lights_out: date,
-                    }))
-                  }
+                  onChange={(date) => {
+                    if (date) {
+                      setSleepDiaryEntry((entry) => ({
+                        ...entry,
+                        lights_out: date,
+                      }));
+                    } else {
+                      setAllValuesAreValid(false);
+                    }
+                  }}
                   initialState={{
                     string: sleepDiaryEntry.lights_out
                       ? "" +
@@ -511,6 +480,7 @@ export default function SleepyDiaryEntryComponent(props: {
                       text: e,
                       value: parseInt(e),
                     }));
+                    console.log(sleepDiaryEntry.night_wakes);
                   }}
                 />
                 {numberOfNightWakes.value &&
@@ -555,17 +525,9 @@ export default function SleepyDiaryEntryComponent(props: {
                           setSleepDiaryEntry((entry) => {
                             const night_wakes = [...entry.night_wakes];
                             night_wakes[n] = parseInt(e);
-
                             return { ...entry, night_wakes: night_wakes };
                           });
                         }}
-                        /* onChange={(e) => {
-                          setNightWakes((wake) => {
-                            nightWakes[n] = parseInt(e);
-                            //setRefreshScreen(!refreshScreen);
-                            return wake;
-                          });
-                        }} */
                       />
                     </Card>
                   ))
@@ -580,16 +542,19 @@ export default function SleepyDiaryEntryComponent(props: {
                   }}
                 >
                   Når våknet du på morgenen uten å få sove igjen? Noter ned ditt
-                  endelige oppvåkningstidspunkt.
+                  endelige oppvåkningstidspunkt. (HH:MM)
                 </Text>
                 <TimeField
-                  onChange={(date) =>
-                    date &&
-                    setSleepDiaryEntry((entry) => ({
-                      ...entry,
-                      waketime: date,
-                    }))
-                  }
+                  onChange={(date) => {
+                    if (date) {
+                      setSleepDiaryEntry((entry) => ({
+                        ...entry,
+                        waketime: date,
+                      }));
+                    } else {
+                      setAllValuesAreValid(false);
+                    }
+                  }}
                   initialState={{
                     string: sleepDiaryEntry.waketime
                       ? "" +
@@ -608,16 +573,19 @@ export default function SleepyDiaryEntryComponent(props: {
                     marginTop: 10,
                   }}
                 >
-                  Når stod du opp?
+                  Når stod du opp? (HH:MM)
                 </Text>
                 <TimeField
-                  onChange={(date) =>
-                    date &&
-                    setSleepDiaryEntry((entry) => ({
-                      ...entry,
-                      risetime: date,
-                    }))
-                  }
+                  onChange={(date) => {
+                    if (date) {
+                      setSleepDiaryEntry((entry) => ({
+                        ...entry,
+                        risetime: date,
+                      }));
+                    } else {
+                      setAllValuesAreValid(false);
+                    }
+                  }}
                   initialState={{
                     string: sleepDiaryEntry.risetime
                       ? "" +
@@ -674,6 +642,7 @@ export default function SleepyDiaryEntryComponent(props: {
                   style={{ width: "70%", marginBottom: 30 }}
                   variant="outlined"
                   onClick={() => postEntry()}
+                  disabled={!allValuesAreValid}
                 >
                   <Text
                     style={{
