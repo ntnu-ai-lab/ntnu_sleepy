@@ -4,7 +4,6 @@ import { getDiary, listDiaryEntries } from "../../api/sleepDiaryApi";
 import { cachedSleepDiary } from "../../state/atoms";
 import { Card } from "../material/Card";
 import SleepDiaryComponentDay from "./SleepDiaryComponentDay";
-import SleepDiaryComponentNight from "./SleepDiaryComponentNight";
 
 export default function SleepyDiaryEntryComponent() {
   const [dayDone, setDayDone] = useState<boolean>(false); //TODO få state fra backend
