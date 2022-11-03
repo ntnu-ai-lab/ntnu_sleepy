@@ -126,6 +126,7 @@ class Input(models.Model):
     )
     answers: models.Manager['Answer']
     rules : models.Manager['RuleGroup']
+    options: models.Manager['InputOption']
 
     def evaluate_rules(self, user: User) -> bool:
         return any([group.evaluate(user) for group in self.rules.all()]) if self.rules.all() else True
@@ -135,6 +136,12 @@ class Input(models.Model):
 
     class Meta:
         ordering = ['ordering']
+
+class InputOption(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    input = models.ForeignKey(Input, related_name='options', on_delete=models.CASCADE)
+    label = models.CharField(max_length=255, default='')
+    value = models.CharField(max_length=255, default='')
 
 class AnswerList(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

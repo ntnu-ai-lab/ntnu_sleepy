@@ -3,7 +3,7 @@ import nested_admin # type: ignore[import]
 from adminsortable2 import admin as sortableadmin # type: ignore[import]
 
 
-from .models import Module, Page, Part, Rule, RuleGroup, Section, TextSection, FormSection, ImageSection, VideoSection, Input
+from .models import InputOption, Module, Page, Part, Rule, RuleGroup, Section, TextSection, FormSection, ImageSection, VideoSection, Input
 
 class RulesAdminSection(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
@@ -47,10 +47,15 @@ class TextSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-
     inlines = (RuleGroupsAdminSection,)
     exclude = ('ordering', 'id')
 
+class InputOptionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = InputOption
+    exclude = ('id', )
+
 class InputAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = Input
-    inlines = (RuleGroupsAdminInput,)
+    inlines = (RuleGroupsAdminInput, InputOptionAdmin)
     exclude = ('id',)
 
 class FormSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]

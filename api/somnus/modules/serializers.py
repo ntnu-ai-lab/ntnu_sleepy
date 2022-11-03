@@ -4,7 +4,7 @@ from rest_flex_fields import FlexFieldsModelSerializer
 from rest_flex_fields.serializers import FlexFieldsSerializerMixin
 from django.db import models
 
-from .models import Answer, AnswerList, FormSection, ImageSection, Input, Module, Page, Part, Rule, RuleGroup, Section, TextSection, VideoSection
+from .models import Answer, AnswerList, FormSection, ImageSection, Input, InputOption, Module, Page, Part, Rule, RuleGroup, Section, TextSection, VideoSection
 
 class RuleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -71,12 +71,18 @@ class AnswerListWriteSerializer(AnswerListSerializer):
             Answer.objects.create(answer_list=answer_list, **answer)
         return answer_list
 
+class InputOptionSerializer(serializers.ModelSerializer[InputOption]):
+    class Meta:
+        model = InputOption
+        fields = ('id', 'label', 'value')
+
 class InputSerializer(serializers.ModelSerializer[Input]):
     rules = serializers.SerializerMethodField('get_rule_group_serializer')
     answers = AnswerSerializer(many=True, )
+    options = InputOptionSerializer(many=True)
     class Meta:
         model = Input
-        fields = ['id', 'type', 'name', 'label', 'helptext', 'answers', 'rules']
+        fields = ['id', 'type', 'name', 'label', 'helptext', 'answers', 'rules', 'options']
 
     def to_representation(self, instance: Input) -> Any:
         return super().to_representation(instance) if instance.evaluate_rules(self.context['request'].user) else None
