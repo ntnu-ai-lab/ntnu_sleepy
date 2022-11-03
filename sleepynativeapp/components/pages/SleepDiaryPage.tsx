@@ -34,7 +34,9 @@ export function SleepDiaryPage() {
 
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
     if (storedSleepDiary) {
-      console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
+      console.log(
+        "STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary.diary_entries
+      );
       setHasSleepDiary(true);
     } else {
       const diary = await getDiary();
@@ -97,7 +99,12 @@ export function SleepDiaryPage() {
           >
             <Button
               style={{ width: "50%" }}
-              onClick={() => setShowAllDiaries(!showAllDiaries)}
+              onClick={() => {
+                setShowAllDiaries(!showAllDiaries);
+                if (createNewDiary) {
+                  setCreateNewDiary(false);
+                }
+              }}
               variant="outlined"
             >
               <Text
@@ -106,12 +113,17 @@ export function SleepDiaryPage() {
                   textAlign: "center",
                 }}
               >
-                Vis alle søvndagbøker
+                Vis/endre eksisterende dager
               </Text>
             </Button>
             <Button
               style={{ width: "50%" }}
-              onClick={() => setCreateNewDiary(!createNewDiary)}
+              onClick={() => {
+                setCreateNewDiary(!createNewDiary);
+                if (showAllDiaries) {
+                  setShowAllDiaries(false);
+                }
+              }}
               variant="outlined"
             >
               <Text

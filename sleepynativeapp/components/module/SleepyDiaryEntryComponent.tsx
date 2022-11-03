@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Title, Text } from "react-native-paper";
 import { useRecoilState } from "recoil";
-import { finishDiaryEntry } from "../../api/sleepDiaryApi";
+import { finishDiaryEntry, listDiaryEntries } from "../../api/sleepDiaryApi";
 import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
 import { colors } from "../../styles/styles";
 import { DiaryEntry, SleepDiary } from "../../types/modules";
@@ -91,6 +91,20 @@ export default function SleepyDiaryEntryComponent(props: {
 
   const [allValuesAreValid, setAllValuesAreValid] = useState<boolean>(false);
 
+  async function updateStoredSleepDiary(): Promise<void> {
+    if (storedSleepDiary) {
+      const updatedDiaryEntries = await listDiaryEntries(
+        storedSleepDiary.id
+      ).then((entries) => {
+        //@ts-ignore
+        setStoredSleepDiary((diary) => ({
+          ...diary,
+          diary_entries: entries,
+        }));
+      });
+    }
+  }
+
   async function postEntry() {
     console.log(sleepDiaryEntry, props.sleepDiaryID);
     if (
@@ -112,23 +126,36 @@ export default function SleepyDiaryEntryComponent(props: {
       } */
       const { date, ...rest } = sleepDiaryEntry;
       setLoading(true);
-      const entryResult = await finishDiaryEntry(storedSleepDiary.id, rest)
-        .then((entry) => {
-          if (entry) {
-            console.log("Result", entry);
-            const tempEntries = [...storedSleepDiary.diary_entries];
-            tempEntries.push(entry);
-            setStoredSleepDiary((diary) => ({
-              ...diary,
-              diary_entries: tempEntries,
-            }));
-            //console.log("STORED: ", storedSleepDiary);
-            return entry;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (
+        storedSleepDiary &&
+        storedSleepDiary.id &&
+        storedSleepDiary.diary_entries
+      ) {
+        finishDiaryEntry(storedSleepDiary.id, rest)
+          .then((entry) => {
+            if (entry) {
+              console.log("Result", entry);
+              updateStoredSleepDiary();
+              /* const tempEntries = [...storedSleepDiary.diary_entries];
+              tempEntries.forEach((item, i) => {
+                if (item.date === entry.date) {
+                  tempEntries[i] = entry;
+                }
+              }); */
+              //tempEntries.push(entry);
+              //@ts-ignore
+              /* setStoredSleepDiary((diary) => ({
+                ...diary,
+                diary_entries: tempEntries,
+              })); */
+              //console.log("STORED: ", storedSleepDiary);
+              return entry;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
     setLoading(false);
   }
@@ -360,7 +387,6 @@ export default function SleepyDiaryEntryComponent(props: {
                   style={{
                     alignItems: "center",
                     color: colors.primary,
-                    marginTop: 30,
                   }}
                 >
                   Drakk du alkohol, eller brukte du sovemedisiner for å sove i

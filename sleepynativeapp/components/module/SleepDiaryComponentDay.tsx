@@ -20,7 +20,6 @@ import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
 export default function SleepDiaryComponentDay() {
   const [date, setDate] = useState<Date>(new Date()); //TODO hent date fra frontend
   const [dayRating, setDayRating] = useState<number>();
-  const [rerender, setRerender] = useState<boolean>(false);
   const [dateValid, setDateValid] = useState<boolean>(true);
 
   const [hasNapped, setHasNapped] = useState<"Ja" | "Nei" | "">("");
@@ -40,7 +39,9 @@ export default function SleepDiaryComponentDay() {
     cachedSleepDiaryEntry
   );
 
-  const allNapsAreValid = naps.every((nap) => nap.every((date) => date));
+  const allNapsAreValid =
+    (naps.every((nap) => nap.every((date) => date)) && naps.length !== 0) ||
+    hasNapped === "Nei";
 
   async function checkSleepDiary(): Promise<void> {
     if (storedSleepDiary) {
@@ -64,10 +65,24 @@ export default function SleepDiaryComponentDay() {
     console.log("hasNapped: ", hasNapped);
     console.log("dayRating: ", dayRating);
     console.log("allNapsAreValid: ", allNapsAreValid);
+    console.log("Naps: ", naps);
     console.log("dateValid: ", dateValid);
   }, [hasNapped, dayRating, allNapsAreValid, dateValid]);
 
   const [sleepDiaryID, setSleepDiaryID] = useState<string>();
+
+  async function updateStoredSleepDiary(): Promise<void> {
+    if (storedSleepDiary) {
+      const updatedDiaryEntries = await listDiaryEntries(storedSleepDiary.id);
+      if (updatedDiaryEntries) {
+        const tempdiary: SleepDiary = {
+          ...storedSleepDiary,
+          diary_entries: [...updatedDiaryEntries],
+        };
+        setStoredSleepDiary(tempdiary);
+      }
+    }
+  }
 
   async function checkSleepDiaryEntries(): Promise<void> {
     if (storedSleepDiary) {
@@ -83,7 +98,7 @@ export default function SleepDiaryComponentDay() {
           found = true;
           console.log("Entry already exists");
           setStoredSleepDiaryEntry(entry);
-          setEntryValues();
+          //setEntryValues();
         }
       });
       if (!found) {
@@ -98,29 +113,12 @@ export default function SleepDiaryComponentDay() {
     console.log("DATE CHANGED");
   }, [date]);
 
-  function setEntryValues(): void {
-    setDayRating(diaryEntry.day_rating);
-    diaryEntry.naps.length > 0 ? setHasNapped("Ja") : setHasNapped("Nei");
-    setNaps(diaryEntry.naps);
-    //console.log(dayRating);
-  }
-
-  function resetEntryValues(): void {
-    setDayRating(0);
-    setHasNapped("");
-    setNaps([]);
-  }
-
   async function postEntry() {
-    if (allNapsAreValid && storedSleepDiary && storedSleepDiary.id) {
-      /* console.log(
-        "DATE: " +
-          date +
-          date.getFullYear() +
-          date.getMonth() +
-          1 +
-          date.getDate()
-      ); */
+    if (
+      (!hasNapped || (hasNapped && allNapsAreValid)) &&
+      storedSleepDiary &&
+      storedSleepDiary.id
+    ) {
       const diaryEntry: Pick<DiaryEntry, "day_rating" | "naps"> = {
         date:
           "" +
@@ -138,58 +136,14 @@ export default function SleepDiaryComponentDay() {
       //console.log(sleepDiaryID, diaryEntry);
       await createDiaryEntry(storedSleepDiary.id, diaryEntry).then((entry) => {
         if (entry) {
-          const finalEntry: DiaryEntry = {
-            id: entry.id ?? "",
-            //@ts-ignore kan sendes til backend uten verdi, legges til av brukeren senere
-            date: entry.date,
-            sleep_aides: entry.sleep_aides ?? false,
-            sleep_aides_detail: entry.sleep_aides_detail ?? "",
-            notes: entry.notes ?? "",
-            sleep_quality: entry.sleep_quality ?? 0,
-            //@ts-ignore
-            bedtime: entry.bedtime,
-            //@ts-ignore
-            lights_out: entry.lights_out,
-            time_to_sleep: entry.time_to_sleep ?? 0,
-            night_wakes: entry.night_wakes ?? [0],
-            //@ts-ignore
-            waketime: entry.waketime,
-            //@ts-ignore
-            risetime: entry.risetime,
-            //@ts-ignore Kan ikke være udefinert, siden brukeren ikke kan trykke på knappen uten at man har valgt en verdi
-            day_rating: entry.day_rating,
-            naps: entry.naps ?? [],
-          };
-          /* console.log(entry);
-          storedSleepDiary.diary_entries.push(finalEntry);
-          setStoredSleepDiary(storedSleepDiary); */
-
-          console.log("Result", entry);
-          if (storedSleepDiary?.diary_entries) {
-            const tempEntries = [finalEntry, ...storedSleepDiary.diary_entries];
-            const newDiary = {
-              ...storedSleepDiary,
-              diary_entries: [...tempEntries],
-            };
-            setStoredSleepDiary(newDiary);
-          }
-
-          //tempEntries.push(finalEntry);
-          //console.log("tempEntries", tempEntries);
-
-          //console.log("newDiary", newDiary);
-
-          /* setStoredSleepDiary((diary) => ({
-            ...diary,
-            diary_entries: [...tempEntries],
-          })); */
-          //console.log("STORED: ", storedSleepDiary);
+          console.log("UPDATING ENTRIES");
+          updateStoredSleepDiary();
         }
       });
     } else {
       console.log("DiaryEntry not valid");
-      //console.log(allNapsAreValid, sleepDiaryID);
     }
+    //updateStoredSleepDiary();
   }
 
   return (
@@ -218,12 +172,19 @@ export default function SleepDiaryComponentDay() {
         }}
         initialState={{
           string:
-            "" +
-            date.getFullYear() +
-            "-" +
-            (date.getMonth() + 1) +
-            "-" +
-            date.getDate(),
+            date.getDate() < 10
+              ? "" +
+                date.getFullYear() +
+                "-" +
+                (date.getMonth() + 1) +
+                "-0" +
+                date.getDate()
+              : "" +
+                date.getFullYear() +
+                "-" +
+                (date.getMonth() + 1) +
+                "-" +
+                date.getDate(),
           date: date,
           valid: true,
         }}
@@ -354,7 +315,9 @@ export default function SleepDiaryComponentDay() {
         variant="outlined"
         disabled={
           dayRating === (null || undefined || 0) ||
-          hasNapped === (undefined || "")
+          hasNapped === (undefined || "") ||
+          !dateValid ||
+          (hasNapped === "Ja" && !allNapsAreValid)
           /* dayRating === (null || undefined || 0) ||
           hasNapped === (undefined || "") ||
           (hasNapped === "Ja" && !allNapsAreValid) ||
