@@ -41,6 +41,7 @@ export function TabNavigation() {
           tabBarInactiveTintColor: "gray",
           headerShown: true,
         })}
+        initialRouteName="Søvndagbok"
       >
         <Tab.Screen
           name="Home"

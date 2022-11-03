@@ -45,20 +45,15 @@ export function FormSectionComponent(props: { section: FormSection }) {
   const [answers, setAnswers] = useState<AnswerList>({
     section: section.id,
     user: id,
-    answers: [],
+    answers: section.form.map((i) => {
+      const answer: Answer = {
+        input: i.id,
+        value: "",
+      };
+      return answer;
+    }),
   });
 
-  function submitAnswer(answer: Answer) {
-    const tempAnswers = answers;
-    tempAnswers.answers.push(answer);
-    setAnswers(tempAnswers);
-  }
-
-  /*
-  useEffect(() => {
-    console.log(answers)
-  },[answers])
-*/
   return (
     <Card>
       <Text style={[styles.heading, { alignSelf: "center" }]}>
@@ -69,21 +64,33 @@ export function FormSectionComponent(props: { section: FormSection }) {
           case "text": {
             return (
               <View key={i}>
-                <TextFormInput input={input} submitAnswer={submitAnswer} />
+                <TextFormInput
+                  input={input}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                />
               </View>
             );
           }
           case "select": {
             return (
               <View key={i}>
-                <SelectFormInput input={input} submitAnswer={submitAnswer} />
+                <SelectFormInput
+                  input={input}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                />
               </View>
             );
           }
           case "checkbox": {
             return (
               <View key={i}>
-                <CheckboxFormInput input={input} submitAnswer={submitAnswer} />
+                <CheckboxFormInput
+                  input={input}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                />
               </View>
             );
           }
@@ -93,7 +100,7 @@ export function FormSectionComponent(props: { section: FormSection }) {
         }
       })}
       <Button
-        onClick={() => {
+        onClick={async () => {
           sendAnswerList(answers);
         }}
         variant={"contained"}
@@ -106,17 +113,31 @@ export function FormSectionComponent(props: { section: FormSection }) {
 
 function TextFormInput(props: {
   input: Input;
-  submitAnswer: (arg: Answer) => void;
+  answers: AnswerList;
+  setAnswers: (arg0: AnswerList) => void;
 }) {
-  const { input, submitAnswer } = props;
-  const [newAnswer, setNewAnswer] = useState<string>("");
+  const { input, answers, setAnswers } = props;
+  const answered = input.answers?.length ?? 0 > 0;
+  const [newAnswer, setNewAnswer] = useState<string>(
+    input.answers?.[0] ? (input.answers?.[0].value as string) : ""
+  );
 
   useEffect(() => {
-    const answer: Answer = {
-      input: input.id,
-      value: newAnswer,
+    const newAnswers = [...answers.answers];
+    newAnswers.forEach((a, n) => {
+      if (a.input === input.id) {
+        const answer: Answer = {
+          ...a,
+          value: newAnswer,
+        };
+        newAnswers.splice(n, 1, answer);
+      }
+    });
+    const newAnswerList = {
+      ...answers,
+      answers: newAnswers,
     };
-    submitAnswer(answer);
+    setAnswers(newAnswerList);
   }, [newAnswer]);
 
   return (
@@ -127,6 +148,7 @@ function TextFormInput(props: {
         onChange={setNewAnswer}
         placeholderText={input.value}
         multiline
+        editable={!answered}
       />
       <Text style={styles.caption}>{input.helptext}</Text>
     </View>
@@ -135,17 +157,35 @@ function TextFormInput(props: {
 
 function SelectFormInput(props: {
   input: Input;
-  submitAnswer: (arg: Answer) => void;
+  answers: AnswerList;
+  setAnswers: (arg0: AnswerList) => void;
 }) {
-  const { input, submitAnswer } = props;
-  const [selected, setSelected] = useState<string>("");
+  const { input, answers, setAnswers } = props;
+  const [selected, setSelected] = useState<FormSelectOption>(
+    {
+      value: input.answers?.[0]?.value as string,
+      lable: input.answers?.[0]?.value as string,
+    } ?? { value: undefined, lable: undefined }
+  );
 
   useEffect(() => {
-    const answer: Answer = {
-      input: input.id,
-      value: selected,
-    };
-    submitAnswer(answer);
+    if (selected) {
+      const newAnswers = [...answers.answers];
+      newAnswers.forEach((a, n) => {
+        if (a.input === input.id) {
+          const answer: Answer = {
+            ...a,
+            value: selected.value,
+          };
+          newAnswers.splice(n, 1, answer);
+        }
+      });
+      const newAnswerList = {
+        ...answers,
+        answers: newAnswers,
+      };
+      setAnswers(newAnswerList);
+    }
   }, [selected]);
 
   return (
@@ -154,6 +194,7 @@ function SelectFormInput(props: {
       <Select
         options={input.options ? input.options : []}
         optionDisplay={(option: FormSelectOption) => option.lable}
+        onChange={setSelected}
         placeholderText={input.label}
       />
       <Text style={styles.caption}>{input.helptext}</Text>
@@ -163,19 +204,30 @@ function SelectFormInput(props: {
 
 function CheckboxFormInput(props: {
   input: Input;
-  submitAnswer: (arg: Answer) => void;
+  answers: AnswerList;
+  setAnswers: (arg0: AnswerList) => void;
 }) {
-  const { input, submitAnswer } = props;
+  const { input, answers, setAnswers } = props;
   const [checked, setChecked] = useState<
     "checked" | "unchecked" | "indeterminate"
-  >("unchecked");
+  >(input.answers?.[0].value ? "checked" : "unchecked");
 
   useEffect(() => {
-    const answer: Answer = {
-      input: input.id,
-      value: checked,
+    const newAnswers = [...answers.answers];
+    newAnswers.forEach((a, n) => {
+      if (a.input === input.id) {
+        const answer: Answer = {
+          ...a,
+          value: checked === "checked" ? true : false,
+        };
+        newAnswers.splice(n, 1, answer);
+      }
+    });
+    const newAnswerList = {
+      ...answers,
+      answers: newAnswers,
     };
-    submitAnswer(answer);
+    setAnswers(newAnswerList);
   }, [checked]);
 
   return (
