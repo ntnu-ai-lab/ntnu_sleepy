@@ -1,8 +1,11 @@
-from rest_framework import viewsets
+from typing import Any, Type
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework import viewsets, status
 from django.db import models
 
 from .models import Answer, AnswerList, Input, Module, Page, Part, Section
-from .serializers import AnswerSerializer, AnswerListSerializer, ChildSectionSerializer, InputSerializer, ModuleSerializer, PageSerializer, PartSerializer
+from .serializers import AnswerListReadSerializer, AnswerListWriteSerializer, AnswerSerializer, AnswerListSerializer, ChildSectionSerializer, InputSerializer, ModuleSerializer, PageSerializer, PartSerializer
 
 class ModuleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Module.objects.all()
@@ -23,7 +26,15 @@ class SectionViewSet(viewsets.ReadOnlyModelViewSet):
 class AnswerListViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> models.QuerySet[AnswerList]:
         return AnswerList.objects.filter(user=self.request.user)
-    serializer_class = AnswerListSerializer
+    
+    def get_serializer_class(self) -> Type[AnswerListSerializer]:
+        if self.request.method in ['GET']:
+            return AnswerListReadSerializer
+        return AnswerListWriteSerializer
+
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        request.data.update({'user': request.user.id}) # type: ignore[union-attr]
+        return super().create(request, *args, **kwargs)
 
 class AnswerViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> models.QuerySet[Answer]:
