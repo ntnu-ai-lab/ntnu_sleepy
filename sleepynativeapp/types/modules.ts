@@ -26,7 +26,7 @@ export interface Input {
 
 export interface FormSelectOption {
   value: string;
-  lable: string;
+  label: string;
 }
 
 export interface Module {

@@ -161,11 +161,11 @@ function SelectFormInput(props: {
   setAnswers: (arg0: AnswerList) => void;
 }) {
   const { input, answers, setAnswers } = props;
-  const [selected, setSelected] = useState<FormSelectOption>(
-    {
-      value: input.answers?.[0]?.value as string,
-      lable: input.answers?.[0]?.value as string,
-    } ?? { value: undefined, lable: undefined }
+  const [selected, setSelected] = useState<FormSelectOption>( //@ts-ignore
+    { 
+      value: input.answers?.[0]?.value as string, 
+      label: input.options?.find(option => option.value === input.answers?.[0].value)?.label, //@ts-ignore
+    } ?? { value: undefined, lable: undefined } 
   );
 
   useEffect(() => {
@@ -193,9 +193,10 @@ function SelectFormInput(props: {
       <Text style={styles.subHeading}>{input.label}</Text>
       <Select
         options={input.options ? input.options : []}
-        optionDisplay={(option: FormSelectOption) => option.lable}
+        optionDisplay={(option: FormSelectOption) => option.label}
         onChange={setSelected}
         placeholderText={input.label}
+        value={selected}
       />
       <Text style={styles.caption}>{input.helptext}</Text>
     </View>
