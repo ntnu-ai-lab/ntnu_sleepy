@@ -105,7 +105,7 @@ export function FormSectionComponent(props: { section: FormSection }) {
         }}
         variant={"contained"}
       >
-        <Text>Send in</Text>
+        <Text>Send inn</Text>
       </Button>
     </Card>
   );
@@ -161,12 +161,24 @@ function SelectFormInput(props: {
   setAnswers: (arg0: AnswerList) => void;
 }) {
   const { input, answers, setAnswers } = props;
-  const [selected, setSelected] = useState<FormSelectOption>( //@ts-ignore
-    { 
-      value: input.answers?.[0]?.value as string, 
-      label: input.options?.find(option => option.value === input.answers?.[0].value)?.label, //@ts-ignore
-    } ?? { value: undefined, lable: undefined } 
-  );
+
+  function getPrevAnswer() {
+    let prev: FormSelectOption
+    try {
+      prev = { 
+        value: input.answers?.[0]?.value as string, 
+        label: input.options?.find(option => option.value === input.answers?.[0].value)?.label as string
+      }
+    }
+    catch {
+      prev = {
+        value: "", label: "" 
+      }
+    }
+    return prev
+  }
+
+  const [selected, setSelected] = useState<FormSelectOption>(getPrevAnswer());
 
   useEffect(() => {
     if (selected) {
