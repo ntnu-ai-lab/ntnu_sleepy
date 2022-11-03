@@ -1,4 +1,6 @@
-FROM python:3.10
+FROM python:3.10-alpine
+
+RUN apk add build-base
 
 WORKDIR /app
 
