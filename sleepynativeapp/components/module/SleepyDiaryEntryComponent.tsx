@@ -240,7 +240,7 @@ export default function SleepyDiaryEntryComponent(props: {
                     day_rating: dagvurdering.indexOf(e) + 1,
                   }));
                 }}
-                value={dagvurdering[sleepDiaryEntry.day_rating - 1]}
+                value={dagvurdering[sleepDiaryEntry.day_rating - 1 ?? 0]}
               />
               <Text style={styles.text}>
                 Har du tatt en eller flere blunder iløpet av dagen?
