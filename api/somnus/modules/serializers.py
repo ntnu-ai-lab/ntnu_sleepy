@@ -1,8 +1,10 @@
 from typing import Any
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
+from rest_flex_fields.serializers import FlexFieldsSerializerMixin
+from django.db import models
 
-from .models import Answer, AnswerList, FormSection, ImageSection, Input, Module, Page, Part, Rule, RuleGroup, Section, TextSection, VideoSection
+from .models import Answer, AnswerList, FormSection, ImageSection, Input, InputOption, Module, Page, Part, QuizOption, QuizQuestion, QuizSection, Rule, RuleGroup, Section, TextSection, VideoSection
 
 class RuleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,11 +40,49 @@ class RuleGroupSerializer(serializers.ModelSerializer):
         serializer = RuleSerializer(children, many=True, context=serializer_context)
         return serializer.data
 
+class FilteredListOfAnswerSerializer(serializers.ListSerializer):
+    def to_representation(self, data: models.QuerySet[Answer]) -> Any:
+        data = data.filter(answer_list__user=self.context['request'].user)
+        return super().to_representation(data)
+
+class AnswerSerializer(serializers.ModelSerializer[Answer]):
+    class Meta:
+        model = Answer
+        fields = ['id', 'input', 'value']
+        list_serializer_class = FilteredListOfAnswerSerializer
+
+class AnswerListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnswerList
+        fields = ['id', 'section', 'user', 'answers']
+
+class AnswerListReadSerializer(FlexFieldsSerializerMixin, AnswerListSerializer): # type: ignore [no-any-unimported]
+    expandable_fields = {
+        'answers': (AnswerSerializer)
+    }
+
+class AnswerListWriteSerializer(AnswerListSerializer):
+    answers = AnswerSerializer(many=True)
+
+    def create(self, validated_data: Any) -> AnswerList:
+        answers = validated_data.pop('answers')
+        answer_list: AnswerList = AnswerList.objects.create(**validated_data)
+        for answer in answers:
+            Answer.objects.create(answer_list=answer_list, **answer)
+        return answer_list
+
+class InputOptionSerializer(serializers.ModelSerializer[InputOption]):
+    class Meta:
+        model = InputOption
+        fields = ('id', 'label', 'value')
+
 class InputSerializer(serializers.ModelSerializer[Input]):
     rules = serializers.SerializerMethodField('get_rule_group_serializer')
+    answers = AnswerSerializer(many=True, )
+    options = InputOptionSerializer(many=True)
     class Meta:
         model = Input
-        fields = ['type', 'name', 'label', 'helptext', 'value', 'answers', 'rules']
+        fields = ['id', 'type', 'name', 'label', 'helptext', 'answers', 'rules', 'options']
 
     def to_representation(self, instance: Input) -> Any:
         return super().to_representation(instance) if instance.evaluate_rules(self.context['request'].user) else None
@@ -80,20 +120,37 @@ class VideoSectionSerializer(SectionSerializer):
         model = VideoSection
         fields = SectionSerializer.Meta.fields + ['uri']
 
-class FormSectionSerializer(FlexFieldsModelSerializer[FormSection]): # type: ignore[no-any-unimported]
+class FormSectionSerializer(SectionSerializer):
     rules = serializers.SerializerMethodField('get_rule_group_serializer')
-    expandable_fields = {
-        'form': (InputSerializer) 
-    }
+    form = InputSerializer(many=True)
     class Meta(SectionSerializer.Meta):
         model = FormSection
         fields = SectionSerializer.Meta.fields + ['form']
 
-    def get_rule_group_serializer(self, obj: FormSection) -> Any:
+    def get_rule_group_serializer(self, obj: Section) -> Any:
         serializer_context = {'request': self.context.get('request') }
         children = RuleGroup.objects.all().filter(section=obj)
         serializer = RuleGroupSerializer(children, many=True, context=serializer_context)
         return serializer.data
+
+class QuizOptionSerializer(serializers.ModelSerializer[QuizOption]):
+    class Meta:
+        model = QuizOption
+        fields = ('label', 'correct')
+
+class QuizQuestionSerializer(serializers.ModelSerializer[QuizQuestion]):
+    options = QuizOptionSerializer(many=True)
+
+    class Meta:
+        model = QuizQuestion
+        fields = ('question', 'options')
+
+class QuizSectionSerializer(SectionSerializer):
+    questions = QuizQuestionSerializer(many=True)
+
+    class Meta:
+        model = QuizSection
+        fields = SectionSerializer.Meta.fields + ['questions']
 
 class ChildSectionSerializer(serializers.Serializer):
     serializers = {
@@ -101,6 +158,7 @@ class ChildSectionSerializer(serializers.Serializer):
         TextSection: TextSectionSerializer,
         ImageSection: ImageSectionSerializer,
         VideoSection: VideoSectionSerializer,
+        QuizSection: QuizSectionSerializer,
     }
     def to_representation(self, instance: Section) -> Any:
         section = Section.objects.get_subclass(id=instance.id) if type(instance) == Section else instance
@@ -132,20 +190,5 @@ class ModuleSerializer(FlexFieldsModelSerializer[Module]): # type: ignore [no-an
     
     expandable_fields = {
         'parts': (PartSerializer, {'many': True})
-    }
-
-
-class AnswerSerializer(serializers.ModelSerializer[Answer]):
-    class Meta:
-        model = Answer
-        fields = ['id', 'input', 'answer_list', 'value']
-
-class AnswerListSerializer(FlexFieldsModelSerializer[AnswerList]): # type: ignore [no-any-unimported]
-    class Meta:
-        model = AnswerList
-        fields = ['id', 'section', 'user', 'answers']
-
-    expandable_fields = {
-        'answers': (AnswerSerializer)
     }
 

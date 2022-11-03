@@ -106,6 +106,22 @@ class VideoSection(Section):
     uri = models.CharField(max_length=255, blank=True)
 
 
+class QuizSection(Section):
+    type = 'quiz'
+    questions: models.Manager['QuizSection']
+
+class QuizQuestion(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    quiz = models.ForeignKey(QuizSection, on_delete=models.CASCADE, related_name='questions')
+    question = models.CharField(max_length=255, default='')
+    options: models.Manager['QuizOption']
+
+class QuizOption(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE, related_name='options')
+    label = models.CharField(max_length=255, default='')
+    correct = models.BooleanField(default=False)
+
 class Input(models.Model):
     class InputType(models.TextChoices):
         select = 'select', 'Flervalg'
@@ -126,6 +142,7 @@ class Input(models.Model):
     )
     answers: models.Manager['Answer']
     rules : models.Manager['RuleGroup']
+    options: models.Manager['InputOption']
 
     def evaluate_rules(self, user: User) -> bool:
         return any([group.evaluate(user) for group in self.rules.all()]) if self.rules.all() else True
@@ -136,11 +153,20 @@ class Input(models.Model):
     class Meta:
         ordering = ['ordering']
 
+class InputOption(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    input = models.ForeignKey(Input, related_name='options', on_delete=models.CASCADE)
+    label = models.CharField(max_length=255, default='')
+    value = models.CharField(max_length=255, default='')
+
 class AnswerList(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     section = models.ForeignKey(to=FormSection, related_name='answer_lists', on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, related_name='answer_lists', on_delete=models.CASCADE)
     answers: models.Manager['Answer']
+
+    class Meta:
+        unique_together = ('section', 'user')
 
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
