@@ -42,7 +42,7 @@ class InputSerializer(serializers.ModelSerializer[Input]):
     rules = serializers.SerializerMethodField('get_rule_group_serializer')
     class Meta:
         model = Input
-        fields = ['type', 'name', 'label', 'helptext', 'answers', 'rules']
+        fields = ['id', 'type', 'name', 'label', 'helptext', 'answers', 'rules']
 
     def to_representation(self, instance: Input) -> Any:
         return super().to_representation(instance) if instance.evaluate_rules(self.context['request'].user) else None
