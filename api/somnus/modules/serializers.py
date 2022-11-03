@@ -42,7 +42,7 @@ class InputSerializer(serializers.ModelSerializer[Input]):
     rules = serializers.SerializerMethodField('get_rule_group_serializer')
     class Meta:
         model = Input
-        fields = ['type', 'name', 'label', 'helptext', 'value', 'answers', 'rules']
+        fields = ['type', 'name', 'label', 'helptext', 'answers', 'rules']
 
     def to_representation(self, instance: Input) -> Any:
         return super().to_representation(instance) if instance.evaluate_rules(self.context['request'].user) else None
@@ -80,16 +80,14 @@ class VideoSectionSerializer(SectionSerializer):
         model = VideoSection
         fields = SectionSerializer.Meta.fields + ['uri']
 
-class FormSectionSerializer(FlexFieldsModelSerializer[FormSection]): # type: ignore[no-any-unimported]
+class FormSectionSerializer(SectionSerializer):
     rules = serializers.SerializerMethodField('get_rule_group_serializer')
-    expandable_fields = {
-        'form': (InputSerializer) 
-    }
+    form = InputSerializer(many=True)
     class Meta(SectionSerializer.Meta):
         model = FormSection
         fields = SectionSerializer.Meta.fields + ['form']
 
-    def get_rule_group_serializer(self, obj: FormSection) -> Any:
+    def get_rule_group_serializer(self, obj: Section) -> Any:
         serializer_context = {'request': self.context.get('request') }
         children = RuleGroup.objects.all().filter(section=obj)
         serializer = RuleGroupSerializer(children, many=True, context=serializer_context)
