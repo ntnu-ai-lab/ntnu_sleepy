@@ -12,6 +12,20 @@ jobs:
       matrix:
         python-version: ["3.10"]
 
+    services:
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_USER: django
+          POSTGRES_PASSWORD: django
+          POSTGRES_DB: django
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -26,7 +40,7 @@ jobs:
       - name: Run Tests
         working-directory: api
         run: |
-          DATABASE_URL=sqlite:// python manage.py test
+          DATABASE_URL=postgres://django:django@localhost:5432/django python manage.py test
       - name: Mypy
         working-directory: api
         run: |
