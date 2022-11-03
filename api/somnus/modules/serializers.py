@@ -1,6 +1,8 @@
 from typing import Any
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
+from rest_flex_fields.serializers import FlexFieldsSerializerMixin
+from django.db import models
 
 from .models import Answer, AnswerList, FormSection, ImageSection, Input, Module, Page, Part, Rule, RuleGroup, Section, TextSection, VideoSection
 
@@ -38,8 +40,40 @@ class RuleGroupSerializer(serializers.ModelSerializer):
         serializer = RuleSerializer(children, many=True, context=serializer_context)
         return serializer.data
 
+class FilteredListOfAnswerSerializer(serializers.ListSerializer):
+    def to_representation(self, data: models.QuerySet[Answer]) -> Any:
+        data = data.filter(answer_list__user=self.context['request'].user)
+        return super().to_representation(data)
+
+class AnswerSerializer(serializers.ModelSerializer[Answer]):
+    class Meta:
+        model = Answer
+        fields = ['id', 'input', 'value']
+        list_serializer_class = FilteredListOfAnswerSerializer
+
+class AnswerListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnswerList
+        fields = ['id', 'section', 'user', 'answers']
+
+class AnswerListReadSerializer(FlexFieldsSerializerMixin, AnswerListSerializer): # type: ignore [no-any-unimported]
+    expandable_fields = {
+        'answers': (AnswerSerializer)
+    }
+
+class AnswerListWriteSerializer(AnswerListSerializer):
+    answers = AnswerSerializer(many=True)
+
+    def create(self, validated_data: Any) -> AnswerList:
+        answers = validated_data.pop('answers')
+        answer_list: AnswerList = AnswerList.objects.create(**validated_data)
+        for answer in answers:
+            Answer.objects.create(answer_list=answer_list, **answer)
+        return answer_list
+
 class InputSerializer(serializers.ModelSerializer[Input]):
     rules = serializers.SerializerMethodField('get_rule_group_serializer')
+    answers = AnswerSerializer(many=True, )
     class Meta:
         model = Input
         fields = ['id', 'type', 'name', 'label', 'helptext', 'answers', 'rules']
@@ -130,20 +164,5 @@ class ModuleSerializer(FlexFieldsModelSerializer[Module]): # type: ignore [no-an
     
     expandable_fields = {
         'parts': (PartSerializer, {'many': True})
-    }
-
-
-class AnswerSerializer(serializers.ModelSerializer[Answer]):
-    class Meta:
-        model = Answer
-        fields = ['id', 'input', 'answer_list', 'value']
-
-class AnswerListSerializer(FlexFieldsModelSerializer[AnswerList]): # type: ignore [no-any-unimported]
-    class Meta:
-        model = AnswerList
-        fields = ['id', 'section', 'user', 'answers']
-
-    expandable_fields = {
-        'answers': (AnswerSerializer)
     }
 
