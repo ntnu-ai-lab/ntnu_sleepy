@@ -247,7 +247,17 @@ export function SignupPage() {
                 }
               />
             </View>
-
+            <View>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: colors.text_white,
+                  textTransform: "uppercase",
+                }}
+              >
+                Fødselsdato
+              </Text>
+            </View>
             <DateField
               onChange={(date) => {
                 date &&
