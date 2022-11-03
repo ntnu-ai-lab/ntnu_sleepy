@@ -2,8 +2,10 @@ import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import { useRecoilState } from "recoil";
-import { cachedModules } from "../../state/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useModule } from "../../api/modulesApi";
+import { cachedModules, moduleIds, moduleProgression } from "../../state/atoms";
+import { ModuleExpanded } from "../../types/modules";
 import { Alert } from "../material/Alert";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
@@ -11,20 +13,20 @@ import { PageTemplate } from "../material/PageTemplate";
 import { ModulePartPage } from "../module/ModulePartPage";
 
 export function HistoryPage() {
-  //legg til progress når det er lagret i state hvor i treningen brukeren er
   const navigation = useNavigation();
-  const [thisModules] = useRecoilState(cachedModules);
+  const [finishedModules] = useRecoilState(cachedModules);
   const [openAlert, setOpenAlert] = useState(false);
+  const progression = useRecoilValue(moduleProgression);
 
   useEffect(() => {
     console.log("cached", cachedModules);
-    console.log(thisModules);
+    console.log(finishedModules);
   }, []);
 
   return (
     <PageTemplate>
       <View>
-        {thisModules?.map((m) => {
+        {finishedModules?.map((m) => {
           return (
             <Card key={m.id}>
               <Text>{m.title}</Text>
