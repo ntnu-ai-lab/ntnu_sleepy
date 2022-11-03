@@ -142,6 +142,9 @@ class AnswerList(models.Model):
     user = models.ForeignKey(to=User, related_name='answer_lists', on_delete=models.CASCADE)
     answers: models.Manager['Answer']
 
+    class Meta:
+        unique_together = ('section', 'user')
+
 class Answer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     input = models.ForeignKey(to=Input, related_name='answers', on_delete=models.CASCADE)
