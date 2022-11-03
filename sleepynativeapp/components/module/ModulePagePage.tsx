@@ -12,6 +12,7 @@ import ArrowBack from "../../assets/arrowBack.svg";
 import { useNavigation } from "@react-navigation/native";
 import { moduleProgression } from "../../state/atoms";
 import { useRecoilState } from "recoil";
+import { QuizSectionComponent } from "./section/QuizSectionComponent";
 
 export function ModulePagePage(props: {
   page: Page;
@@ -63,6 +64,13 @@ export function ModulePagePage(props: {
                       <TextSectionComponent section={s} />
                     </View>
                   );
+                }
+                case "quiz": {
+                  return (
+                    <View key={i}>
+                      <QuizSectionComponent section={s} />
+                    </View>
+                  )
                 }
               }
             })}
