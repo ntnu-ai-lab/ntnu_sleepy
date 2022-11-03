@@ -4,7 +4,7 @@ from rest_flex_fields import FlexFieldsModelSerializer
 from rest_flex_fields.serializers import FlexFieldsSerializerMixin
 from django.db import models
 
-from .models import Answer, AnswerList, FormSection, ImageSection, Input, InputOption, Module, Page, Part, Rule, RuleGroup, Section, TextSection, VideoSection
+from .models import Answer, AnswerList, FormSection, ImageSection, Input, InputOption, Module, Page, Part, QuizOption, QuizQuestion, QuizSection, Rule, RuleGroup, Section, TextSection, VideoSection
 
 class RuleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -133,12 +133,32 @@ class FormSectionSerializer(SectionSerializer):
         serializer = RuleGroupSerializer(children, many=True, context=serializer_context)
         return serializer.data
 
+class QuizOptionSerializer(serializers.ModelSerializer[QuizOption]):
+    class Meta:
+        model = QuizOption
+        fields = ('label', 'correct')
+
+class QuizQuestionSerializer(serializers.ModelSerializer[QuizQuestion]):
+    options = QuizOptionSerializer(many=True)
+
+    class Meta:
+        model = QuizQuestion
+        fields = ('question', 'options')
+
+class QuizSectionSerializer(SectionSerializer):
+    questions = QuizQuestionSerializer(many=True)
+
+    class Meta:
+        model = QuizSection
+        fields = SectionSerializer.Meta.fields + ['questions']
+
 class ChildSectionSerializer(serializers.Serializer):
     serializers = {
         FormSection: FormSectionSerializer,
         TextSection: TextSectionSerializer,
         ImageSection: ImageSectionSerializer,
         VideoSection: VideoSectionSerializer,
+        QuizSection: QuizSectionSerializer,
     }
     def to_representation(self, instance: Section) -> Any:
         section = Section.objects.get_subclass(id=instance.id) if type(instance) == Section else instance

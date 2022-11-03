@@ -3,7 +3,7 @@ import nested_admin # type: ignore[import]
 from adminsortable2 import admin as sortableadmin # type: ignore[import]
 
 
-from .models import InputOption, Module, Page, Part, Rule, RuleGroup, Section, TextSection, FormSection, ImageSection, VideoSection, Input
+from .models import InputOption, Module, Page, Part, QuizOption, QuizQuestion, QuizSection, Rule, RuleGroup, Section, TextSection, FormSection, ImageSection, VideoSection, Input
 
 class RulesAdminSection(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
@@ -64,6 +64,23 @@ class FormSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-
     inlines = [InputAdmin, RuleGroupsAdminSection]
     exclude = ('ordering', 'id')
 
+class QuizOptionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = QuizOption
+    exclude =('id',)
+
+class QuizQuestionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = QuizQuestion
+    inlines = (QuizOptionAdmin,)
+    exclude = ('id',)
+
+class QuizSectionAdmin(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
+    extra = 0
+    model = QuizSection
+    inlines = (QuizQuestionAdmin, RuleGroupsAdminSection)
+    exclude = ('id',)
+
 class SectionAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = Section
@@ -71,7 +88,7 @@ class SectionAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[
 class PageAdminNested(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = Page
-    inlines = [TextSectionAdmin, FormSectionAdmin, ImageSectionAdmin, VideoSectionAdmin]
+    inlines = [TextSectionAdmin, FormSectionAdmin, ImageSectionAdmin, VideoSectionAdmin, QuizSectionAdmin]
     exclude = ('ordering', 'id')
 
 class PageAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-any-unimported]

@@ -106,6 +106,22 @@ class VideoSection(Section):
     uri = models.CharField(max_length=255, blank=True)
 
 
+class QuizSection(Section):
+    type = 'quiz'
+    questions: models.Manager['QuizSection']
+
+class QuizQuestion(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    quiz = models.ForeignKey(QuizSection, on_delete=models.CASCADE, related_name='questions')
+    question = models.CharField(max_length=255, default='')
+    options: models.Manager['QuizOption']
+
+class QuizOption(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE, related_name='options')
+    label = models.CharField(max_length=255, default='')
+    correct = models.BooleanField(default=False)
+
 class Input(models.Model):
     class InputType(models.TextChoices):
         select = 'select', 'Flervalg'
