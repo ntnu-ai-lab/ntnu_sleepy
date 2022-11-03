@@ -173,15 +173,6 @@ export function ProfilePage() {
             <Text style={{ fontSize: 18 }}>Logg ut</Text>
           </Button>
         )}
-
-        <Button
-          onClick={() =>
-            //@ts-ignore
-            getUserByIdentiyId(session?.identity.id).then((r) => console.log(r))
-          }
-        >
-          <Text>Text</Text>
-        </Button>
       </Card>
 
       <View style={{ height: 80, width: "100%" }} />

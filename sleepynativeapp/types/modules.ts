@@ -29,6 +29,15 @@ export interface FormSelectOption {
   label: string;
 }
 
+export interface Question {
+  options: QuizOption[]
+  question: string
+}
+
+export interface QuizOption {
+  label: string, 
+  correct: boolean
+}
 export interface Module {
   title: string;
   id: string;
@@ -85,8 +94,7 @@ export interface FormSection extends BaseSection {
 
 export interface QuizSection extends BaseSection {
   type: "quiz";
-  questions: Input[];
-  correct_answers?: Answer[];
+  questions: Question[];
 }
 
 export type Nap = [Date, Date];
@@ -114,4 +122,4 @@ export interface SleepDiary {
   diary_entries: DiaryEntry[];
 }
 
-export type Section = TextSection | ImageSection | VideoSection | FormSection;
+export type Section = TextSection | ImageSection | VideoSection | FormSection | QuizSection;

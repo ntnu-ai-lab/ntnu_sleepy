@@ -341,6 +341,7 @@ export function SignupPage() {
                 };
               onSubmit(userInput);
             }}
+            disabled={checked === "unchecked"}
           >
             <Text style={{ fontSize: 18 }}>Registrer</Text>
           </Button>
