@@ -32,7 +32,6 @@ export async function getAllModules() {
   if (response.data) {
     const moduleIds = response.data;
     storeModuleIds(moduleIds)
-    console.log(moduleIds)
   }
 }
 
