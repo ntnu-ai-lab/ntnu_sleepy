@@ -91,11 +91,11 @@ def run_seed(self: Any, mode: Literal['clear'] | Literal['refresh'] | None) -> N
         return
 
     # Creating 4 modules
-    for i in range(4):
+    for i in range(2):
         module = create_module(i)
-        for j in range(4):
+        for j in range(2):
             part = create_part(module, j)
-            for k in range(4):
+            for k in range(2):
                 page = create_page(part, k)
-                for l in range(4):
+                for l in range(2):
                     create_textsection(page, l)

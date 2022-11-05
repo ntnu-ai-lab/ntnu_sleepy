@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
     from somnus.modules.models import Answer # Otherwise we get circular imports
-    from somnus.sleepdiary.models import SleepDiary
+    from somnus.sleepdiary.models import SleepDiary, SleepRestrictionPlan
 
 class Gender(models.TextChoices):
         MALE = ("male")
@@ -84,6 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     relationshipstatus = models.CharField(max_length=20, choices=Relationshipstatus.choices, default=Relationshipstatus.UNDEFINED)
     answers: models.Manager['Answer']
     diary: models.Manager['SleepDiary']
+    sleep_restriction_plan: models.Manager['SleepRestrictionPlan']
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"
