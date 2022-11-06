@@ -13,7 +13,6 @@ import { DiaryEntry, SleepDiary } from "../../types/modules";
 import { testDiary } from "../../testing/testdata";
 import { Button } from "../material/Button";
 import SleepyDiaryEntryComponent from "../module/SleepyDiaryEntryComponent";
-import SleepDiaryComponent from "../module/SleepDiaryComponent";
 import {
   createDiary,
   getDiary,
@@ -129,12 +128,7 @@ export function SleepDiaryPage() {
         )}
         {showAllDiaries && storedSleepDiary ? (
           storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => (
-            <SleepyDiaryEntryComponent
-              sleepDiaryEntry={e}
-              sleepDiaryID={storedSleepDiary.id}
-              index={i}
-              key={i}
-            />
+            <SleepyDiaryEntryComponent sleepDiaryEntry={e} index={i} key={i} />
           ))
         ) : (
           <></>

@@ -24,7 +24,7 @@ export async function createDiaryEntry(
       method: "POST",
       body: JSON.stringify(entry),
     })
-  ).data;
+  ).error;
 }
 
 export async function finishDiaryEntry(
