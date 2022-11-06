@@ -16,6 +16,7 @@ import { TimeField } from "../material/TimeField";
 export default function SleepyDiaryEntryComponent(props: {
   sleepDiaryEntry: DiaryEntry;
   index: number;
+  sleepDiaryID: string;
 }) {
   const [show, setShow] = useState(false);
   const søvnvurdering = ["Veldig lett", "Lett", "Middels", "Dyp", "Veldig dyp"];
@@ -66,24 +67,32 @@ export default function SleepyDiaryEntryComponent(props: {
   ]);
   const [bedDate, setBedDate] = useState<Date>(sleepDiaryEntry.date);
   const [lightsOutDate, setLightsOutDate] = useState<Date>(
-    new Date(sleepDiaryEntry.lights_out)
+    sleepDiaryEntry.lights_out
       ? new Date(sleepDiaryEntry.lights_out)
-      : sleepDiaryEntry.date
+      : new Date(
+          sleepDiaryEntry.date.getFullYear(),
+          sleepDiaryEntry.date.getMonth(),
+          sleepDiaryEntry.date.getDate()
+        )
   );
 
   const [wakeDate, setWakeDate] = useState<Date>(
-    new Date(
-      sleepDiaryEntry.date.getFullYear(),
-      sleepDiaryEntry.date.getMonth(),
-      sleepDiaryEntry.date.getDate() + 1
-    )
+    sleepDiaryEntry.waketime
+      ? new Date(sleepDiaryEntry.waketime)
+      : new Date(
+          sleepDiaryEntry.date.getFullYear(),
+          sleepDiaryEntry.date.getMonth(),
+          sleepDiaryEntry.date.getDate() + 1
+        )
   );
   const [riseDate, setRiseDate] = useState<Date>(
-    new Date(
-      sleepDiaryEntry.date.getFullYear(),
-      sleepDiaryEntry.date.getMonth(),
-      sleepDiaryEntry.date.getDate() + 1
-    )
+    sleepDiaryEntry.risetime
+      ? new Date(sleepDiaryEntry.risetime)
+      : new Date(
+          sleepDiaryEntry.date.getFullYear(),
+          sleepDiaryEntry.date.getMonth(),
+          sleepDiaryEntry.date.getDate() + 1
+        )
   );
 
   const allNapsAreValid = naps.every((nap) =>
@@ -105,14 +114,6 @@ export default function SleepyDiaryEntryComponent(props: {
       sleepDiaryEntry.risetime
     ) {
       console.log("READY TO PATCH");
-
-      /* if (allNapsAreValid) {
-        //@ts-ignore
-        setSleepDiaryEntry((entry) => ({
-          ...entry,
-          naps: [...naps], //ts ignore fordi alle naps er valid
-        }));
-      } */
       console.log(naps);
 
       const tempEntry: DiaryEntry = {
@@ -181,10 +182,6 @@ export default function SleepyDiaryEntryComponent(props: {
   }
 
   useEffect(() => {
-    //console.log(sleepDiaryEntry.night_wakes);
-  }, [sleepDiaryEntry.night_wakes]);
-
-  useEffect(() => {
     if (
       storedSleepDiary?.id &&
       sleepDiaryEntry &&
@@ -200,7 +197,6 @@ export default function SleepyDiaryEntryComponent(props: {
     } else {
       setAllValuesAreValid(false);
     }
-    //console.log(sleepDiaryEntry);
   }, [sleepDiaryEntry]);
 
   const styles = StyleSheet.create({

@@ -96,29 +96,24 @@ export default function SleepDiaryComponentDay() {
     console.log("DATE CHANGED");
   }, [date]);
 
-  /* function setEntryValues(): void {
-    setDayRating(diaryEntry.day_rating);
-    diaryEntry.naps.length > 0 ? setHasNapped("Ja") : setHasNapped("Nei");
-    setNaps(diaryEntry.naps);
-    //console.log(dayRating);
-  } */
-
-  function resetEntryValues(): void {
-    setDayRating(0);
-    setHasNapped("");
-    setNaps([]);
+  async function updateStoredSleepDiary(): Promise<void> {
+    console.log("Trying to update stored sleepdiary");
+    if (storedSleepDiary) {
+      console.log("Fetching entries");
+      const updatedDiaryEntries = await listDiaryEntries(storedSleepDiary.id);
+      if (updatedDiaryEntries) {
+        const tempdiary: SleepDiary = {
+          ...storedSleepDiary,
+          diary_entries: [...updatedDiaryEntries],
+        };
+        console.log("Updating stored sleepdiary");
+        setStoredSleepDiary(tempdiary);
+      }
+    }
   }
 
   async function postEntry() {
     if (allNapsAreValid && storedSleepDiary && storedSleepDiary.id) {
-      /* console.log(
-        "DATE: " +
-          date +
-          date.getFullYear() +
-          date.getMonth() +
-          1 +
-          date.getDate()
-      ); */
       const diaryEntry: Pick<DiaryEntry, "day_rating" | "naps"> = {
         date:
           "" +
@@ -137,7 +132,8 @@ export default function SleepDiaryComponentDay() {
       await createDiaryEntry(storedSleepDiary.id, diaryEntry)
         .then((entry) => {
           if (entry) {
-            const finalEntry: DiaryEntry = {
+            updateStoredSleepDiary();
+            /* const finalEntry: DiaryEntry = {
               id: entry.id ?? "",
               //@ts-ignore kan sendes til backend uten verdi, legges til av brukeren senere
               date: entry.date,
@@ -159,9 +155,6 @@ export default function SleepDiaryComponentDay() {
               day_rating: entry.day_rating,
               naps: entry.naps ?? [],
             };
-            /* console.log(entry);
-          storedSleepDiary.diary_entries.push(finalEntry);
-          setStoredSleepDiary(storedSleepDiary); */
 
             console.log("Result", entry);
             if (storedSleepDiary?.diary_entries) {
@@ -174,24 +167,12 @@ export default function SleepDiaryComponentDay() {
                 diary_entries: [...tempEntries],
               };
               setStoredSleepDiary(newDiary);
-            }
-
-            //tempEntries.push(finalEntry);
-            //console.log("tempEntries", tempEntries);
-
-            //console.log("newDiary", newDiary);
-
-            /* setStoredSleepDiary((diary) => ({
-            ...diary,
-            diary_entries: [...tempEntries],
-          })); */
-            //console.log("STORED: ", storedSleepDiary);
+            } */
           }
         })
         .catch((err) => console.log("ERROR: ", err));
     } else {
       console.log("DiaryEntry not valid");
-      //console.log(allNapsAreValid, sleepDiaryID);
     }
   }
 

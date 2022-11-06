@@ -96,7 +96,10 @@ export function SleepDiaryPage() {
           >
             <Button
               style={{ width: "50%" }}
-              onClick={() => setShowAllDiaries(!showAllDiaries)}
+              onClick={() => {
+                setShowAllDiaries(!showAllDiaries);
+                setCreateNewDiary(false);
+              }}
               variant="outlined"
             >
               <Text
@@ -110,7 +113,10 @@ export function SleepDiaryPage() {
             </Button>
             <Button
               style={{ width: "50%" }}
-              onClick={() => setCreateNewDiary(!createNewDiary)}
+              onClick={() => {
+                setCreateNewDiary(!createNewDiary);
+                setShowAllDiaries(false);
+              }}
               variant="outlined"
             >
               <Text
@@ -126,14 +132,19 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {showAllDiaries && storedSleepDiary ? (
+        {showAllDiaries && storedSleepDiary && !createNewDiary ? (
           storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => (
-            <SleepyDiaryEntryComponent sleepDiaryEntry={e} index={i} key={i} />
+            <SleepyDiaryEntryComponent
+              sleepDiaryEntry={e}
+              sleepDiaryID={storedSleepDiary.id}
+              index={i}
+              key={i}
+            />
           ))
         ) : (
           <></>
         )}
-        {createNewDiary ? <SleepDiaryComponentDay /> : <></>}
+        {createNewDiary && !showAllDiaries ? <SleepDiaryComponentDay /> : <></>}
         {storedSleepDiary !== undefined ? (
           <></>
         ) : (
