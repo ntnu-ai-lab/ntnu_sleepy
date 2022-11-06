@@ -36,10 +36,6 @@ export default function SleepDiaryComponentDay() {
   const [storedSleepDiary, setStoredSleepDiary] =
     useRecoilState(cachedSleepDiary);
 
-  const [diaryEntry, setStoredSleepDiaryEntry] = useRecoilState(
-    cachedSleepDiaryEntry
-  );
-
   const allNapsAreValid = naps.every((nap) => nap.every((date) => date));
 
   async function checkSleepDiary(): Promise<void> {
@@ -80,33 +76,26 @@ export default function SleepDiaryComponentDay() {
         ) {
           found = true;
           console.log("Entry already exists");
-          //setStoredSleepDiaryEntry(entry);
-          //setEntryValues();
         }
       });
       if (!found) {
         console.log("Entry does not exist");
-        //resetEntryValues();
       }
     }
   }
 
   useEffect(() => {
     checkSleepDiaryEntries();
-    console.log("DATE CHANGED");
   }, [date]);
 
   async function updateStoredSleepDiary(): Promise<void> {
-    console.log("Trying to update stored sleepdiary");
     if (storedSleepDiary) {
-      console.log("Fetching entries");
       const updatedDiaryEntries = await listDiaryEntries(storedSleepDiary.id);
       if (updatedDiaryEntries) {
         const tempdiary: SleepDiary = {
           ...storedSleepDiary,
           diary_entries: [...updatedDiaryEntries],
         };
-        console.log("Updating stored sleepdiary");
         setStoredSleepDiary(tempdiary);
       }
     }
@@ -133,41 +122,6 @@ export default function SleepDiaryComponentDay() {
         .then((entry) => {
           if (entry) {
             updateStoredSleepDiary();
-            /* const finalEntry: DiaryEntry = {
-              id: entry.id ?? "",
-              //@ts-ignore kan sendes til backend uten verdi, legges til av brukeren senere
-              date: entry.date,
-              sleep_aides: entry.sleep_aides ?? false,
-              sleep_aides_detail: entry.sleep_aides_detail ?? "",
-              notes: entry.notes ?? "",
-              sleep_quality: entry.sleep_quality ?? 0,
-              //@ts-ignore
-              bedtime: entry.bedtime,
-              //@ts-ignore
-              lights_out: entry.lights_out,
-              time_to_sleep: entry.time_to_sleep ?? 0,
-              night_wakes: entry.night_wakes ?? [0],
-              //@ts-ignore
-              waketime: entry.waketime,
-              //@ts-ignore
-              risetime: entry.risetime,
-              //@ts-ignore Kan ikke være udefinert, siden brukeren ikke kan trykke på knappen uten at man har valgt en verdi
-              day_rating: entry.day_rating,
-              naps: entry.naps ?? [],
-            };
-
-            console.log("Result", entry);
-            if (storedSleepDiary?.diary_entries) {
-              const tempEntries = [
-                finalEntry,
-                ...storedSleepDiary.diary_entries,
-              ];
-              const newDiary = {
-                ...storedSleepDiary,
-                diary_entries: [...tempEntries],
-              };
-              setStoredSleepDiary(newDiary);
-            } */
           }
         })
         .catch((err) => console.log("ERROR: ", err));
@@ -341,11 +295,6 @@ export default function SleepDiaryComponentDay() {
         disabled={
           dayRating === (null || undefined || 0) ||
           hasNapped === (undefined || "")
-          /* dayRating === (null || undefined || 0) ||
-          hasNapped === (undefined || "") ||
-          (hasNapped === "Ja" && !allNapsAreValid) ||
-          hasNapped !== ("Nei" || "Ja") ||
-          !dateValid */
         }
         onClick={() => postEntry()}
       >

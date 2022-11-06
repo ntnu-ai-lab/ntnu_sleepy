@@ -3,9 +3,9 @@ import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { Title, Text } from "react-native-paper";
 import { useRecoilState } from "recoil";
 import { finishDiaryEntry } from "../../api/sleepDiaryApi";
-import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
+import { cachedSleepDiary } from "../../state/atoms";
 import { colors } from "../../styles/styles";
-import { DiaryEntry, SleepDiary } from "../../types/modules";
+import { DiaryEntry } from "../../types/modules";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { DateField } from "../material/DateField";
@@ -102,7 +102,6 @@ export default function SleepyDiaryEntryComponent(props: {
   const [allValuesAreValid, setAllValuesAreValid] = useState<boolean>(false);
 
   async function postEntry() {
-    console.log(sleepDiaryEntry, storedSleepDiary?.id);
     if (
       storedSleepDiary &&
       storedSleepDiary.id &&
@@ -113,9 +112,6 @@ export default function SleepyDiaryEntryComponent(props: {
       sleepDiaryEntry.waketime &&
       sleepDiaryEntry.risetime
     ) {
-      console.log("READY TO PATCH");
-      console.log(naps);
-
       const tempEntry: DiaryEntry = {
         ...sleepDiaryEntry,
         bedtime: new Date(
@@ -160,7 +156,6 @@ export default function SleepyDiaryEntryComponent(props: {
             if (entry) {
               console.log("Result", entry);
               const tempEntries = [...storedSleepDiary.diary_entries];
-              //tempEntries.push(entry);
               tempEntries.map(
                 (entry) => tempEntries.find((o) => o.id === entry.id) || entry
               );
@@ -170,7 +165,6 @@ export default function SleepyDiaryEntryComponent(props: {
                 ...diary,
                 diary_entries: tempEntries,
               }));
-              //console.log("STORED: ", storedSleepDiary);
               return entry;
             }
           })
@@ -328,7 +322,6 @@ export default function SleepyDiaryEntryComponent(props: {
                             return [...naps];
                           });
                           if ((naps[n][0] && naps[n][1]) !== false) {
-                            //console.log(naps);
                             //@ts-ignore
                             setSleepDiaryEntry((entry) => ({
                               ...entry,
@@ -369,7 +362,6 @@ export default function SleepyDiaryEntryComponent(props: {
                           });
 
                           if ((naps[n][0] && naps[n][1]) !== false) {
-                            //console.log(naps);
                             //@ts-ignore
                             setSleepDiaryEntry((entry) => ({
                               ...entry,
@@ -705,7 +697,6 @@ export default function SleepyDiaryEntryComponent(props: {
                       text: e,
                       value: parseInt(e),
                     }));
-                    console.log(sleepDiaryEntry.night_wakes);
                   }}
                 />
                 {numberOfNightWakes.value &&
