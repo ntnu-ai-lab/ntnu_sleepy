@@ -9,6 +9,13 @@ interface TimeFieldState {
   valid: boolean;
 }
 
+/**
+ * Textfield for inputting a HH:MM value and convert it to a date
+ * Has a separate state for the string input and the date, as well as a state
+ * for validating if the input is valid using regex.
+ * baseDate is a Date object given as input to specify the date you want the
+ * created object to have. The baseDate object must have values for day, month and year.
+ */
 export function TimeField({
   initialState = { string: "", valid: true },
   onChange,

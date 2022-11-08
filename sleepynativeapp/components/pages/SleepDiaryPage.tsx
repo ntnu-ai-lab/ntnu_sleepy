@@ -17,6 +17,7 @@ import { cachedSleepDiary } from "../../state/atoms";
 import SleepDiaryComponentDay from "../module/SleepDiaryComponentDay";
 
 export function SleepDiaryPage() {
+  //States to show and hide the different components.
   const [createNewDiary, setCreateNewDiary] = useState<boolean>(false);
   const [showAllDiaries, setShowAllDiaries] = useState<boolean>(false);
   const [storedSleepDiary, setStoredSleepDiary] =
@@ -25,6 +26,9 @@ export function SleepDiaryPage() {
   const [hasSleepDiary, setHasSleepDiary] = useState<boolean>(); //TODO fetch hasSleepDiary from backend
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
 
+  /**
+   * Checks if there exists a sleepDiary in asyncstorage, else it fetches the sleepDiary from the backend.
+   */
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
     if (storedSleepDiary) {
       //console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
@@ -50,6 +54,10 @@ export function SleepDiaryPage() {
     }
   }
 
+  /**
+   * If there does not exist a sleepDiary associated with the user in the backend,
+   * the user will be prompted a button to create a new one.
+   */
   async function createSleepDiary(): Promise<SleepDiary | undefined> {
     const result = await createDiary();
     if (result) {
