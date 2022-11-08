@@ -1,7 +1,8 @@
+import datetime
 from typing import Any
 from rest_framework import serializers
 
-from .models import DiaryEntry, SleepDiary
+from .models import DiaryEntry, SleepDiary, SleepRestrictionPlan
 
 
 class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
@@ -19,3 +20,22 @@ class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
     class Meta:
         model = DiaryEntry
         fields = '__all__'
+
+class SleepRestrictionPlanSerializer(serializers.ModelSerializer[SleepRestrictionPlan]):
+
+    bedtime = serializers.SerializerMethodField('calculate_bedtime')
+
+    def calculate_bedtime(self, plan: SleepRestrictionPlan) -> datetime.time:
+        # Python doesn't support subtracting a timedelta from a datetime.time object.
+        # This is bad and they should feel bad.
+        # So we're instead creating a timedelta which represents the offset from midnight when bedtime is,
+        # then wrapping that around modulo 24 hours (so -2h becomes 22:00),
+        # and converting that back into a datetime.time object via the number of seconds in the delta
+        time = datetime.timedelta(hours=plan.custom_rise_time.hour, minutes=plan.custom_rise_time.minute) - plan.duration
+        if time < datetime.timedelta(0):
+            time += datetime.timedelta(hours=24)
+        return datetime.time(hour=int(time.total_seconds()) // 3600, minute=int((time.total_seconds()) % 3600) // 60)
+
+    class Meta:
+        model = SleepRestrictionPlan
+        fields = ('id', 'week', 'custom_rise_time', 'duration', 'bedtime')

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, StyleSheet, Dimensions } from "react-native";
 import { Title, Text } from "react-native-paper";
 import { useRecoilState } from "recoil";
 import { finishDiaryEntry } from "../../api/sleepDiaryApi";
-import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
+import { cachedSleepDiary } from "../../state/atoms";
 import { colors } from "../../styles/styles";
-import { DiaryEntry, SleepDiary } from "../../types/modules";
+import { DiaryEntry } from "../../types/modules";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { DateField } from "../material/DateField";
@@ -65,36 +65,46 @@ export default function SleepyDiaryEntryComponent(props: {
   const [naps, setNaps] = useState<[Date | false, Date | false][]>([
     ...sleepDiaryEntry.naps,
   ]);
-  const [sleepTimeDate, setSleepTimeDate] = useState<Date>(
-    sleepDiaryEntry.date
-  );
+  const [bedDate, setBedDate] = useState<Date>(sleepDiaryEntry.date);
   const [lightsOutDate, setLightsOutDate] = useState<Date>(
-    sleepDiaryEntry.date
+    sleepDiaryEntry.lights_out
+      ? new Date(sleepDiaryEntry.lights_out)
+      : new Date(
+          sleepDiaryEntry.date.getFullYear(),
+          sleepDiaryEntry.date.getMonth(),
+          sleepDiaryEntry.date.getDate()
+        )
   );
 
   const [wakeDate, setWakeDate] = useState<Date>(
-    new Date(
-      sleepDiaryEntry.date.getFullYear(),
-      sleepDiaryEntry.date.getMonth(),
-      sleepDiaryEntry.date.getDate() + 1
-    )
+    sleepDiaryEntry.waketime
+      ? new Date(sleepDiaryEntry.waketime)
+      : new Date(
+          sleepDiaryEntry.date.getFullYear(),
+          sleepDiaryEntry.date.getMonth(),
+          sleepDiaryEntry.date.getDate() + 1
+        )
   );
   const [riseDate, setRiseDate] = useState<Date>(
-    new Date(
-      sleepDiaryEntry.date.getFullYear(),
-      sleepDiaryEntry.date.getMonth(),
-      sleepDiaryEntry.date.getDate() + 1
-    )
+    sleepDiaryEntry.risetime
+      ? new Date(sleepDiaryEntry.risetime)
+      : new Date(
+          sleepDiaryEntry.date.getFullYear(),
+          sleepDiaryEntry.date.getMonth(),
+          sleepDiaryEntry.date.getDate() + 1
+        )
   );
 
-  const allNapsAreValid = naps.every((nap) => nap.every((date) => date));
+  const allNapsAreValid = naps.every((nap) =>
+    nap.every((date) => date !== false)
+  );
 
   const [allValuesAreValid, setAllValuesAreValid] = useState<boolean>(false);
 
   async function postEntry() {
-    console.log(sleepDiaryEntry, props.sleepDiaryID);
     if (
-      props.sleepDiaryID &&
+      storedSleepDiary &&
+      storedSleepDiary.id &&
       sleepDiaryEntry &&
       sleepDiaryEntry.bedtime &&
       sleepDiaryEntry.lights_out &&
@@ -102,58 +112,126 @@ export default function SleepyDiaryEntryComponent(props: {
       sleepDiaryEntry.waketime &&
       sleepDiaryEntry.risetime
     ) {
-      console.log("READY TO PATCH");
-      /* if (allNapsAreValid) {
-        //@ts-ignore
-        setSleepDiaryEntry((entry) => ({
-          ...entry,
-          naps: [...naps], //ts ignore fordi alle naps er valid
-        }));
-      } */
-      const { date, ...rest } = sleepDiaryEntry;
+      const tempEntry: DiaryEntry = {
+        ...sleepDiaryEntry,
+        bedtime: new Date(
+          bedDate.getFullYear(),
+          bedDate.getMonth(),
+          bedDate.getDate(),
+          new Date(sleepDiaryEntry.bedtime).getHours(),
+          new Date(sleepDiaryEntry.bedtime).getMinutes()
+        ),
+        lights_out: new Date(
+          lightsOutDate.getFullYear(),
+          lightsOutDate.getMonth(),
+          lightsOutDate.getDate(),
+          new Date(sleepDiaryEntry.lights_out).getHours(),
+          new Date(sleepDiaryEntry.lights_out).getMinutes()
+        ),
+        waketime: new Date(
+          wakeDate.getFullYear(),
+          wakeDate.getMonth(),
+          wakeDate.getDate(),
+          new Date(sleepDiaryEntry.waketime).getHours(),
+          new Date(sleepDiaryEntry.waketime).getMinutes()
+        ),
+        risetime: new Date(
+          riseDate.getFullYear(),
+          riseDate.getMonth(),
+          riseDate.getDate(),
+          new Date(sleepDiaryEntry.risetime).getHours(),
+          new Date(sleepDiaryEntry.risetime).getMinutes()
+        ),
+      };
+
+      const { date, ...rest } = tempEntry;
       setLoading(true);
-      const entryResult = await finishDiaryEntry(storedSleepDiary.id, rest)
-        .then((entry) => {
-          if (entry) {
-            console.log("Result", entry);
-            const tempEntries = [...storedSleepDiary.diary_entries];
-            tempEntries.push(entry);
-            setStoredSleepDiary((diary) => ({
-              ...diary,
-              diary_entries: tempEntries,
-            }));
-            //console.log("STORED: ", storedSleepDiary);
-            return entry;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (
+        storedSleepDiary &&
+        storedSleepDiary.id &&
+        storedSleepDiary.diary_entries
+      )
+        await finishDiaryEntry(storedSleepDiary.id, rest)
+          .then((entry) => {
+            if (entry) {
+              //console.log("Result", entry);
+              const tempEntries = [...storedSleepDiary.diary_entries];
+              tempEntries.map(
+                (entry) => tempEntries.find((o) => o.id === entry.id) || entry
+              );
+
+              //@ts-ignore
+              setStoredSleepDiary((diary) => ({
+                ...diary,
+                diary_entries: tempEntries,
+              }));
+              return entry;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
     }
     setLoading(false);
   }
 
   useEffect(() => {
-    //console.log(sleepDiaryEntry.night_wakes);
-  }, [sleepDiaryEntry.night_wakes]);
-
-  useEffect(() => {
     if (
-      props.sleepDiaryID &&
+      storedSleepDiary?.id &&
       sleepDiaryEntry &&
       sleepDiaryEntry.bedtime &&
       sleepDiaryEntry.lights_out &&
       sleepDiaryEntry.time_to_sleep !== (null || undefined) &&
       sleepDiaryEntry.waketime &&
       sleepDiaryEntry.risetime &&
-      sleepDiaryEntry.sleep_quality
+      sleepDiaryEntry.sleep_quality &&
+      allNapsAreValid
     ) {
       setAllValuesAreValid(true);
     } else {
       setAllValuesAreValid(false);
     }
-    //console.log(sleepDiaryEntry);
   }, [sleepDiaryEntry]);
+
+  const styles = StyleSheet.create({
+    card: {},
+    text: {
+      alignItems: "center",
+      color: colors.primary,
+      marginTop: 10,
+    },
+    timefield: {
+      width:
+        Dimensions.get("window").height / Dimensions.get("window").width <
+        16 / 9
+          ? "30%"
+          : "40%",
+    },
+    datefield: {
+      width:
+        Dimensions.get("window").height / Dimensions.get("window").width <
+        16 / 9
+          ? "90%"
+          : "100%",
+    },
+    dateAndTimeView: {
+      flexDirection:
+        Dimensions.get("window").height / Dimensions.get("window").width <
+        16 / 9
+          ? "row"
+          : "column",
+    },
+    textfield: {
+      minWidth: "30%",
+      alignText: "center",
+      alignItems: "center",
+    },
+    savebutton: {
+      color: colors.primary,
+      textAlign: "center",
+      padding: 3,
+    },
+  });
 
   return (
     <>
@@ -162,7 +240,11 @@ export default function SleepyDiaryEntryComponent(props: {
           style={{
             alignItems: "center",
             alignSelf: "center",
-            width: "70%",
+            width:
+              Dimensions.get("window").height / Dimensions.get("window").width <
+              16 / 9
+                ? "70%"
+                : "90%",
           }}
         >
           <TouchableOpacity onPress={() => setShow(!show)}>
@@ -179,15 +261,7 @@ export default function SleepyDiaryEntryComponent(props: {
 
           {show ? (
             <View style={{ alignItems: "center" }}>
-              <Text
-                style={{
-                  alignItems: "center",
-                  color: colors.primary,
-                  marginTop: 10,
-                }}
-              >
-                Hvordan har du fungert på dagtid?
-              </Text>
+              <Text style={styles.text}>Hvordan har du fungert på dagtid?</Text>
               <Select
                 placeholderText="Hvordan har du fungert på dagtid?"
                 options={dagvurdering}
@@ -198,15 +272,9 @@ export default function SleepyDiaryEntryComponent(props: {
                     day_rating: dagvurdering.indexOf(e) + 1,
                   }));
                 }}
-                value={dagvurdering[sleepDiaryEntry.day_rating - 1]}
+                value={dagvurdering[sleepDiaryEntry.day_rating - 1 ?? 0]}
               />
-              <Text
-                style={{
-                  alignItems: "center",
-                  color: colors.primary,
-                  marginTop: 10,
-                }}
-              >
+              <Text style={styles.text}>
                 Har du tatt en eller flere blunder iløpet av dagen?
               </Text>
               <Select
@@ -217,13 +285,7 @@ export default function SleepyDiaryEntryComponent(props: {
                 value={hasNapped}
               />
               {naps.length > 0 && hasNapped === "Ja" ? (
-                <Text
-                  style={{
-                    color: colors.primary,
-                    minWidth: "100%",
-                    textAlign: "center",
-                  }}
-                >
+                <Text style={styles.text}>
                   Noter ned tidspunkt for alle blundene
                 </Text>
               ) : (
@@ -232,7 +294,16 @@ export default function SleepyDiaryEntryComponent(props: {
               {naps.length > 0 && hasNapped === "Ja" ? (
                 naps.map((_, n) => (
                   <Card
-                    style={{ maxWidth: "70%", padding: 5, margin: 0 }}
+                    style={{
+                      width:
+                        Dimensions.get("window").height /
+                          Dimensions.get("window").width <
+                        16 / 9
+                          ? "70%"
+                          : "70%",
+                      padding: 5,
+                      margin: 0,
+                    }}
                     key={n}
                   >
                     <View
@@ -244,13 +315,13 @@ export default function SleepyDiaryEntryComponent(props: {
                     >
                       <TimeField
                         baseDate={new Date(sleepDiaryEntry.date)}
+                        style={styles.timefield}
                         onChange={(nap) => {
                           setNaps((naps) => {
                             naps[n][0] = nap;
                             return [...naps];
                           });
                           if ((naps[n][0] && naps[n][1]) !== false) {
-                            //console.log(naps);
                             //@ts-ignore
                             setSleepDiaryEntry((entry) => ({
                               ...entry,
@@ -265,23 +336,32 @@ export default function SleepyDiaryEntryComponent(props: {
                             typeof naps[n][0] !== "boolean"
                               ? "" +
                                 //@ts-ignore
-                                new Date(naps[n][0]).getHours() +
+                                (new Date(naps[n][0]).getHours() >= 10
+                                  ? //@ts-ignore
+                                    new Date(naps[n][0]).getHours()
+                                  : //@ts-ignore
+                                    "0" + new Date(naps[n][0]).getHours()) +
                                 ":" +
                                 //@ts-ignore
-                                new Date(naps[n][0]).getMinutes()
+                                (new Date(naps[n][0]).getMinutes() >= 10
+                                  ? //@ts-ignore
+                                    new Date(naps[n][0]).getMinutes()
+                                  : //@ts-ignore
+                                    "0" + new Date(naps[n][0]).getMinutes())
                               : "",
                           valid: true,
                         }}
                       />
                       <TimeField
                         baseDate={new Date(sleepDiaryEntry.date)}
+                        style={styles.timefield}
                         onChange={(nap) => {
                           setNaps((naps) => {
                             naps[n][1] = nap;
                             return [...naps];
                           });
+
                           if ((naps[n][0] && naps[n][1]) !== false) {
-                            //console.log(naps);
                             //@ts-ignore
                             setSleepDiaryEntry((entry) => ({
                               ...entry,
@@ -293,13 +373,21 @@ export default function SleepyDiaryEntryComponent(props: {
                         //Vet at hvis type er object, så er den ikke false, og dermed et date object
                         initialState={{
                           string:
-                            typeof naps[n][0] !== "boolean"
+                            typeof naps[n][1] !== "boolean"
                               ? "" +
                                 //@ts-ignore
-                                new Date(naps[n][0]).getHours() +
+                                (new Date(naps[n][1]).getHours() >= 10
+                                  ? //@ts-ignore
+                                    new Date(naps[n][1]).getHours()
+                                  : //@ts-ignore
+                                    "0" + new Date(naps[n][1]).getHours()) +
                                 ":" +
                                 //@ts-ignore
-                                new Date(naps[n][0]).getMinutes()
+                                (new Date(naps[n][1]).getMinutes() >= 10
+                                  ? //@ts-ignore
+                                    new Date(naps[n][1]).getMinutes()
+                                  : //@ts-ignore
+                                    "0" + new Date(naps[n][1]).getMinutes())
                               : "",
                           valid: true,
                         }}
@@ -356,13 +444,7 @@ export default function SleepyDiaryEntryComponent(props: {
                   alignSelf: "center",
                 }}
               >
-                <Text
-                  style={{
-                    alignItems: "center",
-                    color: colors.primary,
-                    marginTop: 30,
-                  }}
-                >
+                <Text style={styles.text}>
                   Drakk du alkohol, eller brukte du sovemedisiner for å sove i
                   går?
                 </Text>
@@ -387,6 +469,7 @@ export default function SleepyDiaryEntryComponent(props: {
                     <TextField
                       style={{ minWidth: "100%" }}
                       value={sleepDiaryEntry.sleep_aides_detail}
+                      multiline={true}
                       //onChange={setSleepAidesDetails}
                       onChange={(arg: string) =>
                         setSleepDiaryEntry((entry) => ({
@@ -399,23 +482,16 @@ export default function SleepyDiaryEntryComponent(props: {
                 ) : (
                   <></>
                 )}
-
-                <View style={{ flexDirection: "row" }}>
-                  <View>
-                    <Text
-                      style={{
-                        alignItems: "center",
-                        alignSelf: "center",
-                        color: colors.primary,
-                        marginTop: 10,
-                      }}
-                    >
+                <View style={styles.dateAndTimeView}>
+                  <View style={{ width: "auto", justifyContent: "center" }}>
+                    <Text style={{ ...styles.text }}>
                       Når gikk du til sengs? (YYYY-MM-DD)
                     </Text>
                     <DateField
+                      style={styles.datefield}
                       onChange={(date) => {
                         date &&
-                          setSleepTimeDate(
+                          setBedDate(
                             new Date(
                               date.getFullYear(),
                               date.getMonth(),
@@ -426,14 +502,19 @@ export default function SleepyDiaryEntryComponent(props: {
                       initialState={{
                         string:
                           "" +
-                          sleepTimeDate.getFullYear() +
+                          bedDate.getFullYear() +
                           "-" +
-                          (sleepTimeDate.getMonth() + 1) +
+                          (bedDate.getMonth() + 1 >= 10
+                            ? bedDate.getMonth() + 1
+                            : "0" + (bedDate.getMonth() + 1)) +
                           "-" +
-                          sleepTimeDate.getDate(),
-                        date: sleepTimeDate,
+                          (bedDate.getDate() >= 10
+                            ? bedDate.getDate()
+                            : "0" + bedDate.getDate()),
+                        date: bedDate,
                         valid: true,
                       }}
+                      baseDate={bedDate}
                     />
                   </View>
                   <View>
@@ -448,7 +529,8 @@ export default function SleepyDiaryEntryComponent(props: {
                       Når gikk du til sengs? (HH:MM)
                     </Text>
                     <TimeField
-                      //onChange={(date) => date && setBedtime(date)}
+                      //onChange={(date) => date && setBedDate(date)}
+                      style={styles.timefield}
                       onChange={(date) => {
                         if (date) {
                           setSleepDiaryEntry((entry) => ({
@@ -459,20 +541,27 @@ export default function SleepyDiaryEntryComponent(props: {
                           setAllValuesAreValid(false);
                         }
                       }}
-                      baseDate={sleepTimeDate}
+                      baseDate={bedDate}
                       initialState={{
                         string: sleepDiaryEntry.bedtime
                           ? "" +
-                            new Date(sleepDiaryEntry.bedtime).getHours() +
+                            (new Date(sleepDiaryEntry.bedtime).getHours() >= 10
+                              ? new Date(sleepDiaryEntry.bedtime).getHours()
+                              : "0" +
+                                new Date(sleepDiaryEntry.bedtime).getHours()) +
                             ":" +
-                            new Date(sleepDiaryEntry.bedtime).getMinutes()
+                            (new Date(sleepDiaryEntry.bedtime).getMinutes() >=
+                            10
+                              ? new Date(sleepDiaryEntry.bedtime).getMinutes()
+                              : "0" +
+                                new Date(sleepDiaryEntry.bedtime).getMinutes())
                           : "",
                         valid: true,
                       }}
                     />
                   </View>
                 </View>
-                <View style={{ flexDirection: "row" }}>
+                <View style={styles.dateAndTimeView}>
                   <View>
                     <Text
                       style={{
@@ -485,6 +574,7 @@ export default function SleepyDiaryEntryComponent(props: {
                       Når skrudde du av lyset? (YYYY-MM-DD)
                     </Text>
                     <DateField
+                      style={styles.datefield}
                       onChange={(date) => {
                         date &&
                           setLightsOutDate(
@@ -500,12 +590,18 @@ export default function SleepyDiaryEntryComponent(props: {
                           "" +
                           lightsOutDate.getFullYear() +
                           "-" +
-                          (lightsOutDate.getMonth() + 1) +
+                          (lightsOutDate.getMonth() + 1 >= 10
+                            ? lightsOutDate.getMonth() + 1
+                            : "0" + (lightsOutDate.getMonth() + 1)) +
                           "-" +
-                          lightsOutDate.getDate(),
+                          (lightsOutDate.getDate() >= 10
+                            ? lightsOutDate.getDate()
+                            : "0" + lightsOutDate.getDate()),
+
                         date: lightsOutDate,
                         valid: true,
                       }}
+                      baseDate={lightsOutDate}
                     />
                   </View>
                   <View>
@@ -520,6 +616,7 @@ export default function SleepyDiaryEntryComponent(props: {
                       Når skrudde du av lyset? (HH:MM)
                     </Text>
                     <TimeField
+                      style={styles.timefield}
                       onChange={(date) => {
                         if (date) {
                           setSleepDiaryEntry((entry) => ({
@@ -533,9 +630,24 @@ export default function SleepyDiaryEntryComponent(props: {
                       initialState={{
                         string: sleepDiaryEntry.lights_out
                           ? "" +
-                            new Date(sleepDiaryEntry.lights_out).getHours() +
+                            (new Date(sleepDiaryEntry.lights_out).getHours() >=
+                            10
+                              ? new Date(sleepDiaryEntry.lights_out).getHours()
+                              : "0" +
+                                new Date(
+                                  sleepDiaryEntry.lights_out
+                                ).getHours()) +
                             ":" +
-                            new Date(sleepDiaryEntry.lights_out).getMinutes()
+                            (new Date(
+                              sleepDiaryEntry.lights_out
+                            ).getMinutes() >= 10
+                              ? new Date(
+                                  sleepDiaryEntry.lights_out
+                                ).getMinutes()
+                              : "0" +
+                                new Date(
+                                  sleepDiaryEntry.lights_out
+                                ).getMinutes())
                           : "",
                         valid: true,
                       }}
@@ -544,22 +656,12 @@ export default function SleepyDiaryEntryComponent(props: {
                   </View>
                 </View>
 
-                <Text
-                  style={{
-                    alignItems: "center",
-                    color: colors.primary,
-                    marginTop: 10,
-                  }}
-                >
+                <Text style={styles.text}>
                   Hvor mange minutter tok det fra lyset var skrudd av til du
                   sovnet?
                 </Text>
                 <TextField
-                  style={{
-                    minWidth: "30%",
-                    alignText: "center",
-                    alignItems: "center",
-                  }}
+                  style={styles.textfield}
                   keyboardType="numeric"
                   placeholderText="          "
                   value={timeToSleep.text}
@@ -585,11 +687,7 @@ export default function SleepyDiaryEntryComponent(props: {
                   Hvor mange ganger våknet du iløpet av natten?
                 </Text>
                 <TextField
-                  style={{
-                    minWidth: "30%",
-                    alignText: "center",
-                    alignItems: "center",
-                  }}
+                  style={styles.textfield}
                   keyboardType="numeric"
                   placeholderText="          "
                   value={numberOfNightWakes.text}
@@ -599,7 +697,6 @@ export default function SleepyDiaryEntryComponent(props: {
                       text: e,
                       value: parseInt(e),
                     }));
-                    console.log(sleepDiaryEntry.night_wakes);
                   }}
                 />
                 {numberOfNightWakes.value &&
@@ -627,11 +724,7 @@ export default function SleepyDiaryEntryComponent(props: {
                       style={{ maxWidth: "100%", padding: 5, margin: 0 }}
                     >
                       <TextField
-                        style={{
-                          minWidth: "30%",
-                          alignText: "center",
-                          alignItems: "center",
-                        }}
+                        style={styles.textfield}
                         placeholderText="          "
                         keyboardType="numeric"
                         value={
@@ -653,29 +746,24 @@ export default function SleepyDiaryEntryComponent(props: {
                 ) : (
                   <></>
                 )}
-                <Text
-                  style={{
-                    alignItems: "center",
-                    color: colors.primary,
-                    marginTop: 10,
-                  }}
-                >
+                <Text style={styles.text}>
                   Når våknet du på morgenen uten å få sove igjen? Noter ned ditt
                   endelige oppvåkningstidspunkt.
                 </Text>
-                <View style={{ flexDirection: "row" }}>
+                <View
+                  style={{
+                    flexDirection:
+                      Dimensions.get("window").height /
+                        Dimensions.get("window").width <
+                      16 / 9
+                        ? "row"
+                        : "column",
+                  }}
+                >
                   <View>
-                    <Text
-                      style={{
-                        alignItems: "center",
-                        alignSelf: "center",
-                        color: colors.primary,
-                        marginTop: 10,
-                      }}
-                    >
-                      Skriv inn dato (YYYY-MM-DD)
-                    </Text>
+                    <Text style={styles.text}>Skriv inn dato (YYYY-MM-DD)</Text>
                     <DateField
+                      style={styles.datefield}
                       onChange={(date) => {
                         date &&
                           setWakeDate(
@@ -691,24 +779,21 @@ export default function SleepyDiaryEntryComponent(props: {
                           "" +
                           wakeDate.getFullYear() +
                           "-" +
-                          (wakeDate.getMonth() + 1) +
+                          (wakeDate.getMonth() + 1 > 10
+                            ? wakeDate.getMonth() + 1
+                            : "0" + (wakeDate.getMonth() + 1)) +
                           "-" +
-                          wakeDate.getDate(),
+                          (wakeDate.getDate() > 10
+                            ? wakeDate.getDate()
+                            : "0" + wakeDate.getDate()),
                         date: wakeDate,
                         valid: true,
                       }}
+                      baseDate={wakeDate}
                     />
                   </View>
                   <View>
-                    <Text
-                      style={{
-                        alignItems: "center",
-                        color: colors.primary,
-                        marginTop: 10,
-                      }}
-                    >
-                      Skriv inn tidspunkt (HH:MM)
-                    </Text>
+                    <Text style={styles.text}>Skriv inn tidspunkt (HH:MM)</Text>
                     <TimeField
                       onChange={(date) => {
                         if (date) {
@@ -723,9 +808,16 @@ export default function SleepyDiaryEntryComponent(props: {
                       initialState={{
                         string: sleepDiaryEntry.waketime
                           ? "" +
-                            new Date(sleepDiaryEntry.waketime).getHours() +
+                            (new Date(sleepDiaryEntry.waketime).getHours() >= 10
+                              ? new Date(sleepDiaryEntry.waketime).getHours()
+                              : "0" +
+                                new Date(sleepDiaryEntry.waketime).getHours()) +
                             ":" +
-                            new Date(sleepDiaryEntry.waketime).getMinutes()
+                            (new Date(sleepDiaryEntry.waketime).getMinutes() >=
+                            10
+                              ? new Date(sleepDiaryEntry.waketime).getMinutes()
+                              : "0" +
+                                new Date(sleepDiaryEntry.waketime).getMinutes())
                           : "",
                         valid: true,
                       }}
@@ -733,16 +825,8 @@ export default function SleepyDiaryEntryComponent(props: {
                     />
                   </View>
                 </View>
-                <Text
-                  style={{
-                    alignItems: "center",
-                    color: colors.primary,
-                    marginTop: 10,
-                  }}
-                >
-                  Når stod du opp?
-                </Text>
-                <View style={{ flexDirection: "row" }}>
+                <Text style={styles.text}>Når stod du opp?</Text>
+                <View style={styles.dateAndTimeView}>
                   <View>
                     <Text
                       style={{
@@ -770,25 +854,21 @@ export default function SleepyDiaryEntryComponent(props: {
                           "" +
                           riseDate.getFullYear() +
                           "-" +
-                          (riseDate.getMonth() + 1) +
+                          (riseDate.getMonth() + 1 > 10
+                            ? riseDate.getMonth() + 1
+                            : "0" + (riseDate.getMonth() + 1)) +
                           "-" +
-                          riseDate.getDate(),
+                          (riseDate.getDate() > 10
+                            ? riseDate.getDate()
+                            : "0" + riseDate.getDate()),
                         date: riseDate,
                         valid: true,
                       }}
+                      baseDate={riseDate}
                     />
                   </View>
                   <View>
-                    <Text
-                      style={{
-                        alignItems: "center",
-                        minWidth: "30%",
-                        color: colors.primary,
-                        marginTop: 10,
-                      }}
-                    >
-                      Skriv inn tidspunkt (HH:MM)
-                    </Text>
+                    <Text style={styles.text}>Skriv inn tidspunkt (HH:MM)</Text>
                     <TimeField
                       onChange={(date) => {
                         if (date) {
@@ -803,9 +883,16 @@ export default function SleepyDiaryEntryComponent(props: {
                       initialState={{
                         string: sleepDiaryEntry.risetime
                           ? "" +
-                            new Date(sleepDiaryEntry.risetime).getHours() +
+                            (new Date(sleepDiaryEntry.risetime).getHours() >= 10
+                              ? new Date(sleepDiaryEntry.risetime).getHours()
+                              : "0" +
+                                new Date(sleepDiaryEntry.risetime).getHours()) +
                             ":" +
-                            new Date(sleepDiaryEntry.risetime).getMinutes()
+                            (new Date(sleepDiaryEntry.risetime).getMinutes() >=
+                            10
+                              ? new Date(sleepDiaryEntry.risetime).getMinutes()
+                              : "0" +
+                                new Date(sleepDiaryEntry.risetime).getMinutes())
                           : "",
                         valid: true,
                       }}
@@ -813,15 +900,7 @@ export default function SleepyDiaryEntryComponent(props: {
                     />
                   </View>
                 </View>
-                <Text
-                  style={{
-                    alignItems: "center",
-                    color: colors.primary,
-                    marginTop: 10,
-                  }}
-                >
-                  Hvor dyp var søvnen din i natt?
-                </Text>
+                <Text style={styles.text}>Hvor dyp var søvnen din i natt?</Text>
                 <Select
                   placeholderText="Hvordan var siste natts søvn totalt sett?"
                   options={søvnvurdering}
@@ -834,15 +913,7 @@ export default function SleepyDiaryEntryComponent(props: {
                   }}
                   value={søvnvurdering[sleepDiaryEntry.sleep_quality - 1]}
                 />
-                <Text
-                  style={{
-                    alignItems: "center",
-                    color: colors.primary,
-                    marginTop: 10,
-                  }}
-                >
-                  Notater
-                </Text>
+                <Text style={styles.text}>Notater</Text>
                 <TextField
                   multiline={true}
                   value={sleepDiaryEntry.notes}
@@ -861,13 +932,7 @@ export default function SleepyDiaryEntryComponent(props: {
                   onClick={() => postEntry()}
                   disabled={!allValuesAreValid}
                 >
-                  <Text
-                    style={{
-                      color: colors.primary,
-                      textAlign: "center",
-                      padding: 3,
-                    }}
-                  >
+                  <Text style={styles.savebutton}>
                     {loading ? "Lagrer dagbok..." : "Lagre dagbok"}
                   </Text>
                 </Button>
