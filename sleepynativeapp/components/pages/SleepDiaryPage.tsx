@@ -27,15 +27,15 @@ export function SleepDiaryPage() {
 
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
     if (storedSleepDiary) {
-      console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
+      //console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
       setHasSleepDiary(true);
     } else {
       const diary = await getDiary();
       if (diary === undefined) {
-        console.log("No sleepdiary found..");
+        //console.log("No sleepdiary found..");
         return undefined;
       } else {
-        console.log("Sleepdiary found!");
+        //console.log("Sleepdiary found!");
         const diaryEntries = await listDiaryEntries(diary.id);
         const tempDiary: SleepDiary = {
           id: diary.id,
