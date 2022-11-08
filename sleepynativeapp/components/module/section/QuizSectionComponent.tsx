@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
   heading: {
     color: colors.text_white,
     fontSize: 20,
+    marginBottom: 12,
   },
   subHeading: {
     color: colors.text_white,
@@ -38,7 +39,7 @@ export function QuizSectionComponent(props: { section: QuizSection }) {
         {section.heading}
       </Text>
       {section.questions.map((q: Question) => (
-        <QuizQuestionComponent question={q} />
+        <QuizQuestionComponent question={q} key={q.question}/>
       ))}
     </Card>
   );

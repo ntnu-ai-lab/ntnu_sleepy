@@ -15,6 +15,7 @@ export function VideoSectionComponent(props: { section: VideoSection }) {
     heading: {
       color: colors.text_white,
       fontSize: 20,
+      marginBottom: 12,
     },
     video: {
       width: 200,

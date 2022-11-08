@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { ModuleProgression, User } from "../types/Types";
+import { ModuleProgression, SleepRestriction, User } from "../types/Types";
 import { DiaryEntry, Module, SleepDiary } from "../types/modules";
 
 export const loggedInUser = atom<User | undefined>({
@@ -31,3 +31,8 @@ export const cachedSleepDiaryEntry = atom<DiaryEntry>({
   key: "cachedSleepDiaryEntry",
   default: undefined,
 });
+
+export const mySleepRestriction = atom<SleepRestriction>({
+  key: "mySleepRestriction",
+  default: undefined,
+})

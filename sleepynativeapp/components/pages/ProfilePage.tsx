@@ -19,6 +19,7 @@ import {
   storeModuleIds,
   storeProgression,
   storeSleepDiary,
+  storeSleepRestriction,
 } from "../../state/StorageController";
 
 export function ProfilePage() {
@@ -59,6 +60,7 @@ export function ProfilePage() {
     storeSleepDiary(undefined);
     storeModuleIds(undefined);
     storeProgression([]);
+    storeSleepRestriction(undefined);
 
     const removeUserFromStorage = async () => {
       try {

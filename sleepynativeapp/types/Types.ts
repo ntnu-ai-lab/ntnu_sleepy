@@ -14,6 +14,7 @@ export interface User {
   gender: gender;
   occupation: string;
   relationshipStatus: relationshipStatus;
+  sleepRestriction?: boolean;
 }
 export interface DjangoUser {
   name: string;
@@ -33,4 +34,12 @@ export interface ModuleProgression {
   module: string //Id of module,
   part: number //Which part in module user is on currently
   finished: boolean //pretty selfexplanitory
+}
+
+export interface SleepRestriction {
+  id: string,
+  week: string,
+  riseTime: string,
+  duration: string,
+  bedtime: string,
 }

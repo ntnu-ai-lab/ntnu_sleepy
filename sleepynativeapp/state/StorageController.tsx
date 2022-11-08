@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { ReactNode, useEffect } from "react";
-import { ModuleProgression, User } from "../types/Types";
+import { ModuleProgression, SleepRestriction, User } from "../types/Types";
 import { DiaryEntry, Module, SleepDiary } from "../types/modules";
 import { useRecoilState } from "recoil";
 import {
@@ -10,6 +10,7 @@ import {
   loggedInUser,
   moduleIds,
   moduleProgression,
+  mySleepRestriction,
 } from "./atoms";
 
 export async function storeLocalUser(user: User | undefined) {
@@ -41,6 +42,13 @@ export async function storeProgression(progression: ModuleProgression[]) {
   await AsyncStorage.setItem("Progression", progressionAsString);
 }
 
+export async function storeSleepRestriction(
+  restriction: SleepRestriction | undefined
+) {
+  const restrictionAsString = JSON.stringify(restriction);
+  await AsyncStorage.setItem("Restriction", restrictionAsString);
+}
+
 export function StorageController(props: {
   children: ReactNode | ReactNode[];
 }) {
@@ -53,6 +61,7 @@ export function StorageController(props: {
   const [sleepDiaryEntry, setSleepDiaryEntry] = useRecoilState(
     cachedSleepDiaryEntry
   );
+  const [restriction, setRestriction] = useRecoilState(mySleepRestriction);
 
   async function getLocalUser() {
     const getData = async () => {
@@ -111,6 +120,16 @@ export function StorageController(props: {
     if (progression != null) setProgression(progression);
   }
 
+  async function getSleepRestriction() {
+    const getData = async () => {
+      const jsonValue = await AsyncStorage.getItem("Restriction");
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    };
+
+    const restriction: SleepRestriction = await getData();
+    if (restriction != null) setRestriction(restriction);
+  }
+
   useEffect(() => {
     getLocalUser();
     getCachedModules();
@@ -118,6 +137,7 @@ export function StorageController(props: {
     getCachedModuleIds();
     getMyProgression();
     getCachedSleepDiaryEntry();
+    getSleepRestriction();
   }, []);
 
   useEffect(() => {
@@ -149,6 +169,16 @@ export function StorageController(props: {
       }
     }
   }, [sleepDiary]);
+
+  useEffect(() => {
+    if (restriction != undefined) {
+      try {
+        storeSleepRestriction(restriction);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [restriction]);
 
   return <>{children}</>;
 }
