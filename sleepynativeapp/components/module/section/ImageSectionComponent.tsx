@@ -14,6 +14,7 @@ export function ImageSectionComponent(props: { section: ImageSection }) {
     heading: {
       color: colors.text_white,
       fontSize: 20,
+      marginBottom: 12,
     },
     img: {
       width: "95%",

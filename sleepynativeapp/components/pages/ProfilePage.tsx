@@ -19,6 +19,7 @@ import {
   storeModuleIds,
   storeProgression,
   storeSleepDiary,
+  storeSleepRestriction,
 } from "../../state/StorageController";
 
 export function ProfilePage() {
@@ -59,7 +60,14 @@ export function ProfilePage() {
     storeSleepDiary(undefined);
     storeModuleIds(undefined);
     storeProgression([]);
-
+    storeSleepRestriction(undefined);
+    const removeSleepRestriction = async () => {
+      try {
+        await AsyncStorage.removeItem("Restriction");
+      } catch (e) {
+        console.error;
+      }
+    }
     const removeUserFromStorage = async () => {
       try {
         await AsyncStorage.removeItem("Local_user");
@@ -67,6 +75,7 @@ export function ProfilePage() {
         console.error;
       }
     };
+    removeSleepRestriction();
     removeUserFromStorage();
     setTimeout(() => {
       //@ts-ignore

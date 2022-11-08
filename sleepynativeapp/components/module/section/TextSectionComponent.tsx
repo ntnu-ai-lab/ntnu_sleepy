@@ -15,6 +15,7 @@ export function TextSectionComponent(props: { section: TextSection }) {
     heading: {
       color: colors.text_white,
       fontSize: 20,
+      marginBottom: 12
     },
   });
 

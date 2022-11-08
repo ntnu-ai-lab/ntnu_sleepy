@@ -10,6 +10,17 @@ export async function createUser(user: User, identiyId: string) {
   return response.data
 }
 
+export async function readyUserForSleepRestriction(user: User, identiyId: string) {
+
+  user.sleepRestriction = true;
+
+  const response = await callApi<User>(`users/${identiyId}/`, {
+    method: "PATCH",
+    body: JSON.stringify(user),
+  });
+  return response.data
+}
+
 export async function getUserByIdentiyId(identiyId: string) {
   const response = await callApi<User>(`users/${identiyId}/`, {
     method: "GET",

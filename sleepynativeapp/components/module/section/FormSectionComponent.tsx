@@ -101,7 +101,7 @@ export function FormSectionComponent(props: { section: FormSection }) {
       })}
       <Button
         onClick={async () => {
-          sendAnswerList(answers);
+          sendAnswerList(answers).then(r => console.log(r)); //Denne får en error, blir med til main med tanke om at det skal fikses
         }}
         variant={"contained"}
       >
@@ -220,10 +220,22 @@ function CheckboxFormInput(props: {
   answers: AnswerList;
   setAnswers: (arg0: AnswerList) => void;
 }) {
+
+  function getPrevAnswer() {
+    let prev: "checked" | "unchecked"
+    try {
+      prev = input.answers?.[0].value ? "checked" : "unchecked"
+    }
+    catch {
+      prev = "unchecked"
+    }
+    return prev
+  }
+  
   const { input, answers, setAnswers } = props;
   const [checked, setChecked] = useState<
     "checked" | "unchecked" | "indeterminate"
-  >(input.answers?.[0].value ? "checked" : "unchecked");
+  >(getPrevAnswer());
 
   useEffect(() => {
     const newAnswers = [...answers.answers];
