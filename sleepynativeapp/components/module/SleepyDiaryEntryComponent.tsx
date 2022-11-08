@@ -154,7 +154,7 @@ export default function SleepyDiaryEntryComponent(props: {
         await finishDiaryEntry(storedSleepDiary.id, rest)
           .then((entry) => {
             if (entry) {
-              console.log("Result", entry);
+              //console.log("Result", entry);
               const tempEntries = [...storedSleepDiary.diary_entries];
               tempEntries.map(
                 (entry) => tempEntries.find((o) => o.id === entry.id) || entry
