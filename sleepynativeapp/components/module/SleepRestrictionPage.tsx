@@ -151,15 +151,15 @@ export function SleepRestrictionPage() {
                     <Text style={styles.bodyText}>
                       For å få mest ut av planen er det vikitg å holde en fast
                       rytme, så prøv å hold både leggetid og når du står opp i
-                      helgene også
+                      helgene også.
                     </Text>
                   </View>
                   <View>
                     <Text style={styles.subHeader}>Effektivitet: </Text>
                     <Text style={styles.bodyText}>
-                      Din Effektivitet blir beregnet ut i fra søvndagboken du
+                      Din effektivitet blir beregnet ut i fra søvndagboken du
                       fører. Vil bli oppdatert hver dag du fører søvndagbok, og
-                      brukes til å beregne neste søvnrestirksjons periode
+                      brukes til å beregne neste søvnrestriksjons periode.
                     </Text>
                   </View>
                 </View>

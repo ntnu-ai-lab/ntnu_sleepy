@@ -191,7 +191,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
             alignSelf: "center",
           }}
         >
-          Søvn restriksjon
+          Søvnrestriksjon
         </Text>
         {restriction ? (
           <View>
@@ -225,7 +225,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
                   });
                 } else {
                   Alert.alert(
-                    "Søvn Restriksjon",
+                    "Søvnrestriksjon",
                     "Du har enten ikke kommet til modulen om søvnrestriksjon, eller har ikke ført nokk dager med søvndagbok til å starte søvn restriksjon, ønsker du å starte søvnrestriksjon likevel?",
                     [
                       {
