@@ -17,10 +17,12 @@ import { DateField } from "../material/DateField";
 import { useRecoilState } from "recoil";
 import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
 
+/**
+ * Component for creating a new sleepdiary, where the user inputs the data points for the day.
+ */
 export default function SleepDiaryComponentDay() {
-  const [date, setDate] = useState<Date>(new Date()); //TODO hent date fra frontend
+  const [date, setDate] = useState<Date>(new Date());
   const [dayRating, setDayRating] = useState<number>();
-  const [rerender, setRerender] = useState<boolean>(false);
   const [dateValid, setDateValid] = useState<boolean>(true);
 
   const [hasNapped, setHasNapped] = useState<"Ja" | "Nei" | "">("");
@@ -82,6 +84,9 @@ export default function SleepDiaryComponentDay() {
     checkSleepDiaryEntries();
   }, [date]);
 
+  /**
+   * Updates the sleep diary stored in asyncstorage with the sleep diary stored in the database.
+   */
   async function updateStoredSleepDiary(): Promise<void> {
     if (storedSleepDiary) {
       const updatedDiaryEntries = await listDiaryEntries(storedSleepDiary.id);
@@ -95,7 +100,15 @@ export default function SleepDiaryComponentDay() {
     }
   }
 
-  async function postEntry() {
+  /**
+   * Posts a new diary entry to the database if there does not already exist
+   * an entry with the given date. After posting, it updates the asyncstorage.
+   * @date 8.11.2022 - 13:00:48
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
+  async function postEntry(): Promise<void> {
     if (allNapsAreValid && storedSleepDiary && storedSleepDiary.id) {
       const diaryEntry: Pick<DiaryEntry, "day_rating" | "naps"> = {
         date:

@@ -3,6 +3,12 @@ import { TextField } from "./TextField";
 
 const timeRegex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 
+/**
+ * Textfield for inputting a YYYY-MM-DD value and convert it to a date
+ * Has a separate state for the string input and the date, as well as a state
+ * for validating if the input is valid using regex.
+ * This is used in combination with TimeField to create a date object with YYYY-MM-DD HH:MM.
+ */
 interface DateFieldState {
   string: string;
   date?: Date;
@@ -16,7 +22,6 @@ export function DateField({
 }: {
   initialState?: DateFieldState;
   onChange: (date: Date | false) => void;
-  baseDate?: Date;
   style?: any;
 }) {
   const [state, setState] = useState<DateFieldState>(initialState);
@@ -35,16 +40,7 @@ export function DateField({
           if (time.valid) {
             time.date = new Date(
               parseInt(e.slice(0, 4)),
-              parseInt(e.slice(5, 7)) - 1,
-              parseInt(e.slice(8, 10))
-              /* baseDate.getFullYear(),
-              baseDate.getMonth(),
-              baseDate.getDate(),
-              parseInt(e.slice(3)) */
-            );
-            console.log(
-              parseInt(e.slice(0, 4)),
-              parseInt(e.slice(5, 7)),
+              parseInt(e.slice(5, 7)) - 1, //-1 because Date.month is 0-indexed for some reason.
               parseInt(e.slice(8, 10))
             );
             onChange(time.date);

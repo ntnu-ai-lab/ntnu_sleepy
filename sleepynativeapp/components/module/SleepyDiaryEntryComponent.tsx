@@ -13,6 +13,10 @@ import { Select } from "../material/Select";
 import { TextField } from "../material/TextField";
 import { TimeField } from "../material/TimeField";
 
+/**
+ * Component for displaying all previously created sleepdiary-entries.
+ * It also enables the user to update and finish unfinished entries.
+ */
 export default function SleepyDiaryEntryComponent(props: {
   sleepDiaryEntry: DiaryEntry;
   index: number;
@@ -101,6 +105,12 @@ export default function SleepyDiaryEntryComponent(props: {
 
   const [allValuesAreValid, setAllValuesAreValid] = useState<boolean>(false);
 
+  /**
+   * Patches the selected entry to the database. Enables the user to update an existing entry.
+   * Creates a new DiaryEntry object with the values from all the fields, and then sends a
+   * patch request to the database. When the patch request is successful, it updates the entry
+   * in asyncstorage.
+   */
   async function postEntry() {
     if (
       storedSleepDiary &&
@@ -514,7 +524,6 @@ export default function SleepyDiaryEntryComponent(props: {
                         date: bedDate,
                         valid: true,
                       }}
-                      baseDate={bedDate}
                     />
                   </View>
                   <View>
@@ -601,7 +610,6 @@ export default function SleepyDiaryEntryComponent(props: {
                         date: lightsOutDate,
                         valid: true,
                       }}
-                      baseDate={lightsOutDate}
                     />
                   </View>
                   <View>
@@ -789,7 +797,6 @@ export default function SleepyDiaryEntryComponent(props: {
                         date: wakeDate,
                         valid: true,
                       }}
-                      baseDate={wakeDate}
                     />
                   </View>
                   <View>
@@ -864,7 +871,6 @@ export default function SleepyDiaryEntryComponent(props: {
                         date: riseDate,
                         valid: true,
                       }}
-                      baseDate={riseDate}
                     />
                   </View>
                   <View>
