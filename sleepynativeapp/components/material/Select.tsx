@@ -5,12 +5,11 @@ import {
   LayoutRectangle,
   ScrollView,
   TouchableOpacity,
-  Text
+  Text,
 } from "react-native";
 import { colors } from "../../styles/styles";
-import AngleDown from "../../assets/angleDown.svg"
-import AngleUp from "../../assets/angleUp.svg"
-
+import AngleDown from "../../assets/angleDown.svg";
+import AngleUp from "../../assets/angleUp.svg";
 
 export function Select(props: {
   placeholderText?: string;
@@ -19,9 +18,18 @@ export function Select(props: {
   value?: any;
   optionDisplay: (arg: any) => string;
   zIndex?: number;
+  editable?: boolean;
 }) {
-  const { placeholderText, onChange, options, value, optionDisplay, zIndex } =
-    props;
+  const {
+    placeholderText,
+    onChange,
+    options,
+    value,
+    optionDisplay,
+    zIndex,
+    editable,
+  } = props;
+
   const [selected, setSelected] = useState<any>(value);
   const [targeted, setTargeted] = useState<boolean>(false);
   const [displayLayout, setDisplayLayout] = useState<LayoutRectangle>({
@@ -57,7 +65,7 @@ export function Select(props: {
       fontWeight: "400",
       fontSize: 16,
       width: "80%",
-      color: selected ? "#000" : colors.text_secondary,
+      color: editable === false ? colors.text_secondary : selected ? "#000" : colors.text_secondary,
     },
     dropdown: {
       display: targeted ? "flex" : "none",
@@ -83,7 +91,11 @@ export function Select(props: {
 
   return (
     <View style={{ zIndex: zIndex ? zIndex : 100 }}>
-      <TouchableOpacity onPress={toggleDropdown}>
+      <TouchableOpacity
+        onPress={() => {
+          if (editable !== false) toggleDropdown();
+        }}
+      >
         <View
           style={styles.wrapperDiv}
           onLayout={(e) => {
@@ -93,7 +105,11 @@ export function Select(props: {
           <Text style={styles.textStyle}>
             {selected ? optionDisplay(selected) : placeholderText}
           </Text>
-          {targeted ? <AngleUp /> : <AngleDown />}
+          {editable !== false ? (
+            <View>{targeted ? <AngleUp /> : <AngleDown />}</View>
+          ) : (
+            <View />
+          )}
         </View>
       </TouchableOpacity>
       {options.length < 5 ? (

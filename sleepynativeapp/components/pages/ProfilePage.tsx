@@ -1,7 +1,7 @@
 import { PageTemplate } from "../material/PageTemplate";
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { User, UserEx } from "../../types/Types";
+import { gender, User, UserEx } from "../../types/Types";
 import { AuthContext } from "../../auth/AuthProvider";
 import { createUser, getUserByIdentiyId } from "../../api/userApi";
 import { useRecoilState } from "recoil";
@@ -21,6 +21,7 @@ import {
   storeSleepDiary,
   storeSleepRestriction,
 } from "../../state/StorageController";
+import { Select } from "../material/Select";
 
 export function ProfilePage() {
   const [thisUser, setThisUser] = useRecoilState(loggedInUser);
@@ -67,7 +68,7 @@ export function ProfilePage() {
       } catch (e) {
         console.error;
       }
-    }
+    };
     const removeUserFromStorage = async () => {
       try {
         await AsyncStorage.removeItem("Local_user");
@@ -82,6 +83,15 @@ export function ProfilePage() {
       navigation.navigate("login");
     }, 100);
   }
+
+  const genders = {
+    male: "Mann",
+    female: "Kvinne",
+    other: "Annet",
+    undefined: "-",
+  };
+
+  const dateRegex = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/
 
   return (
     <PageTemplate>
@@ -115,7 +125,7 @@ export function ProfilePage() {
             <View>
               <Text style={style.fieldDescriptions}>Epost</Text>
               <TextField
-                editable={edit}
+                editable={false}
                 value={user.email}
                 onChange={(arg: string) => {
                   setUser((prev) => ({ ...prev, email: arg }));
@@ -133,17 +143,22 @@ export function ProfilePage() {
               <TextField
                 editable={edit}
                 value={user.dateOfBirth}
+                error={!dateRegex.test(user.dateOfBirth)}
                 onChange={(arg: string) => {
                   setUser((prev) => ({ ...prev, dateOfBirth: arg }));
                 }}
               />
               <Text style={style.fieldDescriptions}>Kjønn</Text>
-              <TextField
+              <Select
                 editable={edit}
-                value={user.gender}
-                onChange={(arg: string) => {
-                  if (arg === ("male" || "female" || "other" || "undefined"))
-                    setUser((prev) => ({ ...prev, gender: arg }));
+                options={Object.entries(genders).map(([k, v]) => ({
+                  value: k,
+                  label: v,
+                }))}
+                optionDisplay={(o) => o.label}
+                value={{value: user.gender, label: genders[user.gender]}}
+                onChange={(o: { value: gender; label: string }) => {
+                  setUser((prev) => ({...prev, gender: o.value}))
                 }}
               />
               <Text style={style.fieldDescriptions}>Yrke</Text>
