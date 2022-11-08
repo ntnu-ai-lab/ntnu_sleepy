@@ -504,11 +504,11 @@ export default function SleepyDiaryEntryComponent(props: {
                           "" +
                           bedDate.getFullYear() +
                           "-" +
-                          (bedDate.getMonth() + 1 > 10
+                          (bedDate.getMonth() + 1 >= 10
                             ? bedDate.getMonth() + 1
                             : "0" + (bedDate.getMonth() + 1)) +
                           "-" +
-                          (bedDate.getDate() > 10
+                          (bedDate.getDate() >= 10
                             ? bedDate.getDate()
                             : "0" + bedDate.getDate()),
                         date: bedDate,
@@ -590,11 +590,11 @@ export default function SleepyDiaryEntryComponent(props: {
                           "" +
                           lightsOutDate.getFullYear() +
                           "-" +
-                          (lightsOutDate.getMonth() + 1 > 10
+                          (lightsOutDate.getMonth() + 1 >= 10
                             ? lightsOutDate.getMonth() + 1
                             : "0" + (lightsOutDate.getMonth() + 1)) +
                           "-" +
-                          (lightsOutDate.getDate() > 10
+                          (lightsOutDate.getDate() >= 10
                             ? lightsOutDate.getDate()
                             : "0" + lightsOutDate.getDate()),
 
