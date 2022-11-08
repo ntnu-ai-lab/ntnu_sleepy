@@ -40,11 +40,11 @@ export default function SleepDiaryComponentDay() {
 
   async function checkSleepDiary(): Promise<void> {
     if (storedSleepDiary) {
-      console.log("Found sleepdiary from AsyncStorage!", storedSleepDiary.id);
+      //console.log("Found sleepdiary from AsyncStorage!", storedSleepDiary.id);
     } else {
-      console.log(
+      /* console.log(
         "Could not find sleepdiary in AsyncStorage, fetching from db.."
-      );
+      ); */
       const diary = await getDiary();
       //console.log(diary);
       if (diary !== undefined) {
@@ -56,12 +56,6 @@ export default function SleepDiaryComponentDay() {
   useEffect(() => {
     checkSleepDiary();
   }, []);
-  useEffect(() => {
-    console.log("hasNapped: ", hasNapped);
-    console.log("dayRating: ", dayRating);
-    console.log("allNapsAreValid: ", allNapsAreValid);
-    console.log("dateValid: ", dateValid);
-  }, [hasNapped, dayRating, allNapsAreValid, dateValid]);
 
   async function checkSleepDiaryEntries(): Promise<void> {
     if (storedSleepDiary) {
@@ -75,11 +69,11 @@ export default function SleepDiaryComponentDay() {
           temp.getDate() === date.getDate()
         ) {
           found = true;
-          console.log("Entry already exists");
+          //console.log("Entry already exists");
         }
       });
       if (!found) {
-        console.log("Entry does not exist");
+        //console.log("Entry does not exist");
       }
     }
   }
@@ -117,7 +111,7 @@ export default function SleepDiaryComponentDay() {
       };
       await checkSleepDiaryEntries();
 
-      console.log(storedSleepDiary.id, diaryEntry);
+      //console.log(storedSleepDiary.id, diaryEntry);
       await createDiaryEntry(storedSleepDiary.id, diaryEntry)
         .then((entry) => {
           if (entry) {
@@ -126,7 +120,7 @@ export default function SleepDiaryComponentDay() {
         })
         .catch((err) => console.log("ERROR: ", err));
     } else {
-      console.log("DiaryEntry not valid");
+      //console.log("DiaryEntry not valid");
     }
   }
 
