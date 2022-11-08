@@ -91,6 +91,9 @@ export function ProfilePage() {
     undefined: "-",
   };
 
+  const dateRegex = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/
+
+
   return (
     <PageTemplate>
       <Card style={{ margin: 10 }}>
@@ -141,6 +144,7 @@ export function ProfilePage() {
               <TextField
                 editable={edit}
                 value={user.dateOfBirth}
+                error={!dateRegex.test(user.dateOfBirth)}
                 onChange={(arg: string) => {
                   setUser((prev) => ({ ...prev, dateOfBirth: arg }));
                 }}
@@ -155,7 +159,7 @@ export function ProfilePage() {
                 optionDisplay={(o) => o.label}
                 placeholderText={genders[user.gender]}
                 onChange={(o: { value: gender; label: string }) => {
-                  setUser((prev) => ({...prev, gender: o.value}))
+                  setUser((prev) => ({...prev, gender: o?.value}))
                 }}
               />
               <Text style={style.fieldDescriptions}>Yrke</Text>
