@@ -93,7 +93,6 @@ export function ProfilePage() {
 
   const dateRegex = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/
 
-
   return (
     <PageTemplate>
       <Card style={{ margin: 10 }}>
@@ -157,9 +156,9 @@ export function ProfilePage() {
                   label: v,
                 }))}
                 optionDisplay={(o) => o.label}
-                placeholderText={genders[user.gender]}
+                value={{value: user.gender, label: genders[user.gender]}}
                 onChange={(o: { value: gender; label: string }) => {
-                  setUser((prev) => ({...prev, gender: o?.value}))
+                  setUser((prev) => ({...prev, gender: o.value}))
                 }}
               />
               <Text style={style.fieldDescriptions}>Yrke</Text>
