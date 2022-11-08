@@ -28,7 +28,7 @@ class SleepDiary(models.Model):
 
 class DiaryEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.DateField(default=datetime.date.today, editable=False)
+    date = models.DateField(default=datetime.date.today, editable=True) #Endre til editable=True igjen fordi jeg fikk rar oppførsel med editable=False
     diary = models.ForeignKey(to=SleepDiary, related_name='entries', on_delete=models.CASCADE)
     day_rating = models.IntegerField()
     naps = ArrayField(ArrayField(models.DateTimeField(), size=2), size=100, blank=True)

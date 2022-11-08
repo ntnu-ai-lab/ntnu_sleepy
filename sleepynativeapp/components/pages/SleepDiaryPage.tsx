@@ -1,19 +1,12 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { View, Image, TouchableOpacity } from "react-native";
-import { Divider, Text, Title } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { colors } from "../../styles/styles";
 import { Card } from "../material/Card";
-import { TextField } from "../material/TextField";
 import { PageTemplate } from "../material/PageTemplate";
-import MultiSlider from "@ptomasroos/react-native-multi-slider";
-import { Select } from "../material/Select";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { DiaryEntry, SleepDiary } from "../../types/modules";
-import { testDiary } from "../../testing/testdata";
 import { Button } from "../material/Button";
 import SleepyDiaryEntryComponent from "../module/SleepyDiaryEntryComponent";
-import SleepDiaryComponent from "../module/SleepDiaryComponent";
 import {
   createDiary,
   getDiary,
@@ -34,17 +27,16 @@ export function SleepDiaryPage() {
 
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
     if (storedSleepDiary) {
-      console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
+      //console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
       setHasSleepDiary(true);
     } else {
       const diary = await getDiary();
       if (diary === undefined) {
-        console.log("No sleepdiary found..");
+        //console.log("No sleepdiary found..");
         return undefined;
       } else {
-        console.log("Sleepdiary found!");
+        //console.log("Sleepdiary found!");
         const diaryEntries = await listDiaryEntries(diary.id);
-        //console.log(diaryEntries);
         const tempDiary: SleepDiary = {
           id: diary.id,
           user: diary.user,
@@ -53,7 +45,6 @@ export function SleepDiaryPage() {
         };
         setSleepDiary(tempDiary);
         setStoredSleepDiary(tempDiary);
-        //console.log("STORED DIARY: " + storedSleepDiary);
         setHasSleepDiary(true);
       }
     }
@@ -63,8 +54,6 @@ export function SleepDiaryPage() {
     const result = await createDiary();
     if (result) {
       const diaryEntries = await listDiaryEntries(result.id);
-      console.log(result);
-      //console.log(diaryEntries);
       const sleepDiary: SleepDiary = {
         id: result.id,
         user: result.user,
@@ -72,9 +61,6 @@ export function SleepDiaryPage() {
         diary_entries: diaryEntries ?? [],
       };
       setStoredSleepDiary(sleepDiary);
-      //console.log(storedSleepDiary);
-      //setSleepDiary(sleepDiary);
-      //setHasSleepDiary(true);
       return sleepDiary;
     }
   }
@@ -85,7 +71,6 @@ export function SleepDiaryPage() {
 
   useEffect(() => {
     setRefreshScreen(!refreshScreen);
-    console.log("Refreshed screen");
   }, [storedSleepDiary]);
 
   return (
@@ -97,7 +82,10 @@ export function SleepDiaryPage() {
           >
             <Button
               style={{ width: "50%" }}
-              onClick={() => setShowAllDiaries(!showAllDiaries)}
+              onClick={() => {
+                setShowAllDiaries(!showAllDiaries);
+                setCreateNewDiary(false);
+              }}
               variant="outlined"
             >
               <Text
@@ -111,7 +99,10 @@ export function SleepDiaryPage() {
             </Button>
             <Button
               style={{ width: "50%" }}
-              onClick={() => setCreateNewDiary(!createNewDiary)}
+              onClick={() => {
+                setCreateNewDiary(!createNewDiary);
+                setShowAllDiaries(false);
+              }}
               variant="outlined"
             >
               <Text
@@ -127,7 +118,7 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {showAllDiaries && storedSleepDiary ? (
+        {showAllDiaries && storedSleepDiary && !createNewDiary ? (
           storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => (
             <SleepyDiaryEntryComponent
               sleepDiaryEntry={e}
@@ -139,7 +130,7 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {createNewDiary ? <SleepDiaryComponentDay /> : <></>}
+        {createNewDiary && !showAllDiaries ? <SleepDiaryComponentDay /> : <></>}
         {storedSleepDiary !== undefined ? (
           <></>
         ) : (
@@ -149,7 +140,6 @@ export function SleepDiaryPage() {
             <Button
               style={{ width: "50%" }}
               onClick={() => {
-                //setHasSleepDiary(true);
                 createSleepDiary();
               }}
               variant="outlined"
