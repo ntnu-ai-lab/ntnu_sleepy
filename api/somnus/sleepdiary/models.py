@@ -26,6 +26,12 @@ class SleepDiary(models.Model):
             return 0
         return sum([entry.efficiency for entry in entries]) / len(entries)
 
+    def __str__(self) -> str:
+        return f"{self.user.name} ({self.user.email})"
+
+    class Meta:
+        verbose_name_plural = 'Sleep diaries'
+
 class DiaryEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date = models.DateField(default=datetime.date.today, editable=True) #Endre til editable=True igjen fordi jeg fikk rar oppførsel med editable=False

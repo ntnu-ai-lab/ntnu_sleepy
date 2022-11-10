@@ -100,23 +100,24 @@ class PageAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-
 class PageAdmin(sortableadmin.SortableAdminMixin, admin.ModelAdmin): # type: ignore[no-any-unimported]
     search_fields = ['title']
     list_filter = ('part', 'part__module')
-    exclude = ['id']
+    exclude = ['id', 'min_duration']
     inlines = [SectionAdminSortable]
 
 class PartAdminNested(nested_admin.NestedStackedInline): # type: ignore[no-any-unimported]
     extra = 0
     model = Part
     inlines = [PageAdminNested]
-    exclude = ('ordering', 'id')
+    exclude = ('ordering', 'id', 'min_duration')
 
 class PartAdminSortable(sortableadmin.SortableStackedInline): # type: ignore[no-any-unimported]
     model = Part
     extra = 0
     show_change_link = True
     cal_delete = False
+    exclude = ('min_duration',)
 
 class PartAdmin(nested_admin.NestedModelAdmin): # type: ignore[no-any-unimported]
-    exclude = ('id', 'ordering', 'module')
+    exclude = ('id', 'ordering', 'module', 'min_duration')
     inlines = [PageAdminNested]
     show_change_link = True
 

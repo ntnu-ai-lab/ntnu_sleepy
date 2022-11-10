@@ -178,6 +178,7 @@ class RuleGroup(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     section = models.ForeignKey(to=Section, related_name='rules', default=None, null=True, blank=True, on_delete=models.CASCADE)
     input = models.ForeignKey(to=Input, related_name='rules', default=None, null=True, blank=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, default='')
 
     rules: models.Manager['Rule']
 
@@ -202,6 +203,7 @@ class Rule(models.Model):
     comparator = models.CharField(max_length=2, choices=Comparator.choices)
     value = models.CharField(max_length=255)
     should_be = models.BooleanField(default=True, verbose_name='Should be True')
+    name = models.CharField(max_length=255, default='')
 
     rule_group = models.ForeignKey(to=RuleGroup, related_name='rules', on_delete=models.CASCADE)
 
