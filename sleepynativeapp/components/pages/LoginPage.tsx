@@ -130,8 +130,6 @@ export function LoginPage() {
           >
             <Text style={{color: colors.text_white}}>Opprett ny bruker</Text>
           </Button>
-
-          <Button><Text style={{color: ""}}>Glemt passord?</Text></Button>
         </Card>
       </View>
     </PageTemplate>
