@@ -21,9 +21,9 @@ export function TabNavigation() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = "";
 
-            if (route.name === "Home") {
+            if (route.name === "Hjem") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Settings") {
+            } else if (route.name === "Innstillinger") {
               iconName = focused ? "cog" : "cog-outline";
             } else if (route.name === "Profil") {
               iconName = focused ? "person-circle" : "person-circle-outline";
@@ -33,7 +33,7 @@ export function TabNavigation() {
               iconName = focused ? "bed" : "bed-outline";
             } else if (route.name === "Assignment") {
               iconName = focused ? "bar-chart" : "bar-chart-outline";
-            } else if (route.name === "History") {
+            } else if (route.name === "Tidligere") {
               iconName = focused
                 ? "checkmark-circle"
                 : "checkmark-circle-outline";
@@ -49,12 +49,12 @@ export function TabNavigation() {
         initialRouteName="Søvndagbok"
       >
         <Tab.Screen
-          name="Home"
+          name="Hjem"
           component={ModulePage}
           options={{ tabBarLabel: "Hjem" }}
         />
         <Tab.Screen
-          name="History"
+          name="Tidligere"
           component={HistoryNavigation}
           options={{ tabBarLabel: "Tidligere Moduler" }}
         />
@@ -64,7 +64,7 @@ export function TabNavigation() {
           options={{ tabBarLabel: "Søvndagbok" }}
         />
         <Tab.Screen
-          name="Settings"
+          name="Innstillinger"
           component={ProfilePage}
           options={{ tabBarLabel: "Innstillinger" }}
         />

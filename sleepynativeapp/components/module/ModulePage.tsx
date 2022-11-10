@@ -177,7 +177,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
               onClick={() => {
                 //@ts-ignore
                 navigation.navigate("home", {
-                  screen: "Home",
+                  screen: "Hjem",
                   params: {
                     screen: "part",
                     params: {
@@ -220,7 +220,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
               onClick={() => {
                 //@ts-ignore
                 navigation.navigate("home", {
-                  screen: "Home",
+                  screen: "Hjem",
                   params: {
                     screen: "restriction",
                   },
@@ -238,7 +238,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
                 if (currentUser?.sleepRestriction === true) {
                   //@ts-ignore
                   navigation.navigate("home", {
-                    screen: "Home",
+                    screen: "Hjem",
                     params: {
                       screen: "restriction",
                     },
@@ -253,7 +253,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
                         onPress: () => {
                           //@ts-ignore
                           navigation.navigate("home", {
-                            screen: "Home",
+                            screen: "Hjem",
                             params: {
                               screen: "restriction",
                             },
