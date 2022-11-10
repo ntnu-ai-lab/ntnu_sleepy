@@ -70,7 +70,7 @@ export function ModulePartPage() {
         <ModulePagePage
           page={part.pages[currentPage]}
           navigatePage={navigatePage}
-          pageProgression={currentPage / (numberOfPages - 1)}
+          pageProgression={numberOfPages === 1 ? 2 :currentPage / (numberOfPages - 1)}
           navigatePart={navigatePart}
         />
       </View>

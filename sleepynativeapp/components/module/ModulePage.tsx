@@ -139,8 +139,6 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
     addModuleToHistory();
   }, []);
 
-  console.log(restriction)
-
   return (
     <PageTemplate>
       <View style={{ marginHorizontal: 10, paddingTop: 10 }}>
