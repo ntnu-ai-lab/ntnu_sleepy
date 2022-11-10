@@ -161,7 +161,7 @@ export function SleepRestrictionPage() {
                       <Text style={styles.subHeader}>Effektivitet: </Text>
                       <Text style={styles.bodyText}>
                         Din effektivitet blir beregnet ut i fra søvndagboken du
-                        fører. Vil bli oppdatert hver dag du fører søvndagbok,
+                        fører. Den vil bli oppdatert hver dag du fører søvndagbok,
                         og brukes til å beregne neste søvnrestriksjons periode.
                       </Text>
                     </View>
