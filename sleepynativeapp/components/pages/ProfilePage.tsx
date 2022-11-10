@@ -5,7 +5,7 @@ import { gender, User, UserEx } from "../../types/Types";
 import { AuthContext } from "../../auth/AuthProvider";
 import { createUser, getUserByIdentiyId } from "../../api/userApi";
 import { useRecoilState } from "recoil";
-import { cachedSleepDiary, loggedInUser } from "../../state/atoms";
+import { cachedModules, cachedSleepDiary, loggedInUser } from "../../state/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "../../styles/styles";
 import { useNavigation } from "@react-navigation/native";
@@ -26,7 +26,7 @@ import { Select } from "../material/Select";
 export function ProfilePage() {
   const [thisUser, setThisUser] = useRecoilState(loggedInUser);
   const [, setSleepDiary] = useRecoilState(cachedSleepDiary);
-  const [, setModules] = useRecoilState(cachedSleepDiary);
+  const [, setModules] = useRecoilState(cachedModules);
   const { sessionToken, session, setSession } = useContext(AuthContext);
   const navigation = useNavigation();
   const [openAlert, setOpenAlert] = useState(false);
@@ -50,18 +50,18 @@ export function ProfilePage() {
     },
   });
 
-  function logOut() {
+  async function logOut() {
     //@ts-ignore
     setSession({ session_token: undefined, session: undefined });
     setThisUser(undefined);
     setSleepDiary(undefined);
-    setModules(undefined);
-    storeCachedModules(undefined);
-    storeLocalUser(undefined);
-    storeSleepDiary(undefined);
-    storeModuleIds(undefined);
-    storeProgression([]);
-    storeSleepRestriction(undefined);
+    setModules([]);
+    await storeCachedModules([]);
+    await storeLocalUser(undefined);
+    await storeSleepDiary(undefined);
+    await storeModuleIds(undefined);
+    await storeProgression([]);
+    await storeSleepRestriction(undefined);
     const removeSleepRestriction = async () => {
       try {
         await AsyncStorage.removeItem("Restriction");
@@ -76,8 +76,8 @@ export function ProfilePage() {
         console.error;
       }
     };
-    removeSleepRestriction();
-    removeUserFromStorage();
+    await removeSleepRestriction();
+    await removeUserFromStorage();
     setTimeout(() => {
       //@ts-ignore
       navigation.navigate("login");

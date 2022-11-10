@@ -129,9 +129,9 @@ export function SleepRestrictionPage() {
               </View>
               <Card>
                 <View style={{ height: Dimensions.get("window").height * 0.5 }}>
-                  <View style={{marginBottom: 20}}>
+                  <View style={{ marginBottom: 20 }}>
                     <Text style={styles.Heading}>Søvn plan</Text>
-                    <Text style={[styles.subHeader, {marginBottom:10}]}>
+                    <Text style={[styles.subHeader, { marginBottom: 10 }]}>
                       Tid i senga: {durationToHM()}
                     </Text>
                     <View

@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { ReactNode, useEffect } from "react";
 import { ModuleProgression, SleepRestriction, User } from "../types/Types";
-import { DiaryEntry, Module, SleepDiary } from "../types/modules";
+import { DiaryEntry, Module, ModuleExpanded, SleepDiary } from "../types/modules";
 import { useRecoilState } from "recoil";
 import {
   cachedModules,
@@ -18,7 +18,7 @@ export async function storeLocalUser(user: User | undefined) {
   await AsyncStorage.setItem("Local_User", userAsString);
 }
 
-export async function storeCachedModules(modules: Module[] | undefined) {
+export async function storeCachedModules(modules: ModuleExpanded[] | undefined) {
   const modulesAsString = JSON.stringify(modules);
   await AsyncStorage.setItem("Modules", modulesAsString);
 }
@@ -79,7 +79,7 @@ export function StorageController(props: {
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     };
 
-    const modules: Module[] = await getData();
+    const modules: ModuleExpanded[] = await getData();
     if (modules != null) setModules(modules);
   }
 
@@ -179,6 +179,16 @@ export function StorageController(props: {
       }
     }
   }, [restriction]);
+
+  useEffect(() => {
+    if (modules !== undefined) {
+      try {
+        storeCachedModules(modules)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  })
 
   return <>{children}</>;
 }

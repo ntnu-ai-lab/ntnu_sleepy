@@ -5,6 +5,7 @@ import { View, Text, Alert } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { getAllModules, useModule } from "../../api/modulesApi";
 import {
+  cachedModules,
   loggedInUser,
   moduleIds,
   moduleProgression,
@@ -105,6 +106,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
     progression.find((mp) => mp.module === module.id)?.part ?? 0;
   const currentUser = useRecoilValue(loggedInUser);
   const restriction = useRecoilValue(mySleepRestriction);
+  const [history, setHistory] = useRecoilState(cachedModules)
 
   function finishModule() {
     const newProgressionList = [...progression];
@@ -121,6 +123,18 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
       }
     });
   }
+
+  function addModuleToHistory() {
+    if (!history.map((h)=> h.id).includes(module.id)) {
+      const newHistory = [...history];
+      newHistory.push({...module, parts: []})
+      setHistory(newHistory)
+    }
+  }
+
+  useEffect(() => {
+    addModuleToHistory()
+  },[])
 
   return (
     <PageTemplate>
@@ -163,7 +177,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
                   screen: "Home",
                   params: {
                     screen: "part",
-                    params: { part: module.parts[currentPart] },
+                    params: { part: module.parts[currentPart], isHistory: false },
                   },
                 });
 

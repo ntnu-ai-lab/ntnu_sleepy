@@ -9,7 +9,7 @@ import { SleepDiaryPage } from "../pages/SleepDiaryPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import { ModulePartPage } from "../module/ModulePartPage";
 import { ModulePage } from "../module/ModulePage";
-import { HistoryNavigation } from "../pages/HistoryPage";
+import { HistoryNavigation } from "../module/HistoryPage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -54,6 +54,11 @@ export function TabNavigation() {
           options={{ tabBarLabel: "Hjem" }}
         />
         <Tab.Screen
+          name="History"
+          component={HistoryNavigation}
+          options={{ tabBarLabel: "Tidligere Moduler" }}
+        />
+        <Tab.Screen
           name="Søvndagbok"
           component={SleepDiaryPage}
           options={{ tabBarLabel: "Søvndagbok" }}
@@ -62,11 +67,6 @@ export function TabNavigation() {
           name="Settings"
           component={ProfilePage}
           options={{ tabBarLabel: "Innstillinger" }}
-        />
-        <Tab.Screen
-          name="History"
-          component={HistoryNavigation}
-          options={{ tabBarLabel: "Fullførte Moduler" }}
         />
       </Tab.Navigator>
     </>
