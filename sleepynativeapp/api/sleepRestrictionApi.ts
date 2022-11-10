@@ -2,11 +2,13 @@ import { SleepRestriction } from "../types/Types";
 import { callApi } from "./callApi";
 
 export async function startSleepRestriction(riseTime: string) {
+  const riseTimeObject = {custom_rise_time: riseTime}
+  console.log(riseTimeObject)
   const response = await callApi<SleepRestriction>(
     `sleepdiary/sleeprestriction/`,
     {
       method: "POST",
-      body: JSON.stringify(riseTime),
+      body: JSON.stringify(riseTimeObject),
     }
   );
   console.log("POST: ",response.response)

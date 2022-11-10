@@ -25,6 +25,9 @@ export function SleepRestrictionPage() {
         if (r === undefined) {
           setCreate(true);
         }
+        else {
+          setRestriction(r)
+        }
       });
     } else return 0;
   }
@@ -32,24 +35,12 @@ export function SleepRestrictionPage() {
   function beginSleepRestriction() {
     const newRiseTime = riseTime.replace(".", ":");
     /** Dette er hva som skal fungere på sikt  */
-    /*
     startSleepRestriction(newRiseTime).then((r) => {
       if (r) {
         setCreate(false);
         setRiseTime("");
         setRestriction(r);
       }
-    });
-    */
-    // Dette er temp:
-    setRiseTime("");
-    setCreate(false);
-    setRestriction({
-      id: "ooga booga test",
-      week: "2022-11-08",
-      riseTime: "06:45:00",
-      duration: "05:00:00",
-      bedtime: "01:45:00",
     });
   }
 
@@ -90,6 +81,15 @@ export function SleepRestrictionPage() {
     return durationString;
   }
 
+  function getProgress() {
+    const today = new Date()
+    const startDate = new Date(restriction.week)
+    const differenceInMS = today.getTime() - startDate.getTime()
+    const MSInADay = 86400000
+    const progressInDays = Math.floor(differenceInMS / MSInADay)
+    return progressInDays
+  }
+
   return (
     <PageTemplate>
       <View>
@@ -123,9 +123,8 @@ export function SleepRestrictionPage() {
         ) : (
           <View>
             <View style={{ marginVertical: 10 }}>
-              <Text style={{ alignSelf: "center", fontSize: 18 }}>Uke X</Text>
               <View style={{ marginHorizontal: 10 }}>
-                <ProgressBar percentage={0} />
+                <ProgressBar percentage={getProgress()} />
               </View>
               <Card>
                 <View style={{ height: Dimensions.get("window").height * 0.5 }}>
@@ -145,7 +144,7 @@ export function SleepRestrictionPage() {
                         Leggetid: {restriction?.bedtime.slice(0, -3)}
                       </Text>
                       <Text style={styles.subHeader}>
-                        Stå opp: {restriction?.riseTime.slice(0, -3)}
+                        Stå opp: {restriction?.custom_rise_time.slice(0, -3)}
                       </Text>
                     </View>
                     <Text style={styles.bodyText}>
