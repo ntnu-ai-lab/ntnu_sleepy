@@ -44,7 +44,7 @@ export function HistoryPage() {
                 onClick={() => {
                   //@ts-ignore
                   navigation.navigate("home", {
-                    screen: "History",
+                    screen: "Tidligere",
                     params: {
                       screen: "modulePartOverview",
                       params: { module: m },
@@ -85,7 +85,7 @@ export function HistoryModulePartOverview() {
                 onClick={() => {
                   //@ts-ignore
                   navigation.navigate("home", {
-                    screen: "History",
+                    screen: "Tidligere",
                     params: {
                       screen: "modulePart",
                       params: { part: p, isHistory: true },
