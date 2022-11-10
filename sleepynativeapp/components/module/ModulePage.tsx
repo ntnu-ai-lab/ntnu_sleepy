@@ -26,13 +26,6 @@ export function ModulePage() {
   const progression = useRecoilValue(moduleProgression);
 
   useEffect(() => {
-    /*
-    if (cachedModuleIds === undefined) {
-      getAllModules().then((r) => {
-        setCachedModuleIds(r);
-      });
-    }
-    */
     getAllModules().then((r) => {
       setCachedModuleIds(r);
     });
@@ -160,7 +153,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
         {currentPart === module.parts.length ? (
           <View style={{ alignItems: "center" }}>
             <Text style={{ color: colors.text_white, fontSize: 20 }}>
-              Gratulere! Modulen er fullført!
+              Gratulerer! Modulen er fullført!
             </Text>
             <View style={{ width: "100%" }}>
               <Button variant="contained" onClick={finishModule}>
