@@ -100,7 +100,8 @@ export function handleFormSubmitError<T>(
               message: `${ge.message}: ${ge.reason}`,
               type: "danger",
             }) //@ts-ignore
-            const nodes: [] = err.response.data.ui.nodes as any
+            const nodes: [] = err.response.data.ui.nodes as any //@ts-ignore
+            ge.ui.messages && responsePopUp("Error", ge.ui.messages[0].text)
             nodes.forEach((node) => { //@ts-ignore
               if (node.attributes.name === "password") { //@ts-ignore
                 responsePopUp("Error", node.messages[0].text)
