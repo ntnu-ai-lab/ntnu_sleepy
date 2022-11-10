@@ -80,12 +80,15 @@ export function SleepRestrictionPage() {
   }
 
   function getProgress() {
-    const today = new Date();
-    const startDate = new Date(restriction.week);
-    const differenceInMS = today.getTime() - startDate.getTime();
-    const MSInADay = 86400000;
-    const progressInDays = Math.floor(differenceInMS / MSInADay);
-    return progressInDays;
+    if (restriction) {
+      const today = new Date();
+      const startDate = new Date(restriction.week);
+      const differenceInMS = today.getTime() - startDate.getTime();
+      const MSInADay = 86400000;
+      const progressInDays = Math.floor(differenceInMS / MSInADay);
+      return progressInDays;
+    }
+    return 0
   }
 
   return (
@@ -161,8 +164,9 @@ export function SleepRestrictionPage() {
                       <Text style={styles.subHeader}>Effektivitet: </Text>
                       <Text style={styles.bodyText}>
                         Din effektivitet blir beregnet ut i fra søvndagboken du
-                        fører. Den vil bli oppdatert hver dag du fører søvndagbok,
-                        og brukes til å beregne neste søvnrestriksjons periode.
+                        fører. Den vil bli oppdatert hver dag du fører
+                        søvndagbok, og brukes til å beregne neste
+                        søvnrestriksjons periode.
                       </Text>
                     </View>
                   </View>
@@ -180,15 +184,16 @@ export function SleepRestrictionPage() {
                           variant="contained"
                           onClick={() => {
                             const newRiseTime = riseTime.replace(".", ":");
-                            changeRiseTimeSleepRestriction(newRiseTime, restriction.id).then(
-                              (r) => {
-                                if(r) {
-                                  setEdit(false);
-                                  setRiseTime("");
-                                  setRestriction(r);
-                                }
+                            changeRiseTimeSleepRestriction(
+                              newRiseTime,
+                              restriction.id
+                            ).then((r) => {
+                              if (r) {
+                                setEdit(false);
+                                setRiseTime("");
+                                setRestriction(r);
                               }
-                            );
+                            });
                           }}
                         >
                           <Text>Oppdater</Text>
