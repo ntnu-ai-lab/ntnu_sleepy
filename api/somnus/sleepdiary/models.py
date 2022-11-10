@@ -70,7 +70,7 @@ class DiaryEntry(models.Model):
 class SleepRestrictionPlan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(to=User, related_name='sleep_restriction_plan', on_delete=models.CASCADE)
-    week = models.DateField(default=datetime.date.today())
+    week = models.DateField(default=datetime.date.today)
     custom_rise_time = models.TimeField(default=datetime.time.fromisoformat('07:00+00:00'))
     duration = models.DurationField(default=datetime.timedelta(hours=5))
 
