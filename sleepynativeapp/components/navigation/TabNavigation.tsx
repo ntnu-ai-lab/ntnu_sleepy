@@ -9,6 +9,7 @@ import { SleepDiaryPage } from "../pages/SleepDiaryPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import { ModulePartPage } from "../module/ModulePartPage";
 import { ModulePage } from "../module/ModulePage";
+import { HistoryNavigation } from "../module/HistoryPage";
 
 export function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -32,6 +33,10 @@ export function TabNavigation() {
               iconName = focused ? "bed" : "bed-outline";
             } else if (route.name === "Assignment") {
               iconName = focused ? "bar-chart" : "bar-chart-outline";
+            } else if (route.name === "History") {
+              iconName = focused
+                ? "checkmark-circle"
+                : "checkmark-circle-outline";
             }
 
             // You can return any component that you like here!
@@ -47,6 +52,11 @@ export function TabNavigation() {
           name="Home"
           component={ModulePage}
           options={{ tabBarLabel: "Hjem" }}
+        />
+        <Tab.Screen
+          name="History"
+          component={HistoryNavigation}
+          options={{ tabBarLabel: "Tidligere Moduler" }}
         />
         <Tab.Screen
           name="Søvndagbok"

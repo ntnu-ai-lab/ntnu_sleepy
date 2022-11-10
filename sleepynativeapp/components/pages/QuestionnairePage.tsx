@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, Text } from "react-native";
+import React, { useRef, useState } from "react";
+import { Text } from "react-native";
 import { NavBar } from "../material/NavBar";
 import { PageTemplate } from "../material/PageTemplate";
 import {
@@ -211,8 +211,8 @@ export function QuestionnairePage() {
                     selectedItem === "Ja"
                       ? setSmoke(true)
                       : selectedItem === "Nei"
-                        ? setSmoke(false)
-                        : setSmoke(undefined);
+                      ? setSmoke(false)
+                      : setSmoke(undefined);
                   }
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
@@ -248,8 +248,8 @@ export function QuestionnairePage() {
                     selectedItem === "Ja"
                       ? setSnus(true)
                       : selectedItem === "Nei"
-                        ? setSnus(false)
-                        : setSnus(undefined);
+                      ? setSnus(false)
+                      : setSnus(undefined);
                   }
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
@@ -302,8 +302,8 @@ export function QuestionnairePage() {
                     selectedItem === "Ja"
                       ? setPregnant(true)
                       : selectedItem === "Nei"
-                        ? setPregnant(false)
-                        : setPregnant(undefined);
+                      ? setPregnant(false)
+                      : setPregnant(undefined);
                   }
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
