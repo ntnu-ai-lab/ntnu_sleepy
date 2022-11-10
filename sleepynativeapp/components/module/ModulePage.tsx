@@ -246,7 +246,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
                 } else {
                   Alert.alert(
                     "Søvnrestriksjon",
-                    "Du har enten ikke kommet til modulen om søvnrestriksjon, eller har ikke ført nok dager med søvndagbok til å starte søvnrestriksjon, ønsker du å starte søvnrestriksjon likevel?",
+                    "Du har enten ikke kommet til modulen om søvnrestriksjon, eller har ikke ført nok dager med søvndagbok til å starte søvnrestriksjon. Ønsker du å starte søvnrestriksjon likevel?",
                     [
                       {
                         text: "Ja",
