@@ -39,7 +39,7 @@ export interface ModuleProgression {
 export interface SleepRestriction {
   id: string,
   week: string,
-  riseTime: string,
+  custom_rise_time: string,
   duration: string,
   bedtime: string,
 }

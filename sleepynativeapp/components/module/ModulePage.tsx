@@ -13,7 +13,7 @@ import {
 } from "../../state/atoms";
 import { colors } from "../../styles/styles";
 import { ModuleExpanded } from "../../types/modules";
-import { ModuleProgression } from "../../types/Types";
+import { ModuleProgression, User } from "../../types/Types";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
 import { PageTemplate } from "../material/PageTemplate";
@@ -26,11 +26,9 @@ export function ModulePage() {
   const progression = useRecoilValue(moduleProgression);
 
   useEffect(() => {
-    if (cachedModuleIds === undefined) {
-      getAllModules().then((r) => {
-        setCachedModuleIds(r);
-      });
-    }
+    getAllModules().then((r) => {
+      setCachedModuleIds(r);
+    });
   }, []);
 
   function moduleToGet() {
@@ -104,9 +102,10 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
   const [progression, setProgression] = useRecoilState(moduleProgression);
   const currentPart =
     progression.find((mp) => mp.module === module.id)?.part ?? 0;
-  const currentUser = useRecoilValue(loggedInUser);
+  const [currentUser, setCurrentUser] = useRecoilState(loggedInUser);
+  const cachedModuleIds = useRecoilValue(moduleIds);
   const restriction = useRecoilValue(mySleepRestriction);
-  const [history, setHistory] = useRecoilState(cachedModules)
+  const [history, setHistory] = useRecoilState(cachedModules);
 
   function finishModule() {
     const newProgressionList = [...progression];
@@ -125,16 +124,20 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
   }
 
   function addModuleToHistory() {
-    if (!history.map((h)=> h.id).includes(module.id)) {
+    if (!history.map((h) => h.id).includes(module.id)) {
       const newHistory = [...history];
-      newHistory.push({...module, parts: []})
-      setHistory(newHistory)
+      newHistory.push({ ...module, parts: [] });
+      setHistory(newHistory);
     }
   }
 
   useEffect(() => {
-    addModuleToHistory()
-  },[])
+    if (progression.length === cachedModuleIds?.length && currentUser) {
+      const newUser: User = { ...currentUser, sleepRestriction: true };
+      setCurrentUser(newUser);
+    }
+    addModuleToHistory();
+  }, []);
 
   return (
     <PageTemplate>
@@ -150,7 +153,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
         {currentPart === module.parts.length ? (
           <View style={{ alignItems: "center" }}>
             <Text style={{ color: colors.text_white, fontSize: 20 }}>
-              Modulen er fullført!
+              Gratulerer! Modulen er fullført!
             </Text>
             <View style={{ width: "100%" }}>
               <Button variant="contained" onClick={finishModule}>
@@ -177,7 +180,10 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
                   screen: "Home",
                   params: {
                     screen: "part",
-                    params: { part: module.parts[currentPart], isHistory: false },
+                    params: {
+                      part: module.parts[currentPart],
+                      isHistory: false,
+                    },
                   },
                 });
 
@@ -240,7 +246,7 @@ export function ModulePageOverview(props: { module: ModuleExpanded }) {
                 } else {
                   Alert.alert(
                     "Søvnrestriksjon",
-                    "Du har enten ikke kommet til modulen om søvnrestriksjon, eller har ikke ført nokk dager med søvndagbok til å starte søvn restriksjon, ønsker du å starte søvnrestriksjon likevel?",
+                    "Du har enten ikke kommet til modulen om søvnrestriksjon, eller har ikke ført nok dager med søvndagbok til å starte søvnrestriksjon. Ønsker du å starte søvnrestriksjon likevel?",
                     [
                       {
                         text: "Ja",
