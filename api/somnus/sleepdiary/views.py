@@ -48,6 +48,9 @@ class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         plan = SleepRestrictionPlan.objects.filter(user=request.user).first()
 
+        if plan is None:
+            return Response(status=404)
+
         if plan and plan.week < date.today() - timedelta(weeks=1):
             plan = self.queryset.create(
                 id=uuid4(),
