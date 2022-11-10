@@ -120,7 +120,6 @@ export function LoginPage() {
           >
             <Text style={{fontSize: 18}}>Logg inn</Text>
           </Button>
-
           <Button
             variant="outlined"
             onClick={() => {

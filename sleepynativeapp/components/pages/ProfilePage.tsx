@@ -5,7 +5,11 @@ import { gender, User, UserEx } from "../../types/Types";
 import { AuthContext } from "../../auth/AuthProvider";
 import { createUser, getUserByIdentiyId } from "../../api/userApi";
 import { useRecoilState } from "recoil";
-import { cachedModules, cachedSleepDiary, loggedInUser } from "../../state/atoms";
+import {
+  cachedModules,
+  cachedSleepDiary,
+  loggedInUser,
+} from "../../state/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "../../styles/styles";
 import { useNavigation } from "@react-navigation/native";
@@ -51,37 +55,17 @@ export function ProfilePage() {
   });
 
   async function logOut() {
-    //@ts-ignore
-    setSession({ session_token: undefined, session: undefined });
     setThisUser(undefined);
+    await AsyncStorage.removeItem("Local_user");
     setSleepDiary(undefined);
+    await AsyncStorage.removeItem("SleepDiary");
     setModules([]);
     await storeCachedModules([]);
-    await storeLocalUser(undefined);
-    await storeSleepDiary(undefined);
-    await storeModuleIds(undefined);
+    await AsyncStorage.removeItem("ModuleIds");
     await storeProgression([]);
-    await storeSleepRestriction(undefined);
-    const removeSleepRestriction = async () => {
-      try {
-        await AsyncStorage.removeItem("Restriction");
-      } catch (e) {
-        console.error;
-      }
-    };
-    const removeUserFromStorage = async () => {
-      try {
-        await AsyncStorage.removeItem("Local_user");
-      } catch (e) {
-        console.error;
-      }
-    };
-    await removeSleepRestriction();
-    await removeUserFromStorage();
-    setTimeout(() => {
-      //@ts-ignore
-      navigation.navigate("login");
-    }, 100);
+    await AsyncStorage.removeItem("Restriction");
+    //@ts-ignore
+    setSession({ session_token: undefined, session: undefined })
   }
 
   const genders = {
@@ -91,7 +75,7 @@ export function ProfilePage() {
     undefined: "-",
   };
 
-  const dateRegex = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/
+  const dateRegex = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/;
 
   return (
     <PageTemplate>
@@ -156,9 +140,9 @@ export function ProfilePage() {
                   label: v,
                 }))}
                 optionDisplay={(o) => o.label}
-                value={{value: user.gender, label: genders[user.gender]}}
+                value={{ value: user.gender, label: genders[user.gender] }}
                 onChange={(o: { value: gender; label: string }) => {
-                  setUser((prev) => ({...prev, gender: o.value}))
+                  setUser((prev) => ({ ...prev, gender: o.value }));
                 }}
               />
               <Text style={style.fieldDescriptions}>Yrke</Text>

@@ -70,7 +70,7 @@ export function ModulePagePage(props: {
                     <View key={i}>
                       <QuizSectionComponent section={s} />
                     </View>
-                  )
+                  );
                 }
               }
             })}
@@ -88,7 +88,7 @@ export function ModulePagePage(props: {
             paddingHorizontal: 20,
           }}
         >
-          {pageProgression === 0 ? (
+          {pageProgression === 0 || pageProgression === 2 ? (
             <View />
           ) : (
             <TouchableOpacity onPress={() => navigatePage(-1)}>
@@ -100,10 +100,10 @@ export function ModulePagePage(props: {
               </View>
             </TouchableOpacity>
           )}
-          {pageProgression === 1 ? (
+          {pageProgression === 1 || pageProgression === 2 ? (
             <TouchableOpacity
-              onPress={() => { 
-                navigatePart(1)
+              onPress={() => {
+                navigatePart(1);
                 //@ts-ignore because navigation wack as fuck
                 navigation.goBack();
               }}
