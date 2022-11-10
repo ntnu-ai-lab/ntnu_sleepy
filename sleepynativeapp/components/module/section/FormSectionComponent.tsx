@@ -101,7 +101,7 @@ export function FormSectionComponent(props: { section: FormSection }) {
       })}
       <Button
         onClick={async () => {
-          sendAnswerList(answers).then(r => console.log(r)); //Denne får en error, blir med til main med tanke om at det skal fikses
+          sendAnswerList(answers);
         }}
         variant={"contained"}
       >
@@ -243,7 +243,7 @@ function CheckboxFormInput(props: {
       if (a.input === input.id) {
         const answer: Answer = {
           ...a,
-          value: checked === "checked" ? true : false,
+          value: checked === "checked" ? "true" : "false",
         };
         newAnswers.splice(n, 1, answer);
       }
