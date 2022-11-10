@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
 import { useRecoilState } from "recoil";
 import {
   changeRiseTimeSleepRestriction,
@@ -112,8 +112,8 @@ export function SleepRestrictionPage() {
               <TextField
                 value={riseTime}
                 onChange={setRiseTime}
-                keyboardType={"numeric"}
-                placeholderText={"HH.MM"}
+                keyboardType={Platform.OS === "ios" ? "numbers-and-punctuation" : "default"}
+                placeholderText={"HH:MM"}
                 error={!timeRegex.test(riseTime)}
               />
               <Button variant="outlined" onClick={beginSleepRestriction}>
@@ -130,7 +130,7 @@ export function SleepRestrictionPage() {
               <Card>
                 <View
                   style={{
-                    height: Dimensions.get("window").height * 0.5,
+                    minHeight: Dimensions.get("window").height * 0.5,
                     justifyContent: "space-between",
                   }}
                 >
@@ -176,8 +176,8 @@ export function SleepRestrictionPage() {
                         <TextField
                           value={riseTime}
                           onChange={setRiseTime}
-                          keyboardType={"numeric"}
-                          placeholderText={"HH.MM"}
+                          keyboardType={Platform.OS === "ios" ? "numbers-and-punctuation" : "default"}
+                          placeholderText={"HH:MM"}
                           error={!timeRegex.test(riseTime)}
                         />
                         <Button
