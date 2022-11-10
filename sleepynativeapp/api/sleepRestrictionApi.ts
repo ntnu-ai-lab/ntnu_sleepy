@@ -24,12 +24,13 @@ export async function getSleepRestriction() {
   return response.data;
 }
 
-export async function changeRiseTimeSleepRestriction(riseTime: string) {
+export async function changeRiseTimeSleepRestriction(riseTime: string, id: string) {
+  const riseTimeObject = {custom_rise_time: riseTime}
   const response = await callApi<SleepRestriction>(
-    `sleepdiary/sleeprestriction/`,
+    `sleepdiary/sleeprestriction/${id}/`,
     {
       method: "PATCH",
-      body: JSON.stringify(riseTime),
+      body: JSON.stringify(riseTimeObject),
     }
   );
   return response.data;
