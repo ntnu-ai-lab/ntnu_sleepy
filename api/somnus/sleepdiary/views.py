@@ -38,7 +38,10 @@ class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
         return SleepRestrictionPlan.objects.filter(user=self.request.user)
 
     def create(self, request: AuthenticatedRequest, *args: Any, **kwargs: Any) -> Response: # type: ignore [override]
-        duration = max(SleepDiary.objects.get(user=request.user).average_sleep_duration, timedelta(hours=5))
+        try:
+            duration = max(SleepDiary.objects.get(user=request.user).average_sleep_duration, timedelta(hours=5))
+        except SleepDiary.DoesNotExist:
+            duration = timedelta(hours=5)
         request.data.update({'user': request.user.id, 'duration': duration})
         return super().create(request, *args, **kwargs)
 
