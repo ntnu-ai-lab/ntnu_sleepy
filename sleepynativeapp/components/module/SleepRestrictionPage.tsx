@@ -201,7 +201,7 @@ export function SleepRestrictionPage() {
                           setEdit(true);
                         }}
                       >
-                        <Text>Endre våkne tidspunkt</Text>
+                        <Text>Endre når du skal stå opp</Text>
                       </Button>
                     )}
                   </View>
