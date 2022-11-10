@@ -309,6 +309,7 @@ export default function SleepDiaryComponentDay() {
           style={{
             color: colors.primary,
             textAlign: "center",
+            padding: 3,
           }}
         >
           Lagre dagbok
