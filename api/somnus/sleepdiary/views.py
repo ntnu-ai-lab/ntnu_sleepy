@@ -42,7 +42,7 @@ class SleepRestrictionPlanViewSet(viewsets.ModelViewSet):
             duration = max(SleepDiary.objects.get(user=request.user).average_sleep_duration, timedelta(hours=5))
         except SleepDiary.DoesNotExist:
             duration = timedelta(hours=5)
-        request.data.update({'user': request.user, 'duration': duration})
+        request.data.update({'duration': duration})
         return super().create(request, *args, **kwargs)
 
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:

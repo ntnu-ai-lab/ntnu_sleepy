@@ -36,6 +36,10 @@ class SleepRestrictionPlanSerializer(serializers.ModelSerializer[SleepRestrictio
             time += datetime.timedelta(hours=24)
         return datetime.time(hour=int(time.total_seconds()) // 3600, minute=int((time.total_seconds()) % 3600) // 60)
 
+    def create(self, validated_data: Any) -> SleepRestrictionPlan:
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+
     class Meta:
         model = SleepRestrictionPlan
         fields = ('id', 'week', 'custom_rise_time', 'duration', 'bedtime')
