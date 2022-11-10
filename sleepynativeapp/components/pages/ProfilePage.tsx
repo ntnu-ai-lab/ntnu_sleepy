@@ -1,9 +1,9 @@
 import { PageTemplate } from "../material/PageTemplate";
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { gender, User, UserEx } from "../../types/Types";
+import { gender, User } from "../../types/Types";
 import { AuthContext } from "../../auth/AuthProvider";
-import { createUser, getUserByIdentiyId } from "../../api/userApi";
+import { createUser } from "../../api/userApi";
 import { useRecoilState } from "recoil";
 import {
   cachedModules,
@@ -12,18 +12,13 @@ import {
 } from "../../state/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "../../styles/styles";
-import { useNavigation } from "@react-navigation/native";
 import { Alert } from "../material/Alert";
 import { Card } from "../material/Card";
 import { Button } from "../material/Button";
 import { TextField } from "../material/TextField";
 import {
   storeCachedModules,
-  storeLocalUser,
-  storeModuleIds,
   storeProgression,
-  storeSleepDiary,
-  storeSleepRestriction,
 } from "../../state/StorageController";
 import { Select } from "../material/Select";
 
@@ -31,8 +26,7 @@ export function ProfilePage() {
   const [thisUser, setThisUser] = useRecoilState(loggedInUser);
   const [, setSleepDiary] = useRecoilState(cachedSleepDiary);
   const [, setModules] = useRecoilState(cachedModules);
-  const { sessionToken, session, setSession } = useContext(AuthContext);
-  const navigation = useNavigation();
+  const { session, setSession } = useContext(AuthContext);
   const [openAlert, setOpenAlert] = useState(false);
   const [edit, setEdit] = useState(false);
   const [user, setUser] = useState<User>(
@@ -65,7 +59,7 @@ export function ProfilePage() {
     await storeProgression([]);
     await AsyncStorage.removeItem("Restriction");
     //@ts-ignore
-    setSession({ session_token: undefined, session: undefined })
+    setSession({ session_token: undefined, session: undefined });
   }
 
   const genders = {
@@ -102,7 +96,7 @@ export function ProfilePage() {
               style={{ width: 100 }}
               onClick={() => setEdit(!edit)}
             >
-              {!edit ? <Text>Endre</Text> : <Text>Stop Endre</Text>}
+              {!edit ? <Text>Endre</Text> : <Text>Avbryt</Text>}
             </Button>
           </View>
           {thisUser ? (
