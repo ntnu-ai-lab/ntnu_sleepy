@@ -5,7 +5,7 @@ from django.db.models import QuerySet
 
 from somnus.users.serializers import UserSerializer, ProfileSerializer
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     def get_queryset(self) -> QuerySet[User]:
         return User.objects.filter(id=self.request.user.id) # type: ignore[union-attr]
