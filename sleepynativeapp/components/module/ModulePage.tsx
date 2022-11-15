@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Text, Alert } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { getAllModules, useModule } from "../../api/modulesApi";
@@ -19,7 +19,7 @@ import { Card } from "../material/Card";
 import { PageTemplate } from "../material/PageTemplate";
 import { ProgressBar } from "../material/ProgressBar";
 import { ModulePartPage } from "./ModulePartPage";
-import { SleepRestrictionPage } from "./SleepRestrictionPage";
+import { SleepRestrictionPage } from "../pages/SleepRestrictionPage";
 
 export function ModulePage() {
   const [cachedModuleIds, setCachedModuleIds] = useRecoilState(moduleIds);

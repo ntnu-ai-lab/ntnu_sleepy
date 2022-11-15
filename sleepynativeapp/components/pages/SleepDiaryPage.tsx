@@ -6,7 +6,7 @@ import { PageTemplate } from "../material/PageTemplate";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { DiaryEntry, SleepDiary } from "../../types/modules";
 import { Button } from "../material/Button";
-import SleepyDiaryEntryComponent from "../module/SleepyDiaryEntryComponent";
+import SleepyDiaryEntryComponent from "../pages/SleepyDiaryEntryComponent";
 import {
   createDiary,
   getDiary,
@@ -14,7 +14,7 @@ import {
 } from "../../api/sleepDiaryApi";
 import { useRecoilState } from "recoil";
 import { cachedSleepDiary } from "../../state/atoms";
-import SleepDiaryComponentDay from "../module/SleepDiaryComponentDay";
+import SleepDiaryComponentDay from "./SleepDiaryComponentDay";
 
 export function SleepDiaryPage() {
   //States to show and hide the different components.
