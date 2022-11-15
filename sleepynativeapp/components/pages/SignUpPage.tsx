@@ -6,7 +6,7 @@ import {
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
 import { View, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
-import { createUser, updateProfile } from "../../api/userApi";
+import { updateProfile } from "../../api/userApi";
 import { AuthContext } from "../../auth/AuthProvider";
 import { handleFormSubmitError } from "../../auth/form";
 import { ProjectContext } from "../../auth/ProjectProvider";
@@ -136,10 +136,8 @@ export function SignupPage() {
               occupation: occupation,
               relationshipStatus: relationship,
             };
-            createUser({}, s.session.identity.id).then((r) => {
-              updateProfile(user, s.session.identity.id).then((re) => {
-                if (r && re) setThisUser({ ...r, ...re });
-              });
+            updateProfile(user, s.session.identity.id).then((r) => {
+              if (r) setThisUser(r);
             });
           })
           .catch(

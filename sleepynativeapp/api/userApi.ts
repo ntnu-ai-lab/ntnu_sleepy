@@ -1,14 +1,6 @@
 import { storeLocalUser } from "../state/StorageController";
 import { callApi } from "./callApi";
-import { User, Profile, DjangoUser } from "../types/Types";
-
-export async function createUser(user: DjangoUser, identiyId: string) {
-  const response = await callApi<DjangoUser>(`users/${identiyId}/`, {
-    method: "PATCH",
-    body: JSON.stringify(user),
-  });
-  return response.data;
-}
+import { User, Profile } from "../types/Types";
 
 export async function updateProfile(profile: Profile, identityId: string) {
   const response = await callApi<Profile>(`users/profiles/${identityId}/`, {
