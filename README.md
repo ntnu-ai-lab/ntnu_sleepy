@@ -76,9 +76,6 @@ NTNU_Sleepy is a project aimed at creating an app for people experiencing sleep 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
 All prerequisites are provided in the README of the subfolders within the repo.
 
