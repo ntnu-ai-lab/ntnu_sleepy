@@ -33,7 +33,7 @@ export function LoginPage() {
     useContext(AuthContext);
   const [flow, setFlow] = useState<SelfServiceLoginFlow | undefined>(undefined);
   const route = useRoute();
-  const [,setThisUser] = useRecoilState(loggedInUser)
+  const [, setThisUser] = useRecoilState(loggedInUser);
 
   const initializeFlow = () =>
     newKratosSdk(project)
@@ -70,18 +70,25 @@ export function LoginPage() {
     return null;
   }
 
-  const onSubmit = (payload: SubmitSelfServiceLoginFlowBody) =>
-    flow
+  const onSubmit = (payload: SubmitSelfServiceLoginFlowBody) => {
+    return flow
       ? newKratosSdk(project)
           .submitSelfServiceLoginFlow(flow.id, payload, sessionToken)
           .then(({ data }) => Promise.resolve(data as SessionContext))
           // Looks like everything worked and we have a session!
           .then((session) => {
             setSession(session);
-            if (session?.session.identity.id) getUserByIdentiyId(session.session.identity.id).then(r => {if (r) {setThisUser(r)}})
+            if (session?.session.identity.id) {
+              getUserByIdentiyId(session.session.identity.id).then((r) => {
+                if (r) {
+                  setThisUser(r);
+                }
+              });
+            }
           })
           .catch(handleFormSubmitError(setFlow, initializeFlow))
       : Promise.resolve();
+  };
 
   return (
     <PageTemplate>
@@ -107,7 +114,7 @@ export function LoginPage() {
             placeholderText={"Passord"}
           />
           <Button
-          variant="contained"
+            variant="contained"
             onClick={() => {
               const userInput: SubmitSelfServiceLoginFlowWithPasswordMethodBody =
                 {
@@ -118,7 +125,7 @@ export function LoginPage() {
               onSubmit(userInput);
             }}
           >
-            <Text style={{fontSize: 18}}>Logg inn</Text>
+            <Text style={{ fontSize: 18 }}>Logg inn</Text>
           </Button>
           <Button
             variant="outlined"
@@ -127,7 +134,7 @@ export function LoginPage() {
               navigation.navigate("signup");
             }}
           >
-            <Text style={{color: colors.text_white}}>Opprett ny bruker</Text>
+            <Text style={{ color: colors.text_white }}>Opprett ny bruker</Text>
           </Button>
         </Card>
       </View>

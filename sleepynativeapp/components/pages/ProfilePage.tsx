@@ -53,6 +53,7 @@ export function ProfilePage() {
     await AsyncStorage.removeItem("Local_user");
     setSleepDiary(undefined);
     await AsyncStorage.removeItem("SleepDiary");
+    await AsyncStorage.removeItem("Progression");
     setModules([]);
     await storeCachedModules([]);
     await AsyncStorage.removeItem("ModuleIds");

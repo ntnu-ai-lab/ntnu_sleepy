@@ -1,12 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { ReactNode, useEffect } from "react";
 import { ModuleProgression, SleepRestriction, User } from "../types/Types";
-import { DiaryEntry, Module, ModuleExpanded, SleepDiary } from "../types/modules";
+import {
+  DiaryEntry,
+  Module,
+  ModuleExpanded,
+  SleepDiary,
+} from "../types/modules";
 import { useRecoilState } from "recoil";
 import {
   cachedModules,
   cachedSleepDiary,
-  cachedSleepDiaryEntry,
   loggedInUser,
   moduleIds,
   moduleProgression,
@@ -18,7 +22,9 @@ export async function storeLocalUser(user: User | undefined) {
   await AsyncStorage.setItem("Local_User", userAsString);
 }
 
-export async function storeCachedModules(modules: ModuleExpanded[] | undefined) {
+export async function storeCachedModules(
+  modules: ModuleExpanded[] | undefined
+) {
   const modulesAsString = JSON.stringify(modules);
   await AsyncStorage.setItem("Modules", modulesAsString);
 }
@@ -58,9 +64,6 @@ export function StorageController(props: {
   const [sleepDiary, setSleepDiary] = useRecoilState(cachedSleepDiary);
   const [cachedModuleIds, setCachedModuleIds] = useRecoilState(moduleIds);
   const [progression, setProgression] = useRecoilState(moduleProgression);
-  const [sleepDiaryEntry, setSleepDiaryEntry] = useRecoilState(
-    cachedSleepDiaryEntry
-  );
   const [restriction, setRestriction] = useRecoilState(mySleepRestriction);
 
   async function getLocalUser() {
@@ -85,21 +88,12 @@ export function StorageController(props: {
 
   async function getCachedSleepDiary() {
     const getData = async () => {
-      const jsonValue = await AsyncStorage.getItem("sleep_diary");
+      const jsonValue = await AsyncStorage.getItem("SleepDiary");
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     };
 
     const sleepDiary: SleepDiary = await getData();
     if (sleepDiary != null) setSleepDiary(sleepDiary);
-  }
-  async function getCachedSleepDiaryEntry() {
-    const getData = async () => {
-      const jsonValue = await AsyncStorage.getItem("sleep_diary_entry");
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    };
-
-    const sleepDiaryEntry: DiaryEntry = await getData();
-    if (sleepDiary != null) setSleepDiaryEntry(sleepDiaryEntry);
   }
 
   async function getCachedModuleIds() {
@@ -136,7 +130,6 @@ export function StorageController(props: {
     getCachedSleepDiary();
     getCachedModuleIds();
     getMyProgression();
-    getCachedSleepDiaryEntry();
     getSleepRestriction();
   }, []);
 
@@ -183,12 +176,12 @@ export function StorageController(props: {
   useEffect(() => {
     if (modules !== undefined) {
       try {
-        storeCachedModules(modules)
+        storeCachedModules(modules);
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     }
-  })
+  });
 
   return <>{children}</>;
 }

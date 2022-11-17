@@ -27,7 +27,7 @@ class SleepDiary(models.Model):
         return sum([entry.efficiency for entry in entries]) / len(entries)
 
     def __str__(self) -> str:
-        return f"{self.user.name} ({self.user.email})"
+        return str(self.user)
 
     class Meta:
         verbose_name_plural = 'Sleep diaries'

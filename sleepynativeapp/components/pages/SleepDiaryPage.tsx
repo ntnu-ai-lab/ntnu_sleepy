@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text } from "react-native-paper";
 import { colors } from "../../styles/styles";
 import { Card } from "../material/Card";
@@ -15,6 +15,7 @@ import {
 import { useRecoilState } from "recoil";
 import { cachedSleepDiary } from "../../state/atoms";
 import SleepDiaryComponentDay from "./SleepDiaryComponentDay";
+import { AuthContext } from "../../auth/AuthProvider";
 
 export function SleepDiaryPage() {
   //States to show and hide the different components.
@@ -25,11 +26,13 @@ export function SleepDiaryPage() {
   const [sleepDiary, setSleepDiary] = useState<SleepDiary>();
   const [hasSleepDiary, setHasSleepDiary] = useState<boolean>(); //TODO fetch hasSleepDiary from backend
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
+  const { isAuthenticated } = useContext(AuthContext);
 
   /**
    * Checks if there exists a sleepDiary in asyncstorage, else it fetches the sleepDiary from the backend.
    */
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
+    if (!isAuthenticated) return;
     if (storedSleepDiary) {
       //console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
       setHasSleepDiary(true);
