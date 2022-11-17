@@ -87,9 +87,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self) -> str:
         try:
             details = Profile.objects.get(id=self.id)
-            return f"{details.name if details.name else self.id}{f' ({details.email})' if details.email else ''}"
+            return f"{details.name if details.name else self.username}{f' ({details.email})' if details.email else ''}"
         except Profile.DoesNotExist:
-            return f"{self.id}"
+            return f"{self.username}"
 
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -99,4 +99,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=10, choices=Gender.choices, default=Gender.UNDEFINED)
     occupation = models.CharField(max_length=255, blank=True)
     relationshipstatus = models.CharField(max_length=20, choices=Relationshipstatus.choices, default=Relationshipstatus.UNDEFINED)
+
+    def __str__(self) -> str:
+         return f"{self.name if self.name else self.id}{f' ({self.email})' if self.email else ''}"
 
