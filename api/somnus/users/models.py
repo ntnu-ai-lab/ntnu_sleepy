@@ -1,5 +1,5 @@
 from django.utils import timezone
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import uuid
 from django.db import models
@@ -44,7 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
 
     username_validator = UnicodeUsernameValidator()
-    name = models.CharField(max_length=255, blank=True)
     username = models.CharField(
         _("username"),
         max_length=150,
@@ -59,7 +58,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     password = models.CharField(blank=True, max_length=255, default='')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    email = models.EmailField(_("email address"), blank=True)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -78,10 +76,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    dateOfBirth = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=10, choices=Gender.choices, default=Gender.UNDEFINED)
-    occupation = models.CharField(max_length=255, blank=True)
-    relationshipstatus = models.CharField(max_length=20, choices=Relationshipstatus.choices, default=Relationshipstatus.UNDEFINED)
     answers: models.Manager['Answer']
     diary: models.Manager['SleepDiary']
     sleep_restriction_plan: models.Manager['SleepRestrictionPlan']
@@ -91,4 +85,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     def __str__(self) -> str:
-        return f"{self.name if self.name else self.id}{f' ({self.email})' if self.email else ''}"
+        try:
+            details = Profile.objects.get(id=self.id)
+            return f"{details.name if details.name else self.id}{f' ({details.email})' if details.email else ''}"
+        except Profile.DoesNotExist:
+            return f"{self.id}"
+
+class Profile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(_("email address"), blank=True)
+    dateOfBirth = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=Gender.choices, default=Gender.UNDEFINED)
+    occupation = models.CharField(max_length=255, blank=True)
+    relationshipstatus = models.CharField(max_length=20, choices=Relationshipstatus.choices, default=Relationshipstatus.UNDEFINED)
+

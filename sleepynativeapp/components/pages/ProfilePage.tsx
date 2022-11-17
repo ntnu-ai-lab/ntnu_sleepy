@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { gender, User } from "../../types/Types";
 import { AuthContext } from "../../auth/AuthProvider";
-import { createUser } from "../../api/userApi";
+import { updateProfile } from "../../api/userApi";
 import { useRecoilState } from "recoil";
 import {
   cachedModules,
@@ -158,7 +158,7 @@ export function ProfilePage() {
             onClick={() => {
               if (session?.identity.id) {
                 setThisUser(user);
-                createUser(user, session?.identity.id);
+                updateProfile(user, session?.identity.id);
                 setEdit(false);
               }
             }}

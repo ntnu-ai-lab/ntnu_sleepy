@@ -106,8 +106,11 @@ WSGI_APPLICATION = 'somnus.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db_url(default='postgres://django:supersecret@localhost:5431/django')
+    'default': env.db_url(default='postgres://django:supersecret@localhost:5431/django'),
+    'profile_db': env.db_url(var='PROFILE_DATABASE_URL', default='postgres://django:supersecret@localhost:5430/django')
 }
+
+DATABASE_ROUTERS = ['somnus.common.database_routers.UserRouter']
 
 
 # Password validation
