@@ -84,11 +84,6 @@ The following is needed to run the app locally:
 * Python
 
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 
 <!-- LICENSE -->
