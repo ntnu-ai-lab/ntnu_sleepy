@@ -24,7 +24,9 @@ export async function callApi<T>(
     if (response.ok) {
       return { response, data: await response.json() };
     }
-    return { response, error: await response.json() };
+    const error = await response.json();
+    console.error(error);
+    return { response, error };
   }
   return { response };
 }
