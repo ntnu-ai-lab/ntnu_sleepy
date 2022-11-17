@@ -84,6 +84,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
 
+    @property
+    def details(self) -> 'Profile | None':
+        try:
+            details: Profile = Profile.objects.get(id=self.id)
+            return details
+        except Profile.DoesNotExist:
+            return None
+
     def __str__(self) -> str:
         try:
             details = Profile.objects.get(id=self.id)
