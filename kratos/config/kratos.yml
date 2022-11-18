@@ -65,9 +65,7 @@ ciphers:
   algorithm: xchacha20-poly1305
 
 hashers:
-  algorithm: bcrypt
-  bcrypt:
-    cost: 8
+  algorithm: argon2
 
 identity:
   default_schema_id: default
