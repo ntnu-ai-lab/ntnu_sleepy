@@ -144,7 +144,8 @@ Kratos needs a somwehat different config in production mode than in development 
 
 ```yaml
 log:
-  level: error leak_sensitive_values: false
+  level: error
+  leak_sensitive_values: false
 ```
 
 `leak_sensitive_values` should obvisously never be set to true in a production environment.
