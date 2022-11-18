@@ -81,9 +81,15 @@ The following is needed to run the app locally:
 * Node.js
 * Docker
 * Python
+* Expo Go
 
 
+### If you want to try out the production build of the project locally on your smartphone, you can use this link:
+https://expo.dev/@ntnu_somnus/sleepynativeapp?serviceType=classic&distribution=expo-go&release-channel=main
 
+* Download the Expo Go app from Google Play (Android) or App Store (iOS)
+* Scan the QR code with your camera (use the in-app camera for Android)
+* Warning: Using iOS will not work at the moment for anyone other than members of the Expo team for the project.
 
 <!-- LICENSE -->
 ## License
