@@ -94,7 +94,7 @@ https://expo.dev/@ntnu_somnus/sleepynativeapp?serviceType=classic&distribution=e
 <!-- LICENSE -->
 ## License
 
-Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
+Distributed under the GPLv3 License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
