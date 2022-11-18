@@ -55,7 +55,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## This Project
-This project was developed by students at NTUNU in TDT4290 Customer Driven Project for the Musculoskeletal Research Group at the Department of Public Health and Nursing at NTNU.
+This project was developed by students at NTNU in TDT4290 Customer Driven Project for the Musculoskeletal Research Group at the Department of Public Health and Nursing at NTNU.
 
 It consists of a prototype of an app for evidence-based self-treatment of sleep problems. The course consists of one or more theory modules defined in an admin panel, a sleep diary used for self evaluation and calibration, and a sleep restriction module where the user is given a strict bedtime and wake time every day to acclimmatise their bodies to a more desireably circadian rhythm.
 
