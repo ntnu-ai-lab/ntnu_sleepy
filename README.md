@@ -7,15 +7,10 @@ This project was developed by students at NTNU in TDT4290 Customer Driven Projec
 It consists of a prototype of an app for evidence-based self-treatment of sleep problems. The course consists of one or more theory modules defined in an admin panel, a sleep diary used for self evaluation and calibration, and a sleep restriction module where the user is given a strict bedtime and wake time every day to acclimmatise their bodies to a more desireably circadian rhythm.
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 ### Built With
 [![React][React Native]][React-url]
 [![Django][Django]][Django-url]
 [![NodeJS][NodeJS]][NodeJS-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- GETTING STARTED -->
@@ -43,29 +38,6 @@ https://expo.dev/@ntnu_somnus/sleepynativeapp?serviceType=classic&distribution=e
 
 Distributed under the GPLv3 License. See `LICENSE` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/ntnu-ai-lab/ntnu_sleepy/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/ntnu-ai-lab/ntnu_sleepy/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/ntnu-ai-lab/ntnu_sleepy/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/ntnu-ai-lab/ntnu_sleepy/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/ntnu-ai-lab/ntnu_sleepy/blob/master/LICENSE.txt
-[React Native]: https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB
-[React-url]: https://reactnative.dev
-[Django]: https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white
-[Django-url]: https://www.djangoproject.com
-[NodeJS]: https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white
-[NodeJS-url]: https://nodejs.org/en/
 ## Development
 The three folders contain the configuration and instructions for running each part locally for development.
 
