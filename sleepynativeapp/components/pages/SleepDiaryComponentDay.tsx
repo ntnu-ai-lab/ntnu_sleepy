@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import { colors } from "../../styles/styles";
 import { Button } from "../material/Button";
 import { Card } from "../material/Card";
@@ -15,8 +15,7 @@ import {
 
 import { DateField } from "../material/DateField";
 import { useRecoilState } from "recoil";
-import { cachedSleepDiary, cachedSleepDiaryEntry } from "../../state/atoms";
-
+import { cachedSleepDiary } from "../../state/atoms";
 /**
  * Component for creating a new sleepdiary, where the user inputs the data points for the day.
  */
@@ -129,6 +128,7 @@ export default function SleepDiaryComponentDay() {
         .then((entry) => {
           if (entry) {
             updateStoredSleepDiary();
+            Alert.alert("Vellykket", "Ny dag lagret", [{ text: "Ok" }]);
           }
         })
         .catch((err) => console.log("ERROR: ", err));
