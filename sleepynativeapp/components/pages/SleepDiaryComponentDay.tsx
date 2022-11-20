@@ -19,7 +19,11 @@ import { cachedSleepDiary } from "../../state/atoms";
 /**
  * Component for creating a new sleepdiary, where the user inputs the data points for the day.
  */
-export default function SleepDiaryComponentDay() {
+export default function SleepDiaryComponentDay({
+  onFinished,
+}: {
+  onFinished: () => void;
+}) {
   const [date, setDate] = useState<Date>(new Date());
   const [dayRating, setDayRating] = useState<number>();
   const [dateValid, setDateValid] = useState<boolean>(true);
@@ -128,7 +132,9 @@ export default function SleepDiaryComponentDay() {
         .then((entry) => {
           if (entry) {
             updateStoredSleepDiary();
-            Alert.alert("Vellykket", "Ny dag lagret", [{ text: "Ok" }]);
+            Alert.alert("Vellykket", "Ny dag lagret", [
+              { text: "Ok", onPress: onFinished },
+            ]);
           }
         })
         .catch((err) => console.log("ERROR: ", err));

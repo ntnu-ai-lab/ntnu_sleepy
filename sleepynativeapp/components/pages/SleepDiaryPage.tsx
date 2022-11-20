@@ -20,7 +20,6 @@ import { AuthContext } from "../../auth/AuthProvider";
 export function SleepDiaryPage() {
   //States to show and hide the different components.
   const [createNewDiary, setCreateNewDiary] = useState<boolean>(false);
-  const [showAllDiaries, setShowAllDiaries] = useState<boolean>(false);
   const [storedSleepDiary, setStoredSleepDiary] =
     useRecoilState(cachedSleepDiary);
   const [sleepDiary, setSleepDiary] = useState<SleepDiary>();
@@ -85,30 +84,12 @@ export function SleepDiaryPage() {
       <KeyboardAwareScrollView>
         {hasSleepDiary ? (
           <Card
-            style={{ alignItems: "center", alignSelf: "center", width: "70%" }}
+            style={{ alignItems: "center", alignSelf: "center", width: "90%" }}
           >
             <Button
               style={{ width: "50%" }}
               onClick={() => {
-                setShowAllDiaries(!showAllDiaries);
-                setCreateNewDiary(false);
-              }}
-              variant="outlined"
-            >
-              <Text
-                style={{
-                  color: colors.primary,
-                  textAlign: "center",
-                }}
-              >
-                Vis alle søvndagbøker
-              </Text>
-            </Button>
-            <Button
-              style={{ width: "50%" }}
-              onClick={() => {
                 setCreateNewDiary(!createNewDiary);
-                setShowAllDiaries(false);
               }}
               variant="outlined"
             >
@@ -118,14 +99,14 @@ export function SleepDiaryPage() {
                   textAlign: "center",
                 }}
               >
-                Logg en ny dag
+                {createNewDiary ? "Avbryt" : "Logg en ny dag"}
               </Text>
             </Button>
           </Card>
         ) : (
           <></>
         )}
-        {showAllDiaries && storedSleepDiary && !createNewDiary ? (
+        {storedSleepDiary && !createNewDiary ? (
           storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => (
             <SleepyDiaryEntryComponent
               sleepDiaryEntry={e}
@@ -137,7 +118,11 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {createNewDiary && !showAllDiaries ? <SleepDiaryComponentDay /> : <></>}
+        {createNewDiary ? (
+          <SleepDiaryComponentDay onFinished={() => setCreateNewDiary(false)} />
+        ) : (
+          <></>
+        )}
         {storedSleepDiary !== undefined ? (
           <></>
         ) : (

@@ -30,13 +30,13 @@ export interface FormSelectOption {
 }
 
 export interface Question {
-  options: QuizOption[]
-  question: string
+  options: QuizOption[];
+  question: string;
 }
 
 export interface QuizOption {
-  label: string, 
-  correct: boolean
+  label: string;
+  correct: boolean;
 }
 export interface Module {
   title: string;
@@ -114,6 +114,7 @@ export interface DiaryEntry {
   night_wakes: number[];
   waketime: Date;
   risetime: Date;
+  finished?: boolean;
 }
 export interface SleepDiary {
   id: string;
@@ -122,4 +123,9 @@ export interface SleepDiary {
   diary_entries: DiaryEntry[];
 }
 
-export type Section = TextSection | ImageSection | VideoSection | FormSection | QuizSection;
+export type Section =
+  | TextSection
+  | ImageSection
+  | VideoSection
+  | FormSection
+  | QuizSection;

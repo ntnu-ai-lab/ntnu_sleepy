@@ -19,7 +19,27 @@ class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
 class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
     class Meta:
         model = DiaryEntry
-        fields = '__all__'
+        fields = [
+            'id', 
+            'date',
+            'diary',
+            'day_rating',
+            'naps',
+            'sleep_aides',
+            'sleep_aides_detail',
+            'notes',
+            'sleep_quality',
+            'bedtime',
+            'lights_out',
+            'time_to_sleep',
+            'night_wakes',
+            'waketime',
+            'risetime',
+            'finished',
+            'sleep_duration',
+            'bed_duration',
+            'efficiency'
+        ]
 
 class SleepRestrictionPlanSerializer(serializers.ModelSerializer[SleepRestrictionPlan]):
 

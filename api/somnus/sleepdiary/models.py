@@ -24,7 +24,7 @@ class SleepDiary(models.Model):
         entries = self.entries.order_by('-date')[:7]
         if not entries:
             return 0
-        return sum([entry.efficiency for entry in entries]) / len(entries)
+        return sum([entry.efficiency for entry in entries if entry.efficiency]) / len(entries)
 
     def __str__(self) -> str:
         return str(self.user)
@@ -66,8 +66,11 @@ class DiaryEntry(models.Model):
         return self.risetime - self.bedtime
 
     @property
-    def efficiency(self) -> float:
-        return self.sleep_duration / self.bed_duration
+    def efficiency(self) -> float | None:
+        try:
+            return self.sleep_duration / self.bed_duration
+        except ZeroDivisionError:
+            return None
 
     class Meta:
         unique_together = ('date', 'diary')
