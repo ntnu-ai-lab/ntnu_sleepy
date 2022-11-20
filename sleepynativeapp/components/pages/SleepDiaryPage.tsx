@@ -84,7 +84,7 @@ export function SleepDiaryPage() {
       <KeyboardAwareScrollView>
         {hasSleepDiary ? (
           <Card
-            style={{ alignItems: "center", alignSelf: "center", width: "70%" }}
+            style={{ alignItems: "center", alignSelf: "center", width: "90%" }}
           >
             <Button
               style={{ width: "50%" }}
