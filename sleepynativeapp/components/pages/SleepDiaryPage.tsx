@@ -107,18 +107,22 @@ export function SleepDiaryPage() {
           <></>
         )}
         {storedSleepDiary && !createNewDiary ? (
-          storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => {
-            console.log(e);
+          [...storedSleepDiary.diary_entries]
+            .sort((a, b) =>
+              a.finished === b.finished ? 0 : !a.finished && b.finished ? -1 : 1
+            )
+            .map((e: DiaryEntry, i) => {
+              console.log(e);
 
-            return (
-              <DiaryEntryComponent
-                refresh={checkSleepDiary}
-                entry={e}
-                diaryId={storedSleepDiary.id}
-                key={i}
-              />
-            );
-          })
+              return (
+                <DiaryEntryComponent
+                  refresh={checkSleepDiary}
+                  entry={e}
+                  diaryId={storedSleepDiary.id}
+                  key={i}
+                />
+              );
+            })
         ) : (
           <></>
         )}
