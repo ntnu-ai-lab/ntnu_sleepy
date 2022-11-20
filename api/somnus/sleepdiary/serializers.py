@@ -17,10 +17,29 @@ class SleepDiarySerializer(serializers.ModelSerializer[SleepDiary]):
         return super().create(validated_data)
 
 class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
-    # finished = serializers.CharField(source="finished", read_only=True)
     class Meta:
         model = DiaryEntry
-        fields = ['id', 'date', 'diary', 'day_rating', 'naps', 'sleep_aides', 'sleep_aides_detail', 'notes', 'sleep_quality', 'bedtime', 'lights_out', 'time_to_sleep', 'night_wakes', 'waketime', 'risetime', 'finished']
+        fields = [
+            'id', 
+            'date',
+            'diary',
+            'day_rating',
+            'naps',
+            'sleep_aides',
+            'sleep_aides_detail',
+            'notes',
+            'sleep_quality',
+            'bedtime',
+            'lights_out',
+            'time_to_sleep',
+            'night_wakes',
+            'waketime',
+            'risetime',
+            'finished',
+            'sleep_duration',
+            'bed_duration',
+            'efficiency'
+        ]
 
 class SleepRestrictionPlanSerializer(serializers.ModelSerializer[SleepRestrictionPlan]):
 
