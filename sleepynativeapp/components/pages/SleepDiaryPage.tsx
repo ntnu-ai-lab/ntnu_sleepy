@@ -24,19 +24,16 @@ export function SleepDiaryPage() {
   const [storedSleepDiary, setStoredSleepDiary] =
     useRecoilState(cachedSleepDiary);
   const [sleepDiary, setSleepDiary] = useState<SleepDiary>();
-  const [hasSleepDiary, setHasSleepDiary] = useState<boolean>(); //TODO fetch hasSleepDiary from backend
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
   const { isAuthenticated } = useContext(AuthContext);
 
+  const hasSleepDiary = !!sleepDiary;
   /**
    * Checks if there exists a sleepDiary in asyncstorage, else it fetches the sleepDiary from the backend.
    */
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
     if (!isAuthenticated) return;
-    if (storedSleepDiary) {
-      //console.log("STORED DIARY IN ASYNCSTORAGE: " + storedSleepDiary);
-      setHasSleepDiary(true);
-    } else {
+    if (!storedSleepDiary) {
       const diary = await getDiary();
       if (diary === undefined) {
         //console.log("No sleepdiary found..");
@@ -52,7 +49,6 @@ export function SleepDiaryPage() {
         };
         setSleepDiary(tempDiary);
         setStoredSleepDiary(tempDiary);
-        setHasSleepDiary(true);
       }
     }
   }

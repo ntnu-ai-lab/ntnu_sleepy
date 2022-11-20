@@ -18,10 +18,11 @@ export function ApiController(props: { children: ReactNode | ReactNode[] }) {
         setMIds(r);
       });
       getDiary().then((d) => {
-        d &&
-          listDiaryEntries(d.id).then(
-            (e) => e && setCachedSleepDiary({ ...d, diary_entries: e })
-          );
+        d
+          ? listDiaryEntries(d.id).then(
+              (e) => e && setCachedSleepDiary({ ...d, diary_entries: e })
+            )
+          : setCachedSleepDiary(undefined);
       });
     }
   }, [isAuthenticated, user]);
