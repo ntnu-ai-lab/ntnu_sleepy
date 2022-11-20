@@ -32,9 +32,16 @@ export interface DiaryEntryServer extends DiaryEntryBase {
   risetime: string;
 }
 
-export interface SleepDiary {
+export interface SleepDiaryBase {
   id: string;
   user: User;
   started_date: Date;
+}
+
+export interface SleepDiary extends SleepDiaryBase {
   diary_entries: DiaryEntry[];
+}
+
+export interface SleepDiaryServer extends SleepDiaryBase {
+  diary_entries: DiaryEntryServer[];
 }

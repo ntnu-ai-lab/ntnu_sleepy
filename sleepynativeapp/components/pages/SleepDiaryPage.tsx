@@ -4,9 +4,8 @@ import { colors } from "../../styles/styles";
 import { Card } from "../material/Card";
 import { PageTemplate } from "../material/PageTemplate";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { DiaryEntry, SleepDiary } from "../../types/modules";
+import { DiaryEntry, SleepDiary } from "../../types/sleepDiary";
 import { Button } from "../material/Button";
-import SleepyDiaryEntryComponent from "../pages/SleepyDiaryEntryComponent";
 import {
   createDiary,
   getDiary,
@@ -14,19 +13,21 @@ import {
 } from "../../api/sleepDiaryApi";
 import { useRecoilState } from "recoil";
 import { cachedSleepDiary } from "../../state/atoms";
-import SleepDiaryComponentDay from "./SleepDiaryComponentDay";
+import SleepDiaryComponentDay from "../sleepdiary/CreateEntry";
 import { AuthContext } from "../../auth/AuthProvider";
+import { DiaryEntryComponent } from "../sleepdiary/DiaryEntry";
 
 export function SleepDiaryPage() {
   //States to show and hide the different components.
   const [createNewDiary, setCreateNewDiary] = useState<boolean>(false);
   const [storedSleepDiary, setStoredSleepDiary] =
     useRecoilState(cachedSleepDiary);
-  const [sleepDiary, setSleepDiary] = useState<SleepDiary>();
   const [refreshScreen, setRefreshScreen] = useState<boolean>(false);
   const { isAuthenticated } = useContext(AuthContext);
 
-  const hasSleepDiary = !!sleepDiary;
+  console.log(storedSleepDiary);
+
+  const hasSleepDiary = !!storedSleepDiary;
   /**
    * Checks if there exists a sleepDiary in asyncstorage, else it fetches the sleepDiary from the backend.
    */
@@ -46,7 +47,6 @@ export function SleepDiaryPage() {
           started_date: diary.started_date,
           diary_entries: diaryEntries ?? [],
         };
-        setSleepDiary(tempDiary);
         setStoredSleepDiary(tempDiary);
       }
     }
@@ -107,14 +107,18 @@ export function SleepDiaryPage() {
           <></>
         )}
         {storedSleepDiary && !createNewDiary ? (
-          storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => (
-            <SleepyDiaryEntryComponent
-              sleepDiaryEntry={e}
-              sleepDiaryID={storedSleepDiary.id}
-              index={i}
-              key={i}
-            />
-          ))
+          storedSleepDiary.diary_entries.map((e: DiaryEntry, i) => {
+            console.log(e);
+
+            return (
+              <DiaryEntryComponent
+                refresh={checkSleepDiary}
+                entry={e}
+                diaryId={storedSleepDiary.id}
+                key={i}
+              />
+            );
+          })
         ) : (
           <></>
         )}
