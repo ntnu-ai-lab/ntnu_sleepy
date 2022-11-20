@@ -242,7 +242,6 @@ export default function SleepyDiaryEntryComponent(props: {
       padding: 3,
     },
   });
-
   return (
     <>
       <View key={props.index}>
@@ -257,17 +256,22 @@ export default function SleepyDiaryEntryComponent(props: {
                 : "90%",
           }}
         >
-          <TouchableOpacity onPress={() => setShow(!show)}>
-            <Title
+          <Button
+            variant={sleepDiaryEntry.finished ? undefined : "outlined"}
+            onClick={() => setShow(!show)}
+          >
+            <Text
               style={{
+                fontSize: 18,
                 color: colors.primary,
                 minWidth: "100%",
                 textAlign: "center",
               }}
             >
-              {sleepDiaryEntry.date.toDateString()}
-            </Title>
-          </TouchableOpacity>
+              {" "}
+              {sleepDiaryEntry.date.toDateString()}{" "}
+            </Text>
+          </Button>
 
           {show ? (
             <View style={{ alignItems: "center" }}>
