@@ -1,4 +1,10 @@
-import { DiaryEntry, DiaryEntryServer, SleepDiary } from "../types/sleepDiary";
+import {
+  DiaryEntry,
+  DiaryEntryServer,
+  DjangoDate,
+  DjangoDateTime,
+  SleepDiary,
+} from "../types/sleepDiary";
 import { callApi } from "./callApi";
 
 // Overloads
@@ -23,6 +29,9 @@ export function serverToClient(
     lights_out: entry.lights_out ? new Date(entry.lights_out) : undefined,
     waketime: entry.waketime ? new Date(entry.waketime) : undefined,
     risetime: entry.risetime ? new Date(entry.risetime) : undefined,
+    fall_asleep_time: entry.fall_asleep_time
+      ? new Date(entry.fall_asleep_time)
+      : undefined,
     naps: entry.naps
       ? entry.naps.map((nap) => [new Date(nap[0]), new Date(nap[1])])
       : undefined,
@@ -39,7 +48,14 @@ function dateToIsoTime(
   }`;
 }
 
-function dateToIsoDate(date: Date): `${number}-${number}-${number}` {
+export function dateToLocalTime(date: Date): `${string}:${string}` {
+  return `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
+}
+
+function dateToIsoDate(date: Date): DjangoDate {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
@@ -57,13 +73,14 @@ export function clientToServer(
   return {
     ...entry,
     date: entry.date ? dateToIsoDate(entry.date) : undefined,
-    bedtime: entry.bedtime?.toISOString(),
-    lights_out: entry.lights_out?.toISOString(),
-    waketime: entry.waketime?.toISOString(),
-    risetime: entry.risetime?.toISOString(),
+    bedtime: entry.bedtime?.toISOString() as DjangoDateTime,
+    lights_out: entry.lights_out?.toISOString() as DjangoDateTime,
+    waketime: entry.waketime?.toISOString() as DjangoDateTime,
+    risetime: entry.risetime?.toISOString() as DjangoDateTime,
+    fall_asleep_time: entry.fall_asleep_time?.toISOString() as DjangoDateTime,
     naps: entry.naps?.map((nap) => [
-      nap[0].toISOString(),
-      nap[1].toISOString(),
+      nap[0].toISOString() as DjangoDateTime,
+      nap[1].toISOString() as DjangoDateTime,
     ]),
   };
 }
