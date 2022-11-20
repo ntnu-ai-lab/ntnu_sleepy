@@ -3,15 +3,19 @@ import { callApi } from "./callApi";
 
 // Overloads
 // If we have a full entry we get a full entry
-function serverToClient(entry: DiaryEntryServer): DiaryEntry;
+export function serverToClient(entry: DiaryEntryServer): DiaryEntry;
 //If we have a partial entry we get exactly the same attributes back
-function serverToClient<T extends keyof DiaryEntryServer>(
+export function serverToClient<T extends keyof DiaryEntryServer>(
   entry: Pick<DiaryEntryServer, T>
 ): Pick<DiaryEntry, T>;
 // For unknown partials we get an unknown partial back
-function serverToClient(entry: Partial<DiaryEntryServer>): Partial<DiaryEntry>;
+export function serverToClient(
+  entry: Partial<DiaryEntryServer>
+): Partial<DiaryEntry>;
 
-function serverToClient(entry: Partial<DiaryEntryServer>): Partial<DiaryEntry> {
+export function serverToClient(
+  entry: Partial<DiaryEntryServer>
+): Partial<DiaryEntry> {
   return {
     ...entry,
     date: entry.date ? new Date(entry.date) : undefined,
@@ -39,7 +43,17 @@ function dateToIsoDate(date: Date): `${number}-${number}-${number}` {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
-function clientToServer(entry: Partial<DiaryEntry>): Partial<DiaryEntryServer> {
+export function clientToServer(entry: DiaryEntry): DiaryEntryServer;
+export function clientToServer<T extends keyof DiaryEntry>(
+  entry: Pick<DiaryEntry, T>
+): Pick<DiaryEntryServer, T>;
+export function clientToServer(
+  entry: Partial<DiaryEntry>
+): Partial<DiaryEntryServer>;
+
+export function clientToServer(
+  entry: Partial<DiaryEntry>
+): Partial<DiaryEntryServer> {
   return {
     ...entry,
     date: entry.date ? dateToIsoDate(entry.date) : undefined,
