@@ -33,22 +33,20 @@ export function SleepDiaryPage() {
    */
   async function checkSleepDiary(): Promise<SleepDiary | undefined> {
     if (!isAuthenticated) return;
-    if (!storedSleepDiary) {
-      const diary = await getDiary();
-      if (diary === undefined) {
-        //console.log("No sleepdiary found..");
-        return undefined;
-      } else {
-        //console.log("Sleepdiary found!");
-        const diaryEntries = await listDiaryEntries(diary.id);
-        const tempDiary: SleepDiary = {
-          id: diary.id,
-          user: diary.user,
-          started_date: diary.started_date,
-          diary_entries: diaryEntries ?? [],
-        };
-        setStoredSleepDiary(tempDiary);
-      }
+    const diary = await getDiary();
+    if (diary === undefined) {
+      //console.log("No sleepdiary found..");
+      return undefined;
+    } else {
+      //console.log("Sleepdiary found!");
+      const diaryEntries = await listDiaryEntries(diary.id);
+      const tempDiary: SleepDiary = {
+        id: diary.id,
+        user: diary.user,
+        started_date: diary.started_date,
+        diary_entries: diaryEntries ?? [],
+      };
+      setStoredSleepDiary(tempDiary);
     }
   }
 
@@ -70,14 +68,6 @@ export function SleepDiaryPage() {
       return sleepDiary;
     }
   }
-
-  useEffect(() => {
-    checkSleepDiary();
-  }, [storedSleepDiary]);
-
-  useEffect(() => {
-    setRefreshScreen(!refreshScreen);
-  }, [storedSleepDiary]);
 
   return (
     <PageTemplate>
