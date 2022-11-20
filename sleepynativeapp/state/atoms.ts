@@ -1,11 +1,7 @@
 import { atom } from "recoil";
 import { ModuleProgression, SleepRestriction, User } from "../types/Types";
-import {
-  DiaryEntry,
-  Module,
-  ModuleExpanded,
-  SleepDiary,
-} from "../types/modules";
+import { Module, ModuleExpanded } from "../types/modules";
+import { SleepDiary } from "../types/sleepDiary";
 
 export const loggedInUser = atom<User | undefined>({
   key: "loggedInUser",

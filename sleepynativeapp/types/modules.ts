@@ -97,32 +97,6 @@ export interface QuizSection extends BaseSection {
   questions: Question[];
 }
 
-export type Nap = [Date, Date];
-
-export interface DiaryEntry {
-  id: string;
-  date: Date;
-  day_rating: number;
-  naps: Nap[];
-  sleep_aides: boolean;
-  sleep_aides_detail: string;
-  notes: string;
-  sleep_quality: number;
-  bedtime: Date;
-  lights_out: Date;
-  time_to_sleep: number;
-  night_wakes: number[];
-  waketime: Date;
-  risetime: Date;
-  finished?: boolean;
-}
-export interface SleepDiary {
-  id: string;
-  user: User;
-  started_date: Date;
-  diary_entries: DiaryEntry[];
-}
-
 export type Section =
   | TextSection
   | ImageSection
