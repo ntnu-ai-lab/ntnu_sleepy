@@ -40,12 +40,17 @@ export function serverToClient(
 
 function dateToIsoTime(
   date: Date
-): `${number}:${number}${"+" | "-"}${number}:${number}` {
-  return `${date.getHours()}:${date.getMinutes()}${
-    date.getTimezoneOffset() > 0 ? "+" : "-"
-  }${Math.floor(date.getTimezoneOffset() / 60)}:${
-    date.getTimezoneOffset() % 60
-  }`;
+): `${string}:${string}${"+" | "-"}${string}:${string}` {
+  return `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(0, "0")}${date.getTimezoneOffset() > 0 ? "+" : "-"}${Math.floor(
+    date.getTimezoneOffset() / 60
+  )
+    .toString()
+    .padStart(2, "0")}:${(date.getTimezoneOffset() % 60)
+    .toString()
+    .padStart(2, "0")}`;
 }
 
 export function dateToLocalTime(date: Date): `${string}:${string}` {
@@ -56,7 +61,9 @@ export function dateToLocalTime(date: Date): `${string}:${string}` {
 }
 
 function dateToIsoDate(date: Date): DjangoDate {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
 
 export function clientToServer(entry: DiaryEntry): DiaryEntryServer;

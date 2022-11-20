@@ -2,10 +2,10 @@ import { User } from "./Types";
 
 export type Nap = [Date, Date];
 
-export type DjangoDate = `${number}-${number}-${number}`;
-export type DjangoDateTime = `${DjangoDate} ${number}:${number}${
+export type DjangoDate = `${string}-${string}-${string}`;
+export type DjangoDateTime = `${DjangoDate}T${string}:${string}}${
   | "+"
-  | "-"}${number}:${number}`;
+  | "-"}${string}:${string}`;
 
 interface DiaryEntryBase {
   id: string;
