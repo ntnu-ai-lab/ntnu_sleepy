@@ -137,7 +137,11 @@ export function SleepDiaryPage() {
         ) : (
           <></>
         )}
-        {createNewDiary && !showAllDiaries ? <SleepDiaryComponentDay /> : <></>}
+        {createNewDiary && !showAllDiaries ? (
+          <SleepDiaryComponentDay onFinished={() => setCreateNewDiary(false)} />
+        ) : (
+          <></>
+        )}
         {storedSleepDiary !== undefined ? (
           <></>
         ) : (
