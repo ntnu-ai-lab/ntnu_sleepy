@@ -1,8 +1,21 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
+import { dateToLocalTime } from "../../api/sleepDiaryApi";
+import { DiaryEntry } from "../../types/sleepDiary";
 import { Button } from "../material/Button";
 
-export function EntryDisplay({ onEdit }: { onEdit: () => void }) {
+export function EntryDisplay({
+  onEdit,
+  entry,
+}: {
+  onEdit: () => void;
+  entry: DiaryEntry;
+}) {
+  const styles = StyleSheet.create({
+    text: {
+      color: "white",
+    },
+  });
   return (
     <>
       <Button
@@ -10,9 +23,8 @@ export function EntryDisplay({ onEdit }: { onEdit: () => void }) {
         style={{ width: "70%", padding: 5 }}
         onClick={onEdit}
       >
-        <Text style={{ color: "white" }}>Rediger</Text>
+        <Text style={styles.text}>Rediger</Text>
       </Button>
-      <Text>This is a display mode</Text>
     </>
   );
 }

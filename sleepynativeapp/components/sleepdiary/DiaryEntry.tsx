@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Dimensions, View, Text } from "react-native";
+import { Dimensions, View, Text, StyleSheet } from "react-native";
+import { dateToLocalTime } from "../../api/sleepDiaryApi";
 import { colors } from "../../styles/styles";
 import { DiaryEntry, SleepDiary } from "../../types/sleepDiary";
 import { Button } from "../material/Button";
@@ -18,6 +19,11 @@ export function DiaryEntryComponent({
 }) {
   const [edit, setEdit] = useState(!entry.finished);
   const [expand, setExpand] = useState(false);
+  const styles = StyleSheet.create({
+    text: {
+      color: "white",
+    },
+  });
 
   return (
     <View>
@@ -47,6 +53,22 @@ export function DiaryEntryComponent({
             {" "}
             {entry.date.toDateString()}{" "}
           </Text>
+          {entry.finished && (
+            <>
+              {/* I use a template literal here so all the spaces get rendered. */}
+              <Text style={styles.text}>{`${dateToLocalTime(
+                entry.bedtime
+              )}–${dateToLocalTime(
+                entry.fall_asleep_time
+              )}          —          ${dateToLocalTime(
+                entry.waketime
+              )}–${dateToLocalTime(entry.risetime)}`}</Text>
+              <Text style={styles.text}>
+                Effektivitet:{" "}
+                {entry.efficiency ? Math.round(entry.efficiency * 100) : "n/a"}%
+              </Text>
+            </>
+          )}
         </Button>
         {expand &&
           (edit ? (
@@ -60,7 +82,7 @@ export function DiaryEntryComponent({
               onAbort={() => setEdit(false)}
             />
           ) : (
-            <EntryDisplay onEdit={() => setEdit(true)} />
+            <EntryDisplay onEdit={() => setEdit(true)} entry={entry} />
           ))}
       </Card>
     </View>
