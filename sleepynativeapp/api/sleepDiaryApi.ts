@@ -53,7 +53,8 @@ function dateToIsoTime(
     .padStart(2, "0")}`;
 }
 
-export function dateToLocalTime(date: Date): `${string}:${string}` {
+export function dateToLocalTime(date: Date | undefined): `${string}:${string}` {
+  if (!date) return "??:??";
   return `${date.getHours().toString().padStart(2, "0")}:${date
     .getMinutes()
     .toString()
