@@ -55,15 +55,21 @@ class DiaryEntry(models.Model):
 
     @property
     def sleep_duration(self) -> datetime.timedelta:
-        if self.waketime is None or self.lights_out is None:
+        if self.waketime is None or self.fall_asleep_time is None:
             return datetime.timedelta(0)
-        return self.waketime - (self.lights_out + datetime.timedelta(minutes=self.time_to_sleep)) - datetime.timedelta(minutes=sum(self.night_wakes if self.night_wakes else [0]))
+        return self.waketime - self.fall_asleep_time - datetime.timedelta(minutes=sum(self.night_wakes if self.night_wakes else [0]))
 
     @property
     def bed_duration(self) -> datetime.timedelta:
         if self.bedtime is None or self.risetime is None:
             return datetime.timedelta(0)
         return self.risetime - self.bedtime
+
+    @property
+    def fall_asleep_time(self) -> datetime.datetime | None:
+        if self.lights_out is None or self.time_to_sleep is None:
+            return None
+        return self.lights_out + datetime.timedelta(minutes=self.time_to_sleep)
 
     @property
     def efficiency(self) -> float | None:

@@ -38,7 +38,8 @@ class DiaryEntrySerializer(serializers.ModelSerializer[DiaryEntry]):
             'finished',
             'sleep_duration',
             'bed_duration',
-            'efficiency'
+            'efficiency',
+            'fall_asleep_time'
         ]
 
 class SleepRestrictionPlanSerializer(serializers.ModelSerializer[SleepRestrictionPlan]):

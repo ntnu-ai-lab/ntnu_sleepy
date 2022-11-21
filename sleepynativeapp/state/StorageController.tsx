@@ -1,12 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { ReactNode, useEffect } from "react";
 import { ModuleProgression, SleepRestriction, User } from "../types/Types";
-import {
-  DiaryEntry,
-  Module,
-  ModuleExpanded,
-  SleepDiary,
-} from "../types/modules";
+import { Module, ModuleExpanded } from "../types/modules";
 import { useRecoilState } from "recoil";
 import {
   cachedModules,
@@ -16,6 +11,8 @@ import {
   moduleProgression,
   mySleepRestriction,
 } from "./atoms";
+import { SleepDiary, SleepDiaryServer } from "../types/sleepDiary";
+import { clientToServer, serverToClient } from "../api/sleepDiaryApi";
 
 export async function storeLocalUser(user: User | undefined) {
   const userAsString = JSON.stringify(user);
@@ -30,12 +27,13 @@ export async function storeCachedModules(
 }
 
 export async function storeSleepDiary(sleepDiary: SleepDiary | undefined) {
-  const sleepDiaryAsString = JSON.stringify(sleepDiary);
+  const sleepDiaryAsString = JSON.stringify({
+    ...sleepDiary,
+    diary_entries: sleepDiary?.diary_entries.map((entry) =>
+      clientToServer(entry)
+    ),
+  });
   await AsyncStorage.setItem("SleepDiary", sleepDiaryAsString);
-}
-export async function storeSleepDiaryEntry(sleepDiaryEntry: DiaryEntry) {
-  const sleepDiaryEntryAsString = JSON.stringify(sleepDiaryEntry);
-  await AsyncStorage.setItem("SleepDiaryEntry", sleepDiaryEntryAsString);
 }
 
 export async function storeModuleIds(ids: Module[] | undefined) {
@@ -92,8 +90,14 @@ export function StorageController(props: {
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     };
 
-    const sleepDiary: SleepDiary = await getData();
-    if (sleepDiary != null) setSleepDiary(sleepDiary);
+    const sleepDiary: SleepDiaryServer = await getData();
+    if (sleepDiary != null)
+      setSleepDiary({
+        ...sleepDiary,
+        diary_entries: sleepDiary.diary_entries.map((entry) =>
+          serverToClient(entry)
+        ),
+      });
   }
 
   async function getCachedModuleIds() {
