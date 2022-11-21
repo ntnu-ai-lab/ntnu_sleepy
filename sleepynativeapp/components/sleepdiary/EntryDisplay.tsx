@@ -32,7 +32,10 @@ export function EntryDisplay({
           .join(", ") || "Ingen"}
       </Text>
       <Text style={styles.text}>
-        Våken på natten: {entry.night_wakes?.join(" min, ") + " min" || "Ingen"}
+        Våken på natten:{" "}
+        {entry.night_wakes
+          ? entry.night_wakes.join(" min, ") + " min"
+          : "Ingen"}
       </Text>
       <Text style={styles.text}>Form på dagen: {entry.day_rating}/5</Text>
       <Text style={styles.text}>Søvndybde: {entry.sleep_quality}/5</Text>
