@@ -33,7 +33,7 @@ export function EntryDisplay({
       </Text>
       <Text style={styles.text}>
         Våken på natten:{" "}
-        {entry.night_wakes
+        {entry.night_wakes?.length > 0
           ? entry.night_wakes.join(" min, ") + " min"
           : "Ingen"}
       </Text>
